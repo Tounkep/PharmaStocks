@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PharmaManager - Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="app-container">
+        <!-- Barre latérale -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fa-solid fa-square-plus"></i>
+                <h2>PharmaStocks</h2>
+            </div>
+
+            <nav class="menu">
+                <a href="#" class="active"><i class="fa-solid fa-house"></i> Dashboard</a>
+                <a href="#"><i class="fa-solid fa-pills"></i> Médicaments</a>
+                <a href="#"><i class="fa-solid fa-boxes-stacked"></i> Stock</a>
+                <a href="#"><i class="fa-solid fa-cart-shopping"></i> Ventes</a>
+                <a href="#"><i class="fa-solid fa-truck-field"></i> Fournisseurs</a>
+                <a href="#"><i class="fa-solid fa-users"></i> Utilisateurs</a>
+                <a href="#"><i class="fa-solid fa-chart-pie"></i> Rapports</a>
+                <a href="#"><i class="fa-solid fa-gear"></i> Paramètres</a>
+            </nav>
+
+            <div class="logout">
+                <a href="#"><i class="fa-solid fa-right-from-bracket"></i> Déconnexion</a>
+            </div>
+        </aside>
+
+        <!-- Contenu principal -->
+        <main class="main-content">
+
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="search-bar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Rechercher...">
+                </div>
+                <div class="user-profile">
+                    <div class="notifications">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="badge">1</span>
+                    </div>
+                    <div class="user-info">
+                        <img src="https://i.pravatar.cc/100?img=11" alt="Avatar" class="avatar">
+                        <div>
+                            <strong id="user-firstname">Chargement...</strong>
+                            <span id="user-role">... <i class="fa-solid fa-chevron-down"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Message de bienvenue -->
+            <section class="welcome-section">
+                <h1>Bonjour <span id="welcome-firstname">...</span> 👋</h1>
+                <p>Que souhaitez-vous faire ?</p>
+            </section>
+
+            <!-- Cartes d'action rapide -->
+            <section class="cards-grid">
+                <div class="card card-green">
+                    <div class="card-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+                    <h3>Nouvelle vente</h3>
+                    <p>Enregistrer une vente</p>
+                </div>
+                <div class="card card-blue">
+                    <div class="card-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+                    <h3>Rechercher un médicament</h3>
+                    <p>Consulter les informations</p>
+                </div>
+                <div class="card card-purple">
+                    <div class="card-icon"><i class="fa-solid fa-box"></i></div>
+                    <h3>Consulter le stock</h3>
+                    <p>Voir les quantités disponibles</p>
+                </div>
+                <div class="card card-orange">
+                    <div class="card-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <h3>Alertes stock</h3>
+                    <p>Voir les produits en rupture</p>
+                </div>
+            </section>
+
+            <!-- Tableaux de bord -->
+            <section class="bottom-grid">
+                <div class="panel">
+                    <h3>Activité du jour</h3>
+                    <ul class="activity-list" id="ventes-list">
+                        <li>Chargement des données...</li>
+                    </ul>
+                    <a href="#" class="link-more">Voir toutes les ventes &rarr;</a>
+                </div>
+
+                <div class="panel">
+                    <h3>Stock faible</h3>
+                    <ul class="stock-list" id="stocks-list">
+                        <li>Chargement des données...</li>
+                    </ul>
+                    <a href="#" class="link-more">Voir tout &rarr;</a>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Inscription du script JS principal -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>

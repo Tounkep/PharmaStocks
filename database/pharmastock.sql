@@ -1,11 +1,22 @@
 -- =========================================================
+-- CREATION DE LA BASE DE DONNEES
+-- =========================================================
+
+CREATE DATABASE IF NOT EXISTS gestion_pharmacie
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
+
+USE gestion_pharmacie;
+
+
+-- =========================================================
 -- TABLE ROLE
 -- =========================================================
 
 CREATE TABLE Role (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL
-);
+) ENGINE=InnoDB;
 
 
 -- =========================================================
@@ -13,7 +24,7 @@ CREATE TABLE Role (
 -- =========================================================
 
 CREATE TABLE Utilisateur (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
     prenom VARCHAR(100) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
@@ -26,7 +37,7 @@ CREATE TABLE Utilisateur (
         REFERENCES Role(id)
         ON UPDATE CASCADE
         ON DELETE RESTRICT
-);
+) ENGINE=InnoDB;
 
 
 -- =========================================================
@@ -34,10 +45,10 @@ CREATE TABLE Utilisateur (
 -- =========================================================
 
 CREATE TABLE Categorie (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
     description TEXT
-);
+) ENGINE=InnoDB;
 
 
 -- =========================================================
@@ -45,25 +56,35 @@ CREATE TABLE Categorie (
 -- =========================================================
 
 CREATE TABLE Produit (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     reference VARCHAR(100) NOT NULL UNIQUE,
     nom VARCHAR(150) NOT NULL,
     description TEXT,
     forme VARCHAR(100),
     dosage VARCHAR(100),
-    prixAchat DOUBLE PRECISION NOT NULL,
-    prixVente DOUBLE PRECISION NOT NULL,
+
+    prixAchat DECIMAL(10,2) NOT NULL,
+    prixVente DECIMAL(10,2) NOT NULL,
+
     seuilMinimum INT NOT NULL,
-    dateExpiration DATE,
 
     categorie_id INT NOT NULL,
+
+    CONSTRAINT chk_produit_prix_achat
+        CHECK (prixAchat >= 0),
+
+    CONSTRAINT chk_produit_prix_vente
+        CHECK (prixVente >= 0),
+
+    CONSTRAINT chk_produit_seuil
+        CHECK (seuilMinimum >= 0),
 
     CONSTRAINT fk_produit_categorie
         FOREIGN KEY (categorie_id)
         REFERENCES Categorie(id)
         ON UPDATE CASCADE
         ON DELETE RESTRICT
-);
+) ENGINE=InnoDB;
 
 
 -- =========================================================
@@ -71,20 +92,20 @@ CREATE TABLE Produit (
 -- =========================================================
 
 CREATE TABLE Lot (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
     numeroLot VARCHAR(100) NOT NULL,
     quantite INT NOT NULL,
+
     dateReception DATE NOT NULL,
     dateExpiration DATE NOT NULL,
+
     statut VARCHAR(20) NOT NULL,
 
     produit_id INT NOT NULL,
 
-    CONSTRAINT fk_lot_produit
-        FOREIGN KEY (produit_id)
-        REFERENCES Produit(id)
-        ON UPDATE CASCADE
-        ON DELETE RESTRICT,
+    CONSTRAINT chk_lot_quantite
+        CHECK (quantite >= 0),
 
     CONSTRAINT chk_statut_lot
         CHECK (
@@ -93,8 +114,17 @@ CREATE TABLE Lot (
                 'EPUISE',
                 'PERIME'
             )
-        )
-);
+        ),
+
+    CONSTRAINT fk_lot_produit
+        FOREIGN KEY (produit_id)
+        REFERENCES Produit(id)
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT,
+
+    CONSTRAINT uq_lot_numero_produit
+        UNIQUE (produit_id, numeroLot)
+) ENGINE=InnoDB;
 
 
 -- =========================================================
@@ -102,12 +132,13 @@ CREATE TABLE Lot (
 -- =========================================================
 
 CREATE TABLE Fournisseur (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
     nom VARCHAR(150) NOT NULL,
     adresse VARCHAR(255),
     telephone VARCHAR(30),
     email VARCHAR(255)
-);
+) ENGINE=InnoDB;
 
 
 -- =========================================================
@@ -115,13 +146,27 @@ CREATE TABLE Fournisseur (
 -- =========================================================
 
 CREATE TABLE Commande (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
     dateCommande DATE NOT NULL,
     statut VARCHAR(20) NOT NULL,
-    montantTotal DOUBLE PRECISION NOT NULL,
+    montantTotal DECIMAL(10,2) NOT NULL,
 
     fournisseur_id INT NOT NULL,
     utilisateur_id INT NOT NULL,
+
+    CONSTRAINT chk_commande_montant
+        CHECK (montantTotal >= 0),
+
+    CONSTRAINT chk_statut_commande
+        CHECK (
+            statut IN (
+                'EN_ATTENTE',
+                'VALIDEE',
+                'RECUE',
+                'ANNULEE'
+            )
+        ),
 
     CONSTRAINT fk_commande_fournisseur
         FOREIGN KEY (fournisseur_id)
@@ -133,18 +178,8 @@ CREATE TABLE Commande (
         FOREIGN KEY (utilisateur_id)
         REFERENCES Utilisateur(id)
         ON UPDATE CASCADE
-        ON DELETE RESTRICT,
-
-    CONSTRAINT chk_statut_commande
-        CHECK (
-            statut IN (
-                'EN_ATTENTE',
-                'VALIDEE',
-                'RECUE',
-                'ANNULEE'
-            )
-        )
-);
+        ON DELETE RESTRICT
+) ENGINE=InnoDB;
 
 
 -- =========================================================
@@ -152,12 +187,19 @@ CREATE TABLE Commande (
 -- =========================================================
 
 CREATE TABLE DetailCommande (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
     quantite INT NOT NULL,
-    prixUnitaire DOUBLE PRECISION NOT NULL,
+    prixUnitaire DECIMAL(10,2) NOT NULL,
 
     commande_id INT NOT NULL,
     produit_id INT NOT NULL,
+
+    CONSTRAINT chk_detail_commande_quantite
+        CHECK (quantite > 0),
+
+    CONSTRAINT chk_detail_commande_prix
+        CHECK (prixUnitaire >= 0),
 
     CONSTRAINT fk_detailcommande_commande
         FOREIGN KEY (commande_id)
@@ -170,7 +212,7 @@ CREATE TABLE DetailCommande (
         REFERENCES Produit(id)
         ON UPDATE CASCADE
         ON DELETE RESTRICT
-);
+) ENGINE=InnoDB;
 
 
 -- =========================================================
@@ -178,18 +220,22 @@ CREATE TABLE DetailCommande (
 -- =========================================================
 
 CREATE TABLE Vente (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
     dateVente DATE NOT NULL,
-    montantTotal DOUBLE PRECISION NOT NULL,
+    montantTotal DECIMAL(10,2) NOT NULL,
 
     utilisateur_id INT NOT NULL,
+
+    CONSTRAINT chk_vente_montant
+        CHECK (montantTotal >= 0),
 
     CONSTRAINT fk_vente_utilisateur
         FOREIGN KEY (utilisateur_id)
         REFERENCES Utilisateur(id)
         ON UPDATE CASCADE
         ON DELETE RESTRICT
-);
+) ENGINE=InnoDB;
 
 
 -- =========================================================
@@ -197,13 +243,20 @@ CREATE TABLE Vente (
 -- =========================================================
 
 CREATE TABLE DetailVente (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
     quantite INT NOT NULL,
-    prixUnitaire DOUBLE PRECISION NOT NULL,
+    prixUnitaire DECIMAL(10,2) NOT NULL,
 
     vente_id INT NOT NULL,
     produit_id INT NOT NULL,
     lot_id INT NOT NULL,
+
+    CONSTRAINT chk_detail_vente_quantite
+        CHECK (quantite > 0),
+
+    CONSTRAINT chk_detail_vente_prix
+        CHECK (prixUnitaire >= 0),
 
     CONSTRAINT fk_detailvente_vente
         FOREIGN KEY (vente_id)
@@ -222,7 +275,7 @@ CREATE TABLE DetailVente (
         REFERENCES Lot(id)
         ON UPDATE CASCADE
         ON DELETE RESTRICT
-);
+) ENGINE=InnoDB;
 
 
 -- =========================================================
@@ -230,19 +283,29 @@ CREATE TABLE DetailVente (
 -- =========================================================
 
 CREATE TABLE MouvementStock (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
 
     type VARCHAR(20) NOT NULL,
-
     quantite INT NOT NULL,
-
-    dateHeure TIMESTAMP NOT NULL,
-
+    dateHeure DATETIME NOT NULL,
     motif VARCHAR(255),
 
     lot_id INT NOT NULL,
-
     utilisateur_id INT NOT NULL,
+
+    CONSTRAINT chk_mouvement_quantite
+        CHECK (quantite > 0),
+
+    CONSTRAINT chk_type_mouvement
+        CHECK (
+            type IN (
+                'ENTREE',
+                'SORTIE',
+                'PERTE',
+                'RETOUR',
+                'AJUSTEMENT'
+            )
+        ),
 
     CONSTRAINT fk_mouvement_lot
         FOREIGN KEY (lot_id)
@@ -254,19 +317,8 @@ CREATE TABLE MouvementStock (
         FOREIGN KEY (utilisateur_id)
         REFERENCES Utilisateur(id)
         ON UPDATE CASCADE
-        ON DELETE RESTRICT,
-
-    CONSTRAINT chk_type_mouvement
-        CHECK (
-            type IN (
-                'ENTREE',
-                'SORTIE',
-                'PERTE',
-                'RETOUR',
-                'AJUSTEMENT'
-            )
-        )
-);
+        ON DELETE RESTRICT
+) ENGINE=InnoDB;
 
 
 -- =========================================================
@@ -274,31 +326,15 @@ CREATE TABLE MouvementStock (
 -- =========================================================
 
 CREATE TABLE Alerte (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
 
     type VARCHAR(30) NOT NULL,
-
     message TEXT NOT NULL,
-
-    dateCreation TIMESTAMP NOT NULL,
-
+    dateCreation DATETIME NOT NULL,
     statut VARCHAR(20) NOT NULL,
 
     produit_id INT NULL,
-
     lot_id INT NULL,
-
-    CONSTRAINT fk_alerte_produit
-        FOREIGN KEY (produit_id)
-        REFERENCES Produit(id)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
-
-    CONSTRAINT fk_alerte_lot
-        FOREIGN KEY (lot_id)
-        REFERENCES Lot(id)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
 
     CONSTRAINT chk_type_alerte
         CHECK (
@@ -317,8 +353,20 @@ CREATE TABLE Alerte (
                 'TRAITEE',
                 'IGNOREE'
             )
-        )
-);
+        ),
+
+    CONSTRAINT fk_alerte_produit
+        FOREIGN KEY (produit_id)
+        REFERENCES Produit(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_alerte_lot
+        FOREIGN KEY (lot_id)
+        REFERENCES Lot(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
 
 
 -- =========================================================
@@ -326,13 +374,11 @@ CREATE TABLE Alerte (
 -- =========================================================
 
 CREATE TABLE JournalActivite (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
 
     action VARCHAR(150) NOT NULL,
-
     description TEXT,
-
-    dateHeure TIMESTAMP NOT NULL,
+    dateHeure DATETIME NOT NULL,
 
     utilisateur_id INT NOT NULL,
 
@@ -341,4 +387,4 @@ CREATE TABLE JournalActivite (
         REFERENCES Utilisateur(id)
         ON UPDATE CASCADE
         ON DELETE RESTRICT
-);
+) ENGINE=InnoDB;

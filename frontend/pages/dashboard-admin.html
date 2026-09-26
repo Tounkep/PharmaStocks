@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>PharmaStock - Dashboard Admin</title>
+
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/dashboard.css"
+    >
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+
+<body>
+
+<div class="app-container">
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo-container">
+
+            <img
+                src="../images/logo1.png"
+                class="logo-image"
+            >
+
+            <div class="logo-text">
+                PharmaStock
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-menu">
+
+            <a
+                href="dashboard-admin.html"
+                class="menu-item active"
+            >
+                <span class="menu-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+
+            <a
+                href="medicaments.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">💊</span>
+                <span>Médicaments</span>
+            </a>
+
+
+            <a
+                href="stock.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">📦</span>
+                <span>Stock</span>
+            </a>
+
+
+            <a
+                href="ventes.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">🛒</span>
+                <span>Ventes</span>
+            </a>
+
+
+            <a
+                href="fournisseurs.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">🚚</span>
+                <span>Fournisseurs</span>
+            </a>
+
+
+            <a
+                href="utilisateurs.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">👥</span>
+                <span>Utilisateurs</span>
+            </a>
+
+
+            <a
+                href="#"
+                class="menu-item"
+            >
+                <span class="menu-icon">📊</span>
+                <span>Rapports</span>
+            </a>
+
+
+            <a
+                href="#"
+                class="menu-item"
+            >
+                <span class="menu-icon">⚙</span>
+                <span>Paramètres</span>
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <a
+                href="#"
+                id="logoutBtn"
+                class="menu-item logout"
+            >
+                <span class="menu-icon">↪</span>
+                <span>Déconnexion</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main-content">
+
+
+        <!-- HEADER -->
+
+        <header class="topbar">
+
+            <div class="search-container">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    placeholder="Rechercher..."
+                    id="globalSearch"
+                >
+
+            </div>
+
+
+            <div class="topbar-right">
+
+                <button
+                    class="notification-button"
+                    id="notificationButton"
+                >
+                    🔔
+                    <span
+                        class="notification-badge"
+                        id="notificationBadge"
+                    >
+                        0
+                    </span>
+                </button>
+
+
+                <div class="user-profile">
+
+                    <div class="avatar">
+                        A
+                    </div>
+
+                    <div class="user-info">
+
+                        <strong id="adminName">
+                            Admin
+                        </strong>
+
+                        <small>
+                            Administrateur
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENU -->
+
+        <section class="dashboard-content">
+
+
+            <!-- TITRE -->
+
+            <div class="welcome-section">
+
+                <div>
+
+                    <h1>
+                        Bonjour <span id="welcomeName">Admin</span> 👋
+                    </h1>
+
+                    <p>
+                        Voici l'état général de votre pharmacie.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="refresh-button"
+                    id="refreshButton"
+                >
+                    ↻ Actualiser
+                </button>
+
+            </div>
+
+
+
+            <!-- ================= STATISTIQUES ================= -->
+
+            <section class="stats-grid">
+
+
+                <!-- MEDICAMENTS -->
+
+                <div class="stat-card">
+
+                    <div class="stat-icon blue">
+                        💊
+                    </div>
+
+                    <div class="stat-info">
+
+                        <span class="stat-label">
+                            Médicaments
+                        </span>
+
+                        <strong
+                            class="stat-value"
+                            id="totalMedicaments"
+                        >
+                            --
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- STOCK -->
+
+                <div class="stat-card">
+
+                    <div class="stat-icon green">
+                        📦
+                    </div>
+
+                    <div class="stat-info">
+
+                        <span class="stat-label">
+                            Stock total
+                        </span>
+
+                        <strong
+                            class="stat-value"
+                            id="totalStock"
+                        >
+                            --
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- VENTES -->
+
+                <div class="stat-card">
+
+                    <div class="stat-icon purple">
+                        €
+                    </div>
+
+                    <div class="stat-info">
+
+                        <span class="stat-label">
+                            Ventes du mois
+                        </span>
+
+                        <strong
+                            class="stat-value"
+                            id="ventesMois"
+                        >
+                            --
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- UTILISATEURS -->
+
+                <div class="stat-card">
+
+                    <div class="stat-icon orange">
+                        👥
+                    </div>
+
+                    <div class="stat-info">
+
+                        <span class="stat-label">
+                            Utilisateurs
+                        </span>
+
+                        <strong
+                            class="stat-value"
+                            id="totalUtilisateurs"
+                        >
+                            --
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- ================= GRAPHIQUES ================= -->
+
+            <section class="dashboard-grid">
+
+
+                <!-- GRAPH VENTES -->
+
+                <div class="dashboard-card sales-chart-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <h2>
+                                Évolution des ventes
+                            </h2>
+
+                            <p>
+                                Chiffre d'affaires des 12 derniers mois
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="chart-container">
+
+                        <canvas
+                            id="salesChart"
+                        ></canvas>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ALERTES -->
+
+                <div class="dashboard-card alerts-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <h2>
+                                Alertes
+                            </h2>
+
+                            <p>
+                                État actuel du stock
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="alerts-list">
+
+
+                        <div
+                            class="alert-item danger"
+                            id="rupturesAlert"
+                        >
+
+                            <div class="alert-icon">
+                                !
+                            </div>
+
+                            <div class="alert-content">
+
+                                <strong>
+                                    <span id="rupturesCount">
+                                        0
+                                    </span>
+                                    ruptures de stock
+                                </strong>
+
+                                <small>
+                                    Produits sans stock
+                                </small>
+
+                            </div>
+
+                            <span>
+                                →
+                            </span>
+
+                        </div>
+
+
+
+                        <div
+                            class="alert-item warning"
+                            id="stockFaibleAlert"
+                        >
+
+                            <div class="alert-icon">
+                                !
+                            </div>
+
+                            <div class="alert-content">
+
+                                <strong>
+
+                                    <span id="stocksFaiblesCount">
+                                        0
+                                    </span>
+
+                                    stocks faibles
+
+                                </strong>
+
+                                <small>
+                                    Sous le seuil minimum
+                                </small>
+
+                            </div>
+
+                            <span>
+                                →
+                            </span>
+
+                        </div>
+
+
+
+                        <div
+                            class="alert-item orange"
+                            id="expirationAlert"
+                        >
+
+                            <div class="alert-icon">
+                                !
+                            </div>
+
+                            <div class="alert-content">
+
+                                <strong>
+
+                                    <span id="expirationsCount">
+                                        0
+                                    </span>
+
+                                    expirations proches
+
+                                </strong>
+
+                                <small>
+                                    Dans les 30 prochains jours
+                                </small>
+
+                            </div>
+
+                            <span>
+                                →
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- ================= BAS ================= -->
+
+            <section class="bottom-grid">
+
+
+                <!-- ACTIVITE RECENTE -->
+
+                <div class="dashboard-card activity-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <h2>
+                                Activité récente
+                            </h2>
+
+                            <p>
+                                Dernières actions effectuées
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="activity-list"
+                        id="activityList"
+                    >
+
+                        <div class="loading">
+                            Chargement...
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- DERNIERES VENTES -->
+
+                <div class="dashboard-card recent-sales-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <h2>
+                                Dernières ventes
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="sales-list"
+                        id="recentSalesList"
+                    >
+
+                        <div class="loading">
+                            Chargement...
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script src="../js/dashboard-admin.js"></script>
+
+</body>
+
+</html>

@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setupEvents();
 });
 
+
 let salesChart = null;
 
 
@@ -11,6 +12,7 @@ let salesChart = null;
  * URL DE L'API
  * =====================================================
  */
+
 const API_URL = "../../backend/routes/dashboard.php";
 
 
@@ -19,30 +21,56 @@ const API_URL = "../../backend/routes/dashboard.php";
  * CHARGEMENT DU DASHBOARD
  * =====================================================
  */
+
 async function loadDashboard() {
 
     try {
 
         showLoading();
 
-        const response = await fetch(API_URL, {
-            method: "GET",
-            headers: {
-                "Accept": "application/json"
-            },
-            credentials: "include"
-        });
+
+        const response = await fetch(
+            API_URL,
+            {
+                method: "GET",
+
+                headers: {
+                    "Accept": "application/json"
+                },
+
+                credentials: "include"
+            }
+        );
 
 
         if (!response.ok) {
-            throw new Error(`Erreur HTTP ${response.status}`);
+
+            throw new Error(
+                `Erreur HTTP ${response.status}`
+            );
         }
 
 
-        const result = await response.json();
+        const result =
+            await response.json();
 
 
         if (!result.success) {
+
+            /*
+             * Si la session n'existe plus,
+             * retour vers la connexion.
+             */
+
+            if (response.status === 401) {
+
+                window.location.href =
+                    "connexion.html";
+
+                return;
+            }
+
+
             throw new Error(
                 result.message ||
                 "Erreur lors du chargement du dashboard."
@@ -54,39 +82,81 @@ async function loadDashboard() {
 
 
         /*
-         * Statistiques principales
+         * =====================================================
+         * INFORMATIONS DE L'ADMIN CONNECTÉ
+         * =====================================================
          */
-        updateStats(data.statistiques);
+
+        updateAdminInfo(
+            data.utilisateur
+        );
 
 
         /*
-         * Alertes
+         * =====================================================
+         * STATISTIQUES PRINCIPALES
+         * =====================================================
          */
-        updateAlerts(data.statistiques, data.alertes);
+
+        updateStats(
+            data.statistiques
+        );
 
 
         /*
-         * Graphique des ventes
+         * =====================================================
+         * ALERTES
+         * =====================================================
          */
-        updateChart(data.ventesDerniersJours);
+
+        updateAlerts(
+            data.statistiques,
+            data.alertes
+        );
 
 
         /*
-         * Activité récente
+         * =====================================================
+         * GRAPHIQUE DES VENTES
+         * =====================================================
          */
-        updateActivities(data.activiteRecente);
+
+        updateChart(
+            data.ventesDerniersJours
+        );
 
 
         /*
-         * Dernières ventes
+         * =====================================================
+         * ACTIVITÉ RÉCENTE
+         * =====================================================
          */
-        updateRecentSales(data.dernieresVentes);
+
+        updateActivities(
+            data.activiteRecente
+        );
 
 
         /*
-         * Badge des notifications
+         * =====================================================
+         * DERNIÈRES VENTES
+         * =====================================================
          */
-        updateNotificationBadge(data);
+
+        updateRecentSales(
+            data.dernieresVentes
+        );
+
+
+        /*
+         * =====================================================
+         * BADGE DES NOTIFICATIONS
+         * =====================================================
+         */
+
+        updateNotificationBadge(
+            data
+        );
 
 
     } catch (error) {
@@ -95,6 +165,7 @@ async function loadDashboard() {
             "Erreur dashboard :",
             error
         );
+
 
         showError(
             "Impossible de charger les données du dashboard."
@@ -105,9 +176,94 @@ async function loadDashboard() {
 
 /**
  * =====================================================
+ * INFORMATIONS DE L'ADMIN CONNECTÉ
+ * =====================================================
+ */
+
+function updateAdminInfo(utilisateur) {
+
+    if (!utilisateur) {
+        return;
+    }
+
+
+    /*
+     * Nom + prénom dans le profil.
+     */
+
+    const adminName =
+        document.getElementById(
+            "adminName"
+        );
+
+
+    if (adminName) {
+
+        const nomComplet =
+            `${utilisateur.prenom || ""} ${utilisateur.nom || ""}`
+            .trim();
+
+
+        adminName.textContent =
+            nomComplet || "Admin";
+    }
+
+
+    /*
+     * Prénom dans "Bonjour..."
+     */
+
+    const welcomeName =
+        document.getElementById(
+            "welcomeName"
+        );
+
+
+    if (welcomeName) {
+
+        welcomeName.textContent =
+            utilisateur.prenom || "Admin";
+    }
+
+
+    /*
+     * Première lettre du prénom
+     * dans l'avatar.
+     */
+
+    const avatar =
+        document.querySelector(
+            ".avatar"
+        );
+
+
+    if (avatar) {
+
+        const prenom =
+            utilisateur.prenom || "";
+
+
+        if (prenom !== "") {
+
+            avatar.textContent =
+                prenom
+                    .charAt(0)
+                    .toUpperCase();
+
+        } else {
+
+            avatar.textContent = "A";
+        }
+    }
+}
+
+
+/**
+ * =====================================================
  * STATISTIQUES PRINCIPALES
  * =====================================================
  */
+
 function updateStats(stats) {
 
     if (!stats) {
@@ -118,107 +274,190 @@ function updateStats(stats) {
     /*
      * Nombre de produits
      */
+
     const totalMedicaments =
-        document.getElementById("totalMedicaments");
+        document.getElementById(
+            "totalMedicaments"
+        );
+
 
     if (totalMedicaments) {
+
         totalMedicaments.textContent =
-            formatNumber(stats.totalProduits);
+            formatNumber(
+                stats.totalProduits
+            );
     }
 
 
     /*
      * Stock total
      */
+
     const totalStock =
-        document.getElementById("totalStock");
+        document.getElementById(
+            "totalStock"
+        );
+
 
     if (totalStock) {
+
         totalStock.textContent =
-            formatNumber(stats.stockTotal);
+            formatNumber(
+                stats.stockTotal
+            );
     }
 
 
     /*
      * Chiffre d'affaires
      */
+
     const ventesMois =
-        document.getElementById("ventesMois");
+        document.getElementById(
+            "ventesMois"
+        );
+
 
     if (ventesMois) {
+
         ventesMois.textContent =
-            formatCurrency(stats.chiffreAffaires);
+            formatCurrency(
+                stats.chiffreAffaires
+            );
     }
 
 
     /*
      * Nombre total d'utilisateurs
      */
+
     const totalUtilisateurs =
-        document.getElementById("totalUtilisateurs");
+        document.getElementById(
+            "totalUtilisateurs"
+        );
+
 
     if (totalUtilisateurs) {
+
         totalUtilisateurs.textContent =
-            formatNumber(stats.totalUtilisateurs);
+            formatNumber(
+                stats.totalUtilisateurs
+            );
     }
 
 
     /*
-     * Si ces éléments existent dans le HTML,
-     * on les met également à jour.
+     * Fournisseurs
      */
 
     const totalFournisseurs =
-        document.getElementById("totalFournisseurs");
+        document.getElementById(
+            "totalFournisseurs"
+        );
+
 
     if (totalFournisseurs) {
+
         totalFournisseurs.textContent =
-            formatNumber(stats.totalFournisseurs);
+            formatNumber(
+                stats.totalFournisseurs
+            );
     }
 
+
+    /*
+     * Ventes
+     */
 
     const totalVentes =
-        document.getElementById("totalVentes");
+        document.getElementById(
+            "totalVentes"
+        );
+
 
     if (totalVentes) {
+
         totalVentes.textContent =
-            formatNumber(stats.totalVentes);
+            formatNumber(
+                stats.totalVentes
+            );
     }
 
+
+    /*
+     * Stock faible
+     */
 
     const stockFaible =
-        document.getElementById("stockFaible");
+        document.getElementById(
+            "stockFaible"
+        );
+
 
     if (stockFaible) {
+
         stockFaible.textContent =
-            formatNumber(stats.stockFaible);
+            formatNumber(
+                stats.stockFaible
+            );
     }
 
+
+    /*
+     * Expirations proches
+     */
 
     const expirationsProches =
-        document.getElementById("expirationsProches");
+        document.getElementById(
+            "expirationsProches"
+        );
+
 
     if (expirationsProches) {
+
         expirationsProches.textContent =
-            formatNumber(stats.expirationsProches);
+            formatNumber(
+                stats.expirationsProches
+            );
     }
 
+
+    /*
+     * Lots expirés
+     */
 
     const lotsExpires =
-        document.getElementById("lotsExpires");
+        document.getElementById(
+            "lotsExpires"
+        );
+
 
     if (lotsExpires) {
+
         lotsExpires.textContent =
-            formatNumber(stats.lotsExpires);
+            formatNumber(
+                stats.lotsExpires
+            );
     }
 
 
+    /*
+     * Commandes en attente
+     */
+
     const commandesEnAttente =
-        document.getElementById("commandesEnAttente");
+        document.getElementById(
+            "commandesEnAttente"
+        );
+
 
     if (commandesEnAttente) {
+
         commandesEnAttente.textContent =
-            formatNumber(stats.commandesEnAttente);
+            formatNumber(
+                stats.commandesEnAttente
+            );
     }
 }
 
@@ -228,31 +467,31 @@ function updateStats(stats) {
  * ALERTES
  * =====================================================
  */
+
 function updateAlerts(stats, alertes) {
 
-    /*
-     * Ruptures :
-     *
-     * Le backend actuel ne renvoie pas directement
-     * un compteur "ruptures".
-     *
-     * On utilise donc les alertes de type RUPTURE.
-     */
     let ruptures = 0;
+
 
     if (Array.isArray(alertes)) {
 
-        ruptures = alertes.filter(
-            alerte => alerte.type === "RUPTURE"
-        ).length;
+        ruptures =
+            alertes.filter(
+                alerte =>
+                    alerte.type === "RUPTURE"
+            ).length;
     }
 
 
     /*
      * Stock faible
      */
+
     const stocksFaiblesCount =
-        document.getElementById("stocksFaiblesCount");
+        document.getElementById(
+            "stocksFaiblesCount"
+        );
+
 
     if (stocksFaiblesCount) {
 
@@ -266,8 +505,12 @@ function updateAlerts(stats, alertes) {
     /*
      * Expirations proches
      */
+
     const expirationsCount =
-        document.getElementById("expirationsCount");
+        document.getElementById(
+            "expirationsCount"
+        );
+
 
     if (expirationsCount) {
 
@@ -281,13 +524,19 @@ function updateAlerts(stats, alertes) {
     /*
      * Ruptures
      */
+
     const rupturesCount =
-        document.getElementById("rupturesCount");
+        document.getElementById(
+            "rupturesCount"
+        );
+
 
     if (rupturesCount) {
 
         rupturesCount.textContent =
-            formatNumber(ruptures);
+            formatNumber(
+                ruptures
+            );
     }
 }
 
@@ -297,10 +546,13 @@ function updateAlerts(stats, alertes) {
  * GRAPHIQUE DES VENTES
  * =====================================================
  */
+
 function updateChart(ventes) {
 
     const canvas =
-        document.getElementById("salesChart");
+        document.getElementById(
+            "salesChart"
+        );
 
 
     if (!canvas) {
@@ -309,110 +561,111 @@ function updateChart(ventes) {
 
 
     if (!Array.isArray(ventes)) {
+
         ventes = [];
     }
 
 
-    /*
-     * Dates
-     */
-    const labels = ventes.map(
-        vente => formatDate(vente.dateVente)
-    );
+    const labels =
+        ventes.map(
+            vente =>
+                formatDate(
+                    vente.dateVente
+                )
+        );
 
 
-    /*
-     * Chiffre d'affaires par jour
-     */
-    const values = ventes.map(
-        vente => Number(vente.total || 0)
-    );
+    const values =
+        ventes.map(
+            vente =>
+                Number(
+                    vente.total || 0
+                )
+        );
 
 
-    /*
-     * Détruire l'ancien graphique
-     */
     if (salesChart) {
+
         salesChart.destroy();
     }
 
 
-    /*
-     * Création du graphique
-     */
-    salesChart = new Chart(
-        canvas,
-        {
-            type: "line",
+    salesChart =
+        new Chart(
+            canvas,
+            {
+                type: "line",
 
-            data: {
-                labels: labels,
+                data: {
 
-                datasets: [
-                    {
-                        label: "Ventes (€)",
+                    labels: labels,
 
-                        data: values,
+                    datasets: [
+                        {
+                            label: "Ventes (€)",
 
-                        borderWidth: 3,
+                            data: values,
 
-                        fill: true,
+                            borderWidth: 3,
 
-                        tension: 0.4,
+                            fill: true,
 
-                        pointRadius: 4,
+                            tension: 0.4,
 
-                        pointHoverRadius: 6
-                    }
-                ]
-            },
+                            pointRadius: 4,
 
-
-            options: {
-
-                responsive: true,
-
-                maintainAspectRatio: false,
-
-
-                plugins: {
-
-                    legend: {
-                        display: false
-                    },
-
-                    tooltip: {
-                        callbacks: {
-
-                            label: function(context) {
-
-                                return formatCurrency(
-                                    context.parsed.y
-                                );
-                            }
+                            pointHoverRadius: 6
                         }
-                    }
+                    ]
                 },
 
 
-                scales: {
+                options: {
 
-                    y: {
+                    responsive: true,
 
-                        beginAtZero: true,
+                    maintainAspectRatio: false,
 
-                        ticks: {
 
-                            callback: function(value) {
+                    plugins: {
 
-                                return value + " €";
+                        legend: {
+                            display: false
+                        },
+
+                        tooltip: {
+
+                            callbacks: {
+
+                                label: function(context) {
+
+                                    return formatCurrency(
+                                        context.parsed.y
+                                    );
+                                }
+                            }
+                        }
+                    },
+
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero: true,
+
+                            ticks: {
+
+                                callback: function(value) {
+
+                                    return value + " €";
+                                }
                             }
                         }
                     }
                 }
             }
-        }
-    );
+        );
 }
 
 
@@ -421,6 +674,7 @@ function updateChart(ventes) {
  * ACTIVITÉS RÉCENTES
  * =====================================================
  */
+
 function updateActivities(activities) {
 
     const container =
@@ -450,58 +704,61 @@ function updateActivities(activities) {
 
 
     container.innerHTML =
-        activities.map(activity => {
+        activities.map(
+            activity => {
 
-            const name =
-                `${activity.prenom || ""} ${activity.nom || ""}`
-                .trim();
-
-
-            return `
-
-                <div class="activity-item">
-
-                    <div class="activity-icon">
-                        ✓
-                    </div>
+                const name =
+                    `${activity.prenom || ""} ${activity.nom || ""}`
+                    .trim();
 
 
-                    <div class="activity-content">
+                return `
 
-                        <strong>
-                            ${escapeHtml(
-                                activity.action
+                    <div class="activity-item">
+
+                        <div class="activity-icon">
+                            ✓
+                        </div>
+
+
+                        <div class="activity-content">
+
+                            <strong>
+                                ${escapeHtml(
+                                    activity.action
+                                )}
+                            </strong>
+
+
+                            <span>
+                                ${escapeHtml(
+                                    activity.description || ""
+                                )}
+                            </span>
+
+
+                            <small>
+                                ${escapeHtml(
+                                    name
+                                )}
+                            </small>
+
+                        </div>
+
+
+                        <div class="activity-date">
+
+                            ${formatDateTime(
+                                activity.dateHeure
                             )}
-                        </strong>
 
-
-                        <span>
-                            ${escapeHtml(
-                                activity.description || ""
-                            )}
-                        </span>
-
-
-                        <small>
-                            ${escapeHtml(name)}
-                        </small>
+                        </div>
 
                     </div>
 
-
-                    <div class="activity-date">
-
-                        ${formatDateTime(
-                            activity.dateHeure
-                        )}
-
-                    </div>
-
-                </div>
-
-            `;
-
-        }).join("");
+                `;
+            }
+        ).join("");
 }
 
 
@@ -510,6 +767,7 @@ function updateActivities(activities) {
  * DERNIÈRES VENTES
  * =====================================================
  */
+
 function updateRecentSales(sales) {
 
     const container =
@@ -539,58 +797,61 @@ function updateRecentSales(sales) {
 
 
     container.innerHTML =
-        sales.map(vente => {
+        sales.map(
+            vente => {
 
-            const name =
-                `${vente.prenom || ""} ${vente.nom || ""}`
-                .trim();
-
-
-            return `
-
-                <div class="recent-sale-item">
-
-                    <div class="sale-icon">
-                        🛒
-                    </div>
+                const name =
+                    `${vente.prenom || ""} ${vente.nom || ""}`
+                    .trim();
 
 
-                    <div class="sale-info">
+                return `
 
-                        <strong>
-                            Vente #${escapeHtml(
-                                vente.id
+                    <div class="recent-sale-item">
+
+                        <div class="sale-icon">
+                            🛒
+                        </div>
+
+
+                        <div class="sale-info">
+
+                            <strong>
+                                Vente #${escapeHtml(
+                                    vente.id
+                                )}
+                            </strong>
+
+
+                            <small>
+                                ${escapeHtml(
+                                    name
+                                )}
+                            </small>
+
+
+                            <small>
+                                ${formatDate(
+                                    vente.dateVente
+                                )}
+                            </small>
+
+                        </div>
+
+
+                        <div class="sale-amount">
+
+                            ${formatCurrency(
+                                vente.montantTotal
                             )}
-                        </strong>
 
-
-                        <small>
-                            ${escapeHtml(name)}
-                        </small>
-
-
-                        <small>
-                            ${formatDate(
-                                vente.dateVente
-                            )}
-                        </small>
+                        </div>
 
                     </div>
 
-
-                    <div class="sale-amount">
-
-                        ${formatCurrency(
-                            vente.montantTotal
-                        )}
-
-                    </div>
-
-                </div>
-
-            `;
-
-        }).join("");
+                `;
+            }
+        ).join("");
 }
 
 
@@ -599,6 +860,7 @@ function updateRecentSales(sales) {
  * BADGE DES NOTIFICATIONS
  * =====================================================
  */
+
 function updateNotificationBadge(data) {
 
     const badge =
@@ -616,39 +878,35 @@ function updateNotificationBadge(data) {
         data.statistiques || {};
 
 
-    /*
-     * Les alertes réelles présentes
-     * dans la table Alerte.
-     */
     const alertes =
         Array.isArray(data.alertes)
             ? data.alertes
             : [];
 
 
-    /*
-     * Nombre d'alertes nouvelles.
-     */
     let totalAlertes =
         alertes.length;
 
 
-    /*
-     * Si aucune alerte n'est enregistrée,
-     * on peut tout de même afficher les
-     * problèmes calculés par le dashboard.
-     */
     if (totalAlertes === 0) {
 
         totalAlertes =
-            Number(stats.stockFaible || 0) +
-            Number(stats.expirationsProches || 0) +
-            Number(stats.lotsExpires || 0);
+            Number(
+                stats.stockFaible || 0
+            ) +
+            Number(
+                stats.expirationsProches || 0
+            ) +
+            Number(
+                stats.lotsExpires || 0
+            );
     }
 
 
     badge.textContent =
-        formatNumber(totalAlertes);
+        formatNumber(
+            totalAlertes
+        );
 }
 
 
@@ -657,12 +915,14 @@ function updateNotificationBadge(data) {
  * ÉVÉNEMENTS
  * =====================================================
  */
+
 function setupEvents() {
 
 
     /*
      * Actualiser
      */
+
     const refreshButton =
         document.getElementById(
             "refreshButton"
@@ -675,10 +935,13 @@ function setupEvents() {
             "click",
             async () => {
 
-                refreshButton.disabled = true;
+                refreshButton.disabled =
+                    true;
+
 
                 const originalText =
                     refreshButton.textContent;
+
 
                 refreshButton.textContent =
                     "Actualisation...";
@@ -690,10 +953,13 @@ function setupEvents() {
 
                 } finally {
 
-                    refreshButton.disabled = false;
+                    refreshButton.disabled =
+                        false;
+
 
                     refreshButton.textContent =
-                        originalText || "↻ Actualiser";
+                        originalText ||
+                        "↻ Actualiser";
                 }
             }
         );
@@ -701,8 +967,11 @@ function setupEvents() {
 
 
     /*
-     * Déconnexion
+     * =====================================================
+     * DÉCONNEXION
+     * =====================================================
      */
+
     const logout =
         document.getElementById(
             "logoutBtn"
@@ -721,12 +990,23 @@ function setupEvents() {
                 try {
 
                     await fetch(
-                        "../../backend/auth/logout.php",
+                        "../../backend/auth/connexion.php",
                         {
                             method: "POST",
-                            credentials: "include"
+
+                            headers: {
+                                "Content-Type":
+                                    "application/x-www-form-urlencoded"
+                            },
+
+                            body:
+                                "action=logout",
+
+                            credentials:
+                                "include"
                         }
                     );
+
 
                 } catch (error) {
 
@@ -735,10 +1015,15 @@ function setupEvents() {
                         error
                     );
 
+
                 } finally {
 
+                    /*
+                     * Retour à la page de connexion.
+                     */
+
                     window.location.href =
-                        "login.html";
+                        "connexion.html";
                 }
             }
         );
@@ -751,6 +1036,7 @@ function setupEvents() {
  * AFFICHAGE DU CHARGEMENT
  * =====================================================
  */
+
 function showLoading() {
 
     const activity =
@@ -791,6 +1077,7 @@ function showLoading() {
  * AFFICHAGE D'UNE ERREUR
  * =====================================================
  */
+
 function showError(message) {
 
     const activity =
@@ -815,12 +1102,15 @@ function showError(message) {
  * FORMAT NOMBRE
  * =====================================================
  */
+
 function formatNumber(value) {
 
     return new Intl.NumberFormat(
         "fr-FR"
     ).format(
-        Number(value || 0)
+        Number(
+            value || 0
+        )
     );
 }
 
@@ -830,6 +1120,7 @@ function formatNumber(value) {
  * FORMAT MONNAIE
  * =====================================================
  */
+
 function formatCurrency(value) {
 
     return new Intl.NumberFormat(
@@ -839,7 +1130,9 @@ function formatCurrency(value) {
             currency: "EUR"
         }
     ).format(
-        Number(value || 0)
+        Number(
+            value || 0
+        )
     );
 }
 
@@ -849,6 +1142,7 @@ function formatCurrency(value) {
  * FORMAT DATE
  * =====================================================
  */
+
 function formatDate(date) {
 
     if (!date) {
@@ -856,10 +1150,6 @@ function formatDate(date) {
     }
 
 
-    /*
-     * Pour une date MySQL :
-     * YYYY-MM-DD
-     */
     const parts =
         String(date).split("-");
 
@@ -879,6 +1169,7 @@ function formatDate(date) {
  * FORMAT DATE + HEURE
  * =====================================================
  */
+
 function formatDateTime(date) {
 
     if (!date) {
@@ -890,17 +1181,21 @@ function formatDateTime(date) {
         String(date);
 
 
-    /*
-     * MySQL :
-     * YYYY-MM-DD HH:MM:SS
-     */
     const d =
         new Date(
-            value.replace(" ", "T")
+            value.replace(
+                " ",
+                "T"
+            )
         );
 
 
-    if (Number.isNaN(d.getTime())) {
+    if (
+        Number.isNaN(
+            d.getTime()
+        )
+    ) {
+
         return value;
     }
 
@@ -923,20 +1218,42 @@ function formatDateTime(date) {
  * PROTECTION XSS
  * =====================================================
  */
+
 function escapeHtml(value) {
 
     if (
         value === null ||
         value === undefined
     ) {
+
         return "";
     }
 
 
     return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
 }

@@ -2,6 +2,29 @@
 
 session_start();
 
+
+/* =========================================================
+   DÉCONNEXION
+========================================================= */
+
+if (
+    $_SERVER["REQUEST_METHOD"] === "POST" &&
+    isset($_POST["action"]) &&
+    $_POST["action"] === "logout"
+) {
+
+    $_SESSION = [];
+
+    session_destroy();
+
+    echo json_encode([
+        "success" => true
+    ], JSON_UNESCAPED_UNICODE);
+
+    exit;
+}
+
+
 /* =========================================================
    CONNEXION À LA BASE DE DONNÉES
 ========================================================= */
@@ -138,7 +161,6 @@ if ($utilisateur["role"] === "ADMIN") {
 
 if ($utilisateur["role"] === "PHARMACIEN") {
 
-    // À remplacer plus tard par le dashboard pharmacien
     header(
         "Location: ../../frontend/pages/dashboard-pharmacien.html"
     );
@@ -149,7 +171,6 @@ if ($utilisateur["role"] === "PHARMACIEN") {
 
 if ($utilisateur["role"] === "EMPLOYE") {
 
-    // À remplacer plus tard par le dashboard employé
     header(
         "Location: ../../frontend/pages/dashboard-employe.html"
     );

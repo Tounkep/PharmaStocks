@@ -449,8 +449,7 @@ body {
     display: grid;
 
     grid-template-columns:
-        minmax(0, 2fr)
-        minmax(280px, 1fr);
+        minmax(0, 2fr) minmax(280px, 1fr);
 
     gap: 20px;
 
@@ -461,8 +460,7 @@ body {
     display: grid;
 
     grid-template-columns:
-        minmax(0, 1.5fr)
-        minmax(280px, 1fr);
+        minmax(0, 1.5fr) minmax(280px, 1fr);
 
     gap: 20px;
 
@@ -958,4 +956,333 @@ body {
         height: 220px;
     }
 
+}
+
+/* =========================================================
+   COMPLÉMENTS POUR LE DASHBOARD PHARMAMANAGER
+========================================================= */
+
+/* Cartes d'action principales (4 grands blocs de couleur) */
+.action-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.action-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 25px;
+    border-radius: 16px;
+    color: white;
+    text-decoration: none;
+    min-height: 140px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.action-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+}
+
+.action-card-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+}
+
+.action-card h3 {
+    margin: 0 0 6px 0;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.action-card p {
+    margin: 0;
+    font-size: 13px;
+    opacity: 0.9;
+}
+
+/* Couleurs des cartes d'action */
+.action-card.green {
+    background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.action-card.blue {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.action-card.purple {
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+.action-card.orange {
+    background: linear-gradient(135deg, #f97316, #ea580c);
+}
+
+/* Lien "Voir toutes les ventes" */
+.card-footer-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 15px;
+    color: #087f80;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.card-footer-link:hover {
+    text-decoration: underline;
+}
+
+/* Modale pour ajouter une vente (Backend simulation) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    color: #022f39;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btn-secondary {
+    background: #e2e8f0;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: #087f80;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .action-cards-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 1. Bloquer le défilement de toute la page */
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    /* Empêche le scroll global */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 2. Conteneur principal plein écran */
+.app-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* 3. Barre latérale fixe */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #032b35;
+    /* Couleur sombre de la sidebar */
+    display: flex;
+    flex-direction: column;
+    padding: 20px 15px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    /* Empêche la sidebar de se déformer */
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    /* Remplit l'espace vertical */
+}
+
+.sidebar-bottom {
+    margin-top: auto;
+    /* Pousse Déconnexion tout en bas */
+    padding-top: 15px;
+}
+
+/* 4. Zone de contenu principal */
+.main-content {
+    flex: 1;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    /* Si le contenu dépasse sur petit écran, seul le contenu défile, pas la sidebar */
+    padding: 20px 30px;
+    box-sizing: border-box;
+    background-color: #f8fafc;
+}
+
+/* 5. Adapter les espaces pour que tout rentre dans 100vh */
+.action-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    flex: 1;
+    /* Ajuste automatiquement la hauteur des cartes du bas */
+}
+
+.dashboard-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* Zone supérieure droite */
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Bouton notification avec badge rouge */
+.notification-button {
+    position: relative;
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    color: #475569;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 10px;
+    height: 10px;
+    background-color: #ef4444;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+}
+
+/* Profil utilisateur */
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+/* Conteneur cercle de l'avatar */
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #e0f2fe;
+    /* Fond bleu clair doux */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* Image de l'avatar */
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Fallback Icône */
+.avatar-icon {
+    color: #0284c7;
+    font-size: 1.1rem;
+}
+
+/* Informations texte de l'utilisateur */
+.user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.user-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #1e293b;
+}
+
+.dropdown-icon {
+    font-size: 0.7rem;
+    color: #64748b;
+}
+
+.user-role {
+    font-size: 0.8rem;
+    color: #64748b;
 }

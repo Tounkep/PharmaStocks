@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>PharmaStock - Utilisateurs</title>
+
+
+    <!-- CSS général -->
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+
+    <!-- CSS du dashboard -->
+    <link
+        rel="stylesheet"
+        href="../css/dashboard.css"
+    >
+
+    <!-- CSS spécifique aux utilisateurs -->
+    <link
+        rel="stylesheet"
+        href="../css/utilisateurs.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<div class="app-container">
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar">
+
+
+        <!-- LOGO -->
+
+        <div class="logo-container">
+
+            <img
+                src="../images/logo1.png"
+                class="logo-image"
+                alt="Logo PharmaStock"
+            >
+
+            <div class="logo-text">
+                PharmaStock
+            </div>
+
+        </div>
+
+
+        <!-- MENU -->
+
+        <nav class="sidebar-menu">
+
+
+            <!-- DASHBOARD -->
+
+            <a
+                href="dashboard-admin.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    ⌂
+                </span>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <!-- MEDICAMENTS -->
+
+            <a
+                href="#"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    💊
+                </span>
+
+                <span>
+                    Médicaments
+                </span>
+
+            </a>
+
+
+            <!-- STOCK -->
+
+            <a
+                href="#"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    📦
+                </span>
+
+                <span>
+                    Stock
+                </span>
+
+            </a>
+
+
+            <!-- VENTES -->
+
+            <a
+                href="#"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    🛒
+                </span>
+
+                <span>
+                    Ventes
+                </span>
+
+            </a>
+
+
+            <!-- FOURNISSEURS -->
+
+            <a
+                href="#"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    🚚
+                </span>
+
+                <span>
+                    Fournisseurs
+                </span>
+
+            </a>
+
+
+            <!-- UTILISATEURS -->
+
+            <a
+                href="utilisateurs.html"
+                class="menu-item active"
+            >
+
+                <span class="menu-icon">
+                    👥
+                </span>
+
+                <span>
+                    Utilisateurs
+                </span>
+
+            </a>
+
+
+            <!-- RAPPORTS -->
+
+            <a
+                href="#"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    📊
+                </span>
+
+                <span>
+                    Rapports
+                </span>
+
+            </a>
+
+
+            <!-- PARAMETRES -->
+
+            <a
+                href="#"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    ⚙
+                </span>
+
+                <span>
+                    Paramètres
+                </span>
+
+            </a>
+
+
+        </nav>
+
+
+        <!-- DECONNEXION -->
+
+        <div class="sidebar-bottom">
+
+            <a
+                href="#"
+                id="logoutBtn"
+                class="menu-item logout"
+            >
+
+                <span class="menu-icon">
+                    ↪
+                </span>
+
+                <span>
+                    Déconnexion
+                </span>
+
+            </a>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         CONTENU PRINCIPAL
+    ====================================================== -->
+
+    <main class="main-content">
+
+
+        <!-- =================================================
+             TOPBAR
+        ================================================== -->
+
+        <header class="topbar">
+
+
+            <!-- RECHERCHE -->
+
+            <div class="search-container">
+
+                <span>
+                    ⌕
+                </span>
+
+                <input
+                    type="text"
+                    id="globalSearch"
+                    placeholder="Rechercher..."
+                >
+
+            </div>
+
+
+
+            <!-- PARTIE DROITE -->
+
+            <div class="topbar-right">
+
+
+                <!-- NOTIFICATIONS -->
+
+                <button
+                    type="button"
+                    class="notification-button"
+                    id="notificationButton"
+                >
+
+                    🔔
+
+                    <span
+                        class="notification-badge"
+                        id="notificationBadge"
+                    >
+                        0
+                    </span>
+
+                </button>
+
+
+
+                <!-- ADMIN CONNECTÉ -->
+
+                <div class="user-profile">
+
+
+                    <!-- AVATAR -->
+
+                    <div
+                        class="avatar"
+                        id="adminAvatar"
+                    >
+                        A
+                    </div>
+
+
+                    <!-- NOM -->
+
+                    <div class="user-info">
+
+                        <strong id="adminName">
+                            Admin
+                        </strong>
+
+                        <small>
+                            Administrateur
+                        </small>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </header>
+
+
+
+        <!-- =================================================
+             CONTENU UTILISATEURS
+        ================================================== -->
+
+        <section class="dashboard-content users-content">
+
+
+            <!-- TITRE -->
+
+            <div class="users-header">
+
+
+                <div>
+
+                    <h1>
+                        Utilisateurs
+                    </h1>
+
+                    <p>
+                        Gérez les utilisateurs de votre pharmacie.
+                    </p>
+
+                </div>
+
+
+                <!-- BOUTON AJOUTER -->
+
+                <button
+                    type="button"
+                    id="addUserBtn"
+                    class="add-user-btn"
+                >
+
+                    + Ajouter un utilisateur
+
+                </button>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 MESSAGE
+            ================================================== -->
+
+            <div
+                id="message"
+                class="users-message"
+            ></div>
+
+
+
+            <!-- =================================================
+                 CARTE UTILISATEURS
+            ================================================== -->
+
+            <div class="dashboard-card users-card">
+
+
+                <!-- HEADER CARTE -->
+
+                <div class="card-header">
+
+
+                    <div>
+
+                        <h2>
+                            Liste des utilisateurs
+                        </h2>
+
+                        <p>
+                            Utilisateurs enregistrés dans PharmaStock
+                        </p>
+
+                    </div>
+
+
+                    <span
+                        id="userCount"
+                        class="user-count"
+                    >
+                        0 utilisateur
+                    </span>
+
+
+                </div>
+
+
+
+                <!-- TABLEAU -->
+
+                <div class="users-table-container">
+
+
+                    <table class="users-table">
+
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    #
+                                </th>
+
+                                <th>
+                                    Nom
+                                </th>
+
+                                <th>
+                                    Prénom
+                                </th>
+
+                                <th>
+                                    Email
+                                </th>
+
+                                <th>
+                                    Rôle
+                                </th>
+
+                                <th>
+                                    Actions
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="usersTableBody">
+
+                            <!--
+                                Les utilisateurs seront ajoutés
+                                ici avec utilisateurs.js
+                            -->
+
+                        </tbody>
+
+
+                    </table>
+
+
+
+                    <!-- AUCUN UTILISATEUR -->
+
+                    <div
+                        id="emptyUsers"
+                        class="empty-users"
+                    >
+
+                        <div class="empty-users-icon">
+                            👥
+                        </div>
+
+                        <h3>
+                            Aucun utilisateur
+                        </h3>
+
+                        <p>
+                            Aucun utilisateur n'est encore enregistré.
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     MODAL AJOUT / MODIFICATION UTILISATEUR
+========================================================== -->
+
+<div
+    id="userModal"
+    class="user-modal"
+>
+
+
+    <div class="user-modal-content">
+
+
+        <!-- HEADER -->
+
+        <div class="user-modal-header">
+
+
+            <div>
+
+                <h2 id="modalTitle">
+                    Ajouter un utilisateur
+                </h2>
+
+                <p>
+                    Remplissez les informations de l'utilisateur.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="closeModalBtn"
+                class="close-modal-btn"
+            >
+                ×
+            </button>
+
+
+        </div>
+
+
+
+        <!-- FORMULAIRE -->
+
+        <form
+            id="userForm"
+            autocomplete="off"
+        >
+
+
+            <!-- ID CACHÉ -->
+
+            <input
+                type="hidden"
+                id="userId"
+                name="id"
+            >
+
+
+
+            <!-- NOM / PRÉNOM -->
+
+            <div class="form-row">
+
+
+                <div class="form-group">
+
+                    <label for="nom">
+                        Nom
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nom"
+                        name="nom"
+                        placeholder="Ex : Dupont"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="prenom">
+                        Prénom
+                    </label>
+
+                    <input
+                        type="text"
+                        id="prenom"
+                        name="prenom"
+                        placeholder="Ex : Jean"
+                        required
+                    >
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- EMAIL -->
+
+            <div class="form-group">
+
+                <label for="email">
+                    Adresse email
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Ex : jean.dupont@gmail.com"
+                    required
+                >
+
+            </div>
+
+
+
+            <!-- MOT DE PASSE -->
+
+            <div class="form-group">
+
+                <label for="motDePasse">
+                    Mot de passe
+                </label>
+
+                <input
+                    type="password"
+                    id="motDePasse"
+                    name="motDePasse"
+                    placeholder="Mot de passe"
+                >
+
+                <small id="passwordHelp">
+                    Obligatoire lors de la création.
+                </small>
+
+            </div>
+
+
+
+            <!-- ROLE -->
+
+            <div class="form-group">
+
+                <label for="role_id">
+                    Rôle
+                </label>
+
+                <select
+                    id="role_id"
+                    name="role_id"
+                    required
+                >
+
+                    <option value="">
+                        Sélectionner un rôle
+                    </option>
+
+                    <option value="1">
+                        Administrateur
+                    </option>
+
+                    <option value="2">
+                        Pharmacien
+                    </option>
+
+                    <option value="3">
+                        Employé
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- BOUTONS -->
+
+            <div class="user-modal-actions">
+
+
+                <button
+                    type="button"
+                    id="cancelUserBtn"
+                    class="cancel-user-btn"
+                >
+
+                    Annuler
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="save-user-btn"
+                >
+
+                    Enregistrer
+
+                </button>
+
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================== -->
+
+<script src="../js/utilisateurs.js"></script>
+
+
+</body>
+
+</html>

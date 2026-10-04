@@ -1,0 +1,780 @@
+/* =========================================================
+   CONTENU UTILISATEURS
+========================================================= */
+
+.users-content {
+    width: 100%;
+}
+
+
+/* =========================================================
+   EN-TÊTE
+========================================================= */
+
+.users-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+
+    margin-bottom: 25px;
+}
+
+.users-header h1 {
+    margin: 0;
+}
+
+
+/* =========================================================
+   BOUTON AJOUTER
+========================================================= */
+
+.add-user-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 11px 18px;
+
+    border: none;
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    background: #0f9d8a;
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    transition: all 0.2s ease;
+}
+
+.add-user-btn:hover {
+    background: #0b8878;
+
+    transform: translateY(-1px);
+}
+
+.add-user-btn:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+.users-message {
+    display: none;
+
+    padding: 12px 16px;
+
+    margin-bottom: 20px;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+}
+
+.users-message.success {
+    background: #e8f7f3;
+    color: #087f6c;
+}
+
+.users-message.error {
+    background: #ffebee;
+    color: #c62828;
+}
+
+
+/* =========================================================
+   CARTE UTILISATEURS
+========================================================= */
+
+.users-card {
+    width: 100%;
+
+    background: #ffffff;
+
+    border-radius: 18px;
+
+    overflow: hidden;
+}
+
+.user-count {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 8px 18px;
+
+    border-radius: 20px;
+
+    font-size: 15px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   TABLEAU
+========================================================= */
+
+.users-table-container {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+.users-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    table-layout: fixed;
+}
+
+.users-table th {
+    padding: 18px 16px;
+
+    text-align: left;
+
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.users-table td {
+    padding: 18px 16px;
+
+    border-top: 1px solid #edf1f3;
+
+    vertical-align: middle;
+}
+
+
+/* =========================================================
+   LARGEURS DES COLONNES
+========================================================= */
+
+/* # */
+
+.users-table th:nth-child(1),
+.users-table td:nth-child(1) {
+    width: 7%;
+
+    text-align: center;
+}
+
+
+/* Nom */
+
+.users-table th:nth-child(2),
+.users-table td:nth-child(2) {
+    width: 17%;
+}
+
+
+/* Prénom */
+
+.users-table th:nth-child(3),
+.users-table td:nth-child(3) {
+    width: 17%;
+}
+
+
+/* Email */
+
+.users-table th:nth-child(4),
+.users-table td:nth-child(4) {
+    width: 29%;
+}
+
+
+/* Rôle */
+
+.users-table th:nth-child(5),
+.users-table td:nth-child(5) {
+    width: 17%;
+}
+
+
+/* Actions */
+
+.users-table th:nth-child(6),
+.users-table td:nth-child(6) {
+    width: 13%;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   ID
+========================================================= */
+
+.user-id {
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   NOM
+========================================================= */
+
+.user-name {
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   PRÉNOM
+========================================================= */
+
+.user-firstname {
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   EMAIL
+========================================================= */
+
+.user-email {
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   BADGES DES RÔLES
+========================================================= */
+
+.role-badge {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 8px 14px;
+
+    border-radius: 20px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+/* Administrateur */
+
+.role-admin {
+    background: #eee8ff;
+    color: #6842c2;
+}
+
+
+/* Pharmacien */
+
+.role-pharmacien {
+    background: #e4f7f4;
+    color: #087f78;
+}
+
+
+/* Employé */
+
+.role-employe {
+    background: #fff1df;
+    color: #c96b16;
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.user-actions {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+}
+
+
+/* =========================================================
+   BOUTONS MODIFIER / SUPPRIMER
+========================================================= */
+
+.edit-user-btn,
+.delete-user-btn {
+    width: 38px;
+    height: 38px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: none;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 17px;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background-color 0.2s ease;
+}
+
+
+/* Modifier */
+
+.edit-user-btn {
+    background: #eef5ff;
+
+    color: #1976d2;
+}
+
+
+/* Supprimer */
+
+.delete-user-btn {
+    background: #fff0f0;
+
+    color: #e53935;
+}
+
+
+/* Survol */
+
+.edit-user-btn:hover {
+    background: #e1edff;
+
+    transform: translateY(-2px);
+}
+
+.delete-user-btn:hover {
+    background: #ffe2e2;
+
+    transform: translateY(-2px);
+}
+
+
+/* Clic */
+
+.edit-user-btn:active,
+.delete-user-btn:active {
+    transform: translateY(0);
+}
+
+
+/* Focus clavier */
+
+.edit-user-btn:focus,
+.delete-user-btn:focus {
+    outline: 2px solid #90caf9;
+
+    outline-offset: 2px;
+}
+
+
+/* =========================================================
+   ETAT VIDE
+========================================================= */
+
+.empty-users {
+    padding: 40px 20px;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.user-modal {
+    position: fixed;
+
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(7, 59, 76, 0.45);
+
+    z-index: 1000;
+}
+
+.user-modal.active {
+    display: flex;
+}
+
+
+/* =========================================================
+   CONTENU DU MODAL
+========================================================= */
+
+.user-modal-content {
+    width: 100%;
+
+    max-width: 650px;
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    background: #ffffff;
+
+    border-radius: 18px;
+
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+}
+
+
+/* =========================================================
+   EN-TÊTE DU MODAL
+========================================================= */
+
+.user-modal-header {
+    display: flex;
+
+    align-items: flex-start;
+    justify-content: space-between;
+
+    padding: 28px 32px 22px;
+
+    border-bottom: 1px solid #edf1f3;
+}
+
+.user-modal-header > div {
+    flex: 1;
+}
+
+.user-modal-header h2 {
+    margin: 0 0 6px;
+
+    color: #073b4c;
+
+    font-size: 27px;
+
+    font-weight: 700;
+}
+
+.user-modal-header p {
+    margin: 0;
+
+    color: #78909c;
+
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   BOUTON FERMER
+========================================================= */
+
+.close-modal-btn {
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    margin-left: 15px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: transparent;
+
+    color: #263238;
+
+    cursor: pointer;
+
+    font-size: 25px;
+
+    line-height: 1;
+
+    transition: 0.2s ease;
+}
+
+.close-modal-btn:hover {
+    background: #f1f5f6;
+}
+
+
+/* =========================================================
+   FORMULAIRE
+========================================================= */
+
+#userForm {
+    padding: 26px 32px 10px;
+}
+
+
+/* Deux champs sur la même ligne */
+
+.form-row {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px;
+}
+
+
+/* Groupe */
+
+.form-group {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+    margin-bottom: 22px;
+}
+
+
+/* Labels */
+
+.form-group label {
+    color: #073b4c;
+
+    font-size: 15px;
+
+    font-weight: 600;
+}
+
+
+/* Champs */
+
+.form-group input,
+.form-group select {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    min-height: 50px;
+
+    padding: 0 16px;
+
+    border: 1px solid #d7e0e4;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #073b4c;
+
+    font-size: 15px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* Placeholder */
+
+.form-group input::placeholder {
+    color: #9aa5aa;
+}
+
+
+/* Focus */
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #0f9d8a;
+
+    box-shadow: 0 0 0 3px rgba(15, 157, 138, 0.12);
+}
+
+
+/* Petit texte */
+
+.form-group small {
+    margin-top: -2px;
+
+    color: #78909c;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   BOUTONS DU MODAL
+========================================================= */
+
+.user-modal-actions {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    gap: 12px;
+
+    padding: 20px 32px 28px;
+
+    border-top: 1px solid #edf1f3;
+}
+
+
+/* Tous les boutons */
+
+.user-modal-actions button {
+    min-width: 115px;
+
+    height: 44px;
+
+    padding: 0 20px;
+
+    border-radius: 9px;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+/* =========================================================
+   BOUTON ANNULER
+========================================================= */
+
+#cancelUserBtn {
+    border: 1px solid #d5dde0;
+
+    background: #ffffff;
+
+    color: #546e7a;
+}
+
+#cancelUserBtn:hover {
+    background: #f5f7f8;
+
+    border-color: #b9c5c9;
+}
+
+
+/* =========================================================
+   BOUTON ENREGISTRER
+========================================================= */
+
+.save-user-btn {
+    border: 1px solid #0f9d8a;
+
+    background: #0f9d8a;
+
+    color: #ffffff;
+}
+
+.save-user-btn:hover {
+    background: #0b8878;
+
+    border-color: #0b8878;
+
+    transform: translateY(-1px);
+}
+
+.save-user-btn:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .users-table {
+        min-width: 850px;
+    }
+
+    .users-table-container {
+        overflow-x: auto;
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .user-modal {
+        padding: 12px;
+    }
+
+    .user-modal-content {
+        max-height: 95vh;
+
+        border-radius: 14px;
+    }
+
+    .user-modal-header {
+        padding: 22px 20px 18px;
+    }
+
+    .user-modal-header h2 {
+        font-size: 23px;
+    }
+
+    #userForm {
+        padding: 22px 20px 5px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+
+        gap: 0;
+    }
+
+    .user-modal-actions {
+        padding: 18px 20px 22px;
+    }
+}
+
+
+@media (max-width: 650px) {
+
+    .users-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+}

@@ -1,0 +1,256 @@
+<?php require_once 'dashboard.php'; ?>
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PharmaManager - Dashboard</title>
+    <!-- CSS principal du projet -->
+    <link rel="stylesheet" href="css/dashboard.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="app-container">
+        <!-- Barre latérale -->
+        <aside class="sidebar">
+            <!-- 1. Logo -->
+            <div class="logo-container">
+                <img src="images/logo1.png" alt="PharmaManager Logo" class="logo-image">
+                <span class="logo-text">PharmaManager</span>
+            </div>
+
+            <!-- 2. Liens principaux (menu) -->
+            <nav class="sidebar-menu">
+                <a href="index.php" class="menu-item active">
+                    <i class="fa-solid fa-house menu-icon"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="medicaments.php" class="menu-item">
+                    <i class="fa-solid fa-pills menu-icon"></i>
+                    <span>Médicaments</span>
+                </a>
+                <a href="stock.php" class="menu-item">
+                    <i class="fa-solid fa-box-open menu-icon"></i>
+                    <span>Stock</span>
+                </a>
+                <a href="ventes.php" class="menu-item">
+                    <i class="fa-solid fa-cart-shopping menu-icon"></i>
+                    <span>Ventes</span>
+                </a>
+                <a href="fournisseurs.php" class="menu-item">
+                    <i class="fa-solid fa-truck-field menu-icon"></i>
+                    <span>Fournisseurs</span>
+                </a>
+            </nav>
+
+            <!-- 3. Déconnexion poussée en bas -->
+            <div class="sidebar-bottom">
+                <a href="logout.php" class="menu-item">
+                    <i class="fa-solid fa-right-from-bracket menu-icon"></i>
+                    <span>Déconnexion</span>
+                </a>
+            </div>
+        </aside>
+        <!-- Contenu principal -->
+        <main class="main-content">
+
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="search-container">
+                    <i class="fa-solid fa-magnifying-glass" style="color: #8093a2;"></i>
+                    <input type="text" id="searchInput" placeholder="Rechercher...">
+                </div>
+
+                <div class="topbar-right">
+                    <button class="notification-button">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="notification-badge">
+                            <?= isset($user['notifications']) ? $user['notifications'] : 1 ?>
+                        </span>
+                    </button>
+
+                    <div class="user-profile">
+                        <div class="avatar">
+                            <!-- Image de l'avatar située dans votre dossier images/ -->
+                            <img src="images/avatar.jpg" alt="Avatar Admin" class="avatar-img"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+                            <!-- Icône de secours si l'image n'est pas trouvée -->
+                            <i class="fa-regular fa-user" style="display: none;"></i>
+                        </div>
+                        <div class="user-info">
+                            <strong>
+                                <span id="user-firstname">
+                                    <?= htmlspecialchars($user['name'] ?? 'Admin') ?>
+                                </span>
+                                <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i>
+                            </strong>
+                            <small id="user-role">
+                                <?= htmlspecialchars($user['role'] ?? 'Administrateur') ?>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Message de bienvenue -->
+                <section class="welcome-section">
+                    <div>
+                        <h1>Bonjour <span id="welcome-firstname">
+                                <?= htmlspecialchars($user['name'] ?? 'Thomas') ?>
+                            </span> 👋</h1>
+                        <p>Que souhaitez-vous faire ?</p>
+                    </div>
+                </section>
+
+                <!-- Cartes d'action rapide -->
+                <section class="action-cards-grid">
+                    <a href="#" class="action-card green" id="btnNewSale">
+                        <i class="fa-solid fa-cart-shopping action-card-icon"></i>
+                        <div>
+                            <h3>Nouvelle vente</h3>
+                            <p>Enregistrer une vente</p>
+                        </div>
+                    </a>
+
+                    <a href="#" class="action-card blue">
+                        <i class="fa-solid fa-magnifying-glass action-card-icon"></i>
+                        <div>
+                            <h3>Rechercher un médicament</h3>
+                            <p>Consulter les informations</p>
+                        </div>
+                    </a>
+
+                    <a href="#" class="action-card purple">
+                        <i class="fa-solid fa-box action-card-icon"></i>
+                        <div>
+                            <h3>Consulter le stock</h3>
+                            <p>Voir les quantités disponibles</p>
+                        </div>
+                    </a>
+
+                    <a href="#" class="action-card orange">
+                        <i class="fa-solid fa-triangle-exclamation action-card-icon"></i>
+                        <div>
+                            <h3>Alertes stock</h3>
+                            <p>Voir les produits en rupture</p>
+                        </div>
+                    </a>
+                </section>
+
+                <!-- Grille inférieure (Activité du jour + Informations rapides) -->
+                <section class="bottom-grid">
+
+                    <!-- Activité du jour -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h2>Activité du jour</h2>
+                        </div>
+
+                        <div class="sales-list" id="salesList">
+                            <?php if (isset($_SESSION['sales']) && !empty($_SESSION['sales'])): ?>
+                            <?php foreach (array_reverse($_SESSION['sales']) as $sale): ?>
+                            <div class="recent-sale-item">
+                                <div class="sale-icon">
+                                    <i class="fa-solid fa-cart-shopping" style="color: #087f80; font-size: 14px;"></i>
+                                </div>
+                                <div class="sale-info">
+                                    <strong>Vente
+                                        <?= htmlspecialchars($sale['id']) ?>
+                                    </strong>
+                                </div>
+                                <div class="sale-amount">
+                                    <?= htmlspecialchars($sale['amount']) ?>
+                                </div>
+                                <div class="activity-date" style="margin-left: 20px;">
+                                    <?= htmlspecialchars($sale['time']) ?>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                            <?php endif; ?>
+                        </div>
+
+                        <a href="ventes.php" class="card-footer-link">
+                            Voir toutes les ventes <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <!-- Informations rapides (Avertissements/Stock) -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h2>Informations rapides</h2>
+                        </div>
+
+                        <div class="alerts-list">
+                            <div class="alert-item warning">
+                                <div class="alert-icon" style="color: #f59e0b;">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                </div>
+                                <div class="alert-content">
+                                    <span>Stock faible</span>
+                                </div>
+                                <strong>
+                                    <?= $quick_info['low_stock'] ?? 8 ?>
+                                </strong>
+                            </div>
+
+                            <div class="alert-item danger">
+                                <div class="alert-icon" style="color: #ef4444;">
+                                    <i class="fa-solid fa-circle-exclamation"></i>
+                                </div>
+                                <div class="alert-content">
+                                    <span>Ruptures de stock</span>
+                                </div>
+                                <strong>
+                                    <?= $quick_info['out_of_stock'] ?? 5 ?>
+                                </strong>
+                            </div>
+
+                            <div class="alert-item orange">
+                                <div class="alert-icon" style="color: #f97316;">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                </div>
+                                <div class="alert-content">
+                                    <span>Expirations proches</span>
+                                </div>
+                                <strong>
+                                    <?= $quick_info['expiring_soon'] ?? 3 ?>
+                                </strong>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Modal d'enregistrement d'une vente pour le backend PHP -->
+    <div class="modal-overlay" id="saleModal">
+        <div class="modal-content">
+            <h3>Enregistrer une vente</h3>
+            <form method="POST" action="api.php">
+                <input type="hidden" name="action" value="add_sale">
+                <div class="form-group">
+                    <label for="amount">Montant de la vente (€) :</label>
+                    <input type="number" step="0.01" id="amount" name="amount" required placeholder="ex: 15.50">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="btnCancelModal">Annuler</button>
+                    <button type="submit" class="btn-primary">Valider</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script JS principal -->
+    <script src="js/employee.js"></script>
+</body>
+
+</html>

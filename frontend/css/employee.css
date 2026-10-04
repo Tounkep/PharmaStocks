@@ -51,6 +51,105 @@ body {
     margin-bottom: 30px;
 }
 
+/* Style du conteneur du logo */
+.sidebar .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 15px;
+}
+
+/* --- Mise à jour du style du menu actif (Bouton dégradé vert-bleu) --- */
+.menu a {
+    color: #a0b2b8;
+    text-decoration: none;
+    padding: 12px 18px;
+    border-radius: 25px;
+    /* Arrondi prononcé comme sur la maquette */
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.menu a:hover,
+.menu a.active {
+    background: linear-gradient(135deg, #00b894, #00cec9);
+    /* Dégradé turquoise/vert */
+    color: #ffffff;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 184, 148, 0.25);
+}
+
+/* --- Style de la carte Banner (En bas à gauche) --- */
+.bottom-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 20px;
+}
+
+.banner-card {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.banner-text h2 {
+    font-size: 1.3rem;
+    color: #0d3b66;
+    line-height: 1.4;
+    max-width: 200px;
+    font-weight: 700;
+}
+
+.banner-image img {
+    width: 150px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+/* --- Style de l'en-tête de l'activité du jour --- */
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.panel-header h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #0d2c38;
+}
+
+.panel-header i {
+    color: #a0b2b8;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+/* --- Ajustement du logo --- */
+.sidebar .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0 25px 5px;
+}
+
+.sidebar .logo-img {
+    max-height: 45px;
+    width: auto;
+    object-fit: contain;
+}
+
 .menu {
     display: flex;
     flex-direction: column;

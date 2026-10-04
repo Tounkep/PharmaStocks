@@ -1,0 +1,661 @@
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+body {
+    min-height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 30px;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    background: #edf5f7;
+
+    color: #12303f;
+}
+
+
+/* =========================================================
+   GRANDE CARTE
+   Deux blocs côte à côte
+========================================================= */
+
+.login-card {
+    width: 100%;
+
+    max-width: 1050px;
+
+    min-height: 620px;
+
+    display: grid;
+
+    grid-template-columns: 50% 50%;
+
+    background: white;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 20px 50px rgba(14, 59, 92, 0.15);
+}
+
+
+/* =========================================================
+   BLOC GAUCHE
+========================================================= */
+
+.left-panel {
+    position: relative;
+
+    min-height: 620px;
+
+    overflow: hidden;
+
+    background: #075b63;
+}
+
+
+/* =========================================================
+   IMAGE DE FOND
+========================================================= */
+
+.background-image {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+}
+
+
+/* =========================================================
+   VOILE SUR L'IMAGE
+========================================================= */
+
+.image-overlay {
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0, 67, 78, 0.88),
+            rgba(0, 125, 119, 0.58),
+            rgba(0, 54, 70, 0.90)
+        );
+}
+
+
+/* =========================================================
+   CONTENU GAUCHE
+========================================================= */
+
+.left-content {
+    position: relative;
+
+    z-index: 2;
+
+    height: 100%;
+
+    padding: 45px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    color: white;
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.logo {
+    width: 280px;
+
+    height: auto;
+
+    max-height: 150px;
+
+    object-fit: contain;
+
+    display: block;
+
+    margin: 80px auto 0 auto;
+
+    mix-blend-mode: multiply;
+}
+
+
+/* =========================================================
+   PRESENTATION
+========================================================= */
+
+.presentation {
+    margin-top: auto;
+
+    margin-bottom: auto;
+
+    max-width: 390px;
+}
+
+
+.presentation h1 {
+    font-size: 30px;
+
+    line-height: 1.35;
+
+    font-weight: 700;
+
+    margin-bottom: 20px;
+}
+
+
+.presentation p {
+    font-size: 14px;
+
+    line-height: 1.8;
+
+    color: rgba(255, 255, 255, 0.88);
+
+    max-width: 350px;
+}
+
+
+/* =========================================================
+   TEXTE DU BAS
+========================================================= */
+
+.left-bottom-text {
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: rgba(255, 255, 255, 0.85);
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   BLOC DROIT
+========================================================= */
+
+.right-panel {
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    background: #ffffff;
+
+    padding: 55px;
+}
+
+
+/* =========================================================
+   CONTENU CONNEXION
+========================================================= */
+
+.login-content {
+    width: 100%;
+
+    max-width: 365px;
+}
+
+
+/* =========================================================
+   TITRE
+========================================================= */
+
+.login-header {
+    margin-bottom: 32px;
+}
+
+
+.login-header h2 {
+    font-size: 31px;
+
+    color: #0e3b5c;
+
+    margin-bottom: 7px;
+}
+
+
+.login-header p {
+    font-size: 14px;
+
+    color: #7b929d;
+}
+
+
+/* =========================================================
+   FORMULAIRE
+========================================================= */
+
+.login-form {
+    width: 100%;
+}
+
+
+/* =========================================================
+   GROUPE INPUT
+========================================================= */
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+
+.input-group label {
+    display: block;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    color: #345361;
+
+    margin-bottom: 8px;
+}
+
+
+/* =========================================================
+   BOITE INPUT
+========================================================= */
+
+.input-box {
+    position: relative;
+
+    width: 100%;
+
+    height: 51px;
+}
+
+
+.input-box input {
+    width: 100%;
+
+    height: 100%;
+
+    border: 1.5px solid #dce9ed;
+
+    border-radius: 8px;
+
+    outline: none;
+
+    padding: 0 42px;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    font-size: 13px;
+
+    color: #12303f;
+
+    background: #ffffff;
+
+    transition: 0.2s;
+}
+
+
+.input-box input::placeholder {
+    color: #94aab4;
+}
+
+
+.input-box input:focus {
+    border-color: #0a8272;
+
+    box-shadow:
+        0 0 0 3px rgba(10, 130, 114, 0.08);
+}
+
+
+/* =========================================================
+   ICONE INPUT
+========================================================= */
+
+.input-icon {
+    position: absolute;
+
+    left: 14px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #4e8195;
+
+    font-size: 15px;
+
+    z-index: 2;
+}
+
+
+/* =========================================================
+   BOUTON AFFICHER MOT DE PASSE
+========================================================= */
+
+.show-password {
+    position: absolute;
+
+    right: 13px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    border: none;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+    opacity: 0.55;
+}
+
+
+.show-password:hover {
+    opacity: 1;
+}
+
+
+/* =========================================================
+   OPTIONS
+========================================================= */
+
+.login-options {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-top: 2px;
+
+    margin-bottom: 24px;
+
+    font-size: 11px;
+}
+
+
+.remember {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: #607985;
+
+    cursor: pointer;
+}
+
+
+.remember input {
+    width: 15px;
+
+    height: 15px;
+
+    accent-color: #0a8272;
+
+    cursor: pointer;
+}
+
+
+.forgot-password {
+    color: #0a8272;
+
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   BOUTON CONNEXION
+========================================================= */
+
+.login-button {
+    width: 100%;
+
+    height: 51px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #0a9a88;
+
+    color: white;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.login-button:hover {
+    background: #087b6d;
+
+    box-shadow:
+        0 8px 20px rgba(10, 130, 114, 0.20);
+}
+
+
+/* =========================================================
+   SÉCURITÉ
+========================================================= */
+
+.security {
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 32px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid #edf1f2;
+}
+
+
+.security span {
+    font-size: 13px;
+}
+
+
+.security p {
+    font-size: 10px;
+
+    color: #91a2a9;
+}
+
+
+/* =========================================================
+   COPYRIGHT
+========================================================= */
+
+.copyright {
+    text-align: center;
+
+    margin-top: 22px;
+
+    font-size: 9px;
+
+    color: #9aabb2;
+}
+
+
+/* =========================================================
+   MESSAGE D'ERREUR
+========================================================= */
+
+.error-message {
+    position: fixed;
+
+    top: 20px;
+
+    left: 50%;
+
+    z-index: 9999;
+
+    transform: translate(-50%, -20px);
+
+    padding: 14px 25px;
+
+    border-radius: 8px;
+
+    background: #dc3545;
+
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.20);
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease;
+}
+
+
+.error-message.show {
+    opacity: 1;
+
+    transform:
+        translate(-50%, 0);
+}
+
+
+/* =========================================================
+   TABLETTE
+========================================================= */
+
+@media (max-width: 850px) {
+
+    body {
+        padding: 20px;
+    }
+
+
+    .login-card {
+        grid-template-columns: 45% 55%;
+    }
+
+
+    .left-content {
+        padding: 35px;
+    }
+
+
+    .logo {
+        width: 160px;
+    }
+
+
+    .presentation h1 {
+        font-size: 24px;
+    }
+
+
+    .right-panel {
+        padding: 35px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+    body {
+        padding: 0;
+
+        background: white;
+    }
+
+
+    .login-card {
+        display: block;
+
+        width: 100%;
+
+        min-height: 100vh;
+
+        border-radius: 0;
+
+        box-shadow: none;
+    }
+
+
+    .left-panel {
+        display: none;
+    }
+
+
+    .right-panel {
+        min-height: 100vh;
+
+        padding: 35px 25px;
+    }
+
+
+    .login-content {
+        max-width: 420px;
+    }
+
+}

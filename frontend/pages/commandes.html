@@ -10,14 +10,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>PharmaStock - Utilisateurs</title>
-
-
-    <!-- CSS général -->
-    <link
-        rel="stylesheet"
-        href="../css/style.css"
-    >
+    <title>PharmaStock - Commandes</title>
 
     <!-- CSS du dashboard -->
     <link
@@ -25,10 +18,10 @@
         href="../css/dashboard.css"
     >
 
-    <!-- CSS spécifique aux utilisateurs -->
+    <!-- CSS spécifique aux commandes -->
     <link
         rel="stylesheet"
-        href="../css/utilisateurs.css"
+        href="../css/commandes.css"
     >
 
 </head>
@@ -108,7 +101,7 @@
             <!-- STOCK -->
 
             <a
-                href="#"
+                href="stock.html"
                 class="menu-item"
             >
 
@@ -126,7 +119,7 @@
             <!-- VENTES -->
 
             <a
-                href="#"
+                href="ventes.html"
                 class="menu-item"
             >
 
@@ -157,20 +150,31 @@
                 </span>
 
             </a>
-            
-            <a 
-                href="commandes.html" 
-                class="menu-item"
+
+
+            <!-- COMMANDES -->
+
+            <a
+                href="commandes.html"
+                class="menu-item active"
             >
-                <span class="menu-icon">📒</span>
-                <span>Commandes</span>
+
+                <span class="menu-icon">
+                    📒
+                </span>
+
+                <span>
+                    Commandes
+                </span>
+
             </a>
+
 
             <!-- UTILISATEURS -->
 
             <a
                 href="utilisateurs.html"
-                class="menu-item active"
+                class="menu-item"
             >
 
                 <span class="menu-icon">
@@ -281,7 +285,6 @@
             </div>
 
 
-
             <!-- PARTIE DROITE -->
 
             <div class="topbar-right">
@@ -305,7 +308,6 @@
                     </span>
 
                 </button>
-
 
 
                 <!-- ADMIN CONNECTÉ -->
@@ -349,25 +351,25 @@
 
 
         <!-- =================================================
-             CONTENU UTILISATEURS
+             CONTENU COMMANDES
         ================================================== -->
 
-        <section class="dashboard-content users-content">
+        <section class="dashboard-content commandes-content">
 
 
             <!-- TITRE -->
 
-            <div class="users-header">
+            <div class="commandes-header">
 
 
                 <div>
 
                     <h1>
-                        Utilisateurs
+                        Commandes
                     </h1>
 
                     <p>
-                        Gérez les utilisateurs de votre pharmacie.
+                        Gérez les commandes de votre pharmacie.
                     </p>
 
                 </div>
@@ -377,12 +379,10 @@
 
                 <button
                     type="button"
-                    id="addUserBtn"
-                    class="add-user-btn"
+                    id="addOrderBtn"
+                    class="add-order-btn"
                 >
-
-                    + Ajouter un utilisateur
-
+                    + Nouvelle commande
                 </button>
 
 
@@ -390,22 +390,20 @@
 
 
 
-            <!-- =================================================
-                 MESSAGE
-            ================================================== -->
+            <!-- MESSAGE -->
 
             <div
                 id="message"
-                class="users-message"
+                class="commandes-message"
             ></div>
 
 
 
             <!-- =================================================
-                 CARTE UTILISATEURS
+                 CARTE COMMANDES
             ================================================== -->
 
-            <div class="dashboard-card users-card">
+            <div class="dashboard-card commandes-card">
 
 
                 <!-- HEADER CARTE -->
@@ -416,22 +414,96 @@
                     <div>
 
                         <h2>
-                            Liste des utilisateurs
+                            Liste des commandes
                         </h2>
 
                         <p>
-                            Utilisateurs enregistrés dans PharmaStock
+                            Commandes enregistrées dans PharmaStock
                         </p>
 
                     </div>
 
 
                     <span
-                        id="userCount"
-                        class="user-count"
+                        id="orderCount"
+                        class="order-count"
                     >
-                        0 utilisateur
+                        0 commande
                     </span>
+
+
+                </div>
+
+
+
+                <!-- FILTRES -->
+
+                <div class="orders-filters">
+
+
+                    <div class="filter-group">
+
+                        <label for="searchOrder">
+                            Rechercher
+                        </label>
+
+                        <input
+                            type="text"
+                            id="searchOrder"
+                            placeholder="N° commande ou fournisseur..."
+                        >
+
+                    </div>
+
+
+                    <div class="filter-group">
+
+                        <label for="filterStatus">
+                            Statut
+                        </label>
+
+                        <select id="filterStatus">
+
+                            <option value="">
+                                Tous les statuts
+                            </option>
+
+                            <option value="EN_ATTENTE">
+                                En attente
+                            </option>
+
+                            <option value="VALIDEE">
+                                Validée
+                            </option>
+
+                            <option value="RECUE">
+                                Reçue
+                            </option>
+
+                            <option value="ANNULEE">
+                                Annulée
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="filter-group">
+
+                        <label for="filterSupplier">
+                            Fournisseur
+                        </label>
+
+                        <select id="filterSupplier">
+
+                            <option value="">
+                                Tous les fournisseurs
+                            </option>
+
+                        </select>
+
+                    </div>
 
 
                 </div>
@@ -440,10 +512,10 @@
 
                 <!-- TABLEAU -->
 
-                <div class="users-table-container">
+                <div class="orders-table-container">
 
 
-                    <table class="users-table">
+                    <table class="orders-table">
 
 
                         <thead>
@@ -455,19 +527,19 @@
                                 </th>
 
                                 <th>
-                                    Nom
+                                    Date
                                 </th>
 
                                 <th>
-                                    Prénom
+                                    Fournisseur
                                 </th>
 
                                 <th>
-                                    Email
+                                    Montant total
                                 </th>
 
                                 <th>
-                                    Rôle
+                                    Statut
                                 </th>
 
                                 <th>
@@ -479,11 +551,11 @@
                         </thead>
 
 
-                        <tbody id="usersTableBody">
+                        <tbody id="ordersTableBody">
 
                             <!--
-                                Les utilisateurs seront ajoutés
-                                ici avec utilisateurs.js
+                                Les commandes seront ajoutées
+                                ici avec commandes.js
                             -->
 
                         </tbody>
@@ -492,24 +564,23 @@
                     </table>
 
 
-
-                    <!-- AUCUN UTILISATEUR -->
+                    <!-- AUCUNE COMMANDE -->
 
                     <div
-                        id="emptyUsers"
-                        class="empty-users"
+                        id="emptyOrders"
+                        class="empty-orders"
                     >
 
-                        <div class="empty-users-icon">
-                            👥
+                        <div class="empty-orders-icon">
+                            📒
                         </div>
 
                         <h3>
-                            Aucun utilisateur
+                            Aucune commande
                         </h3>
 
                         <p>
-                            Aucun utilisateur n'est encore enregistré.
+                            Aucune commande n'est encore enregistrée.
                         </p>
 
                     </div>
@@ -532,31 +603,31 @@
 
 
 <!-- =========================================================
-     MODAL AJOUT / MODIFICATION UTILISATEUR
+     MODAL AJOUT / MODIFICATION COMMANDE
 ========================================================== -->
 
 <div
-    id="userModal"
-    class="user-modal"
+    id="orderModal"
+    class="order-modal"
 >
 
 
-    <div class="user-modal-content">
+    <div class="order-modal-content">
 
 
         <!-- HEADER -->
 
-        <div class="user-modal-header">
+        <div class="order-modal-header">
 
 
             <div>
 
                 <h2 id="modalTitle">
-                    Ajouter un utilisateur
+                    Nouvelle commande
                 </h2>
 
                 <p>
-                    Remplissez les informations de l'utilisateur.
+                    Remplissez les informations de la commande.
                 </p>
 
             </div>
@@ -578,7 +649,7 @@
         <!-- FORMULAIRE -->
 
         <form
-            id="userForm"
+            id="orderForm"
             autocomplete="off"
         >
 
@@ -587,28 +658,26 @@
 
             <input
                 type="hidden"
-                id="userId"
+                id="orderId"
                 name="id"
             >
 
 
-
-            <!-- NOM / PRÉNOM -->
+            <!-- DATE / FOURNISSEUR -->
 
             <div class="form-row">
 
 
                 <div class="form-group">
 
-                    <label for="nom">
-                        Nom
+                    <label for="orderDate">
+                        Date de commande
                     </label>
 
                     <input
-                        type="text"
-                        id="nom"
-                        name="nom"
-                        placeholder="Ex : Dupont"
+                        type="date"
+                        id="orderDate"
+                        name="dateCommande"
                         required
                     >
 
@@ -617,17 +686,21 @@
 
                 <div class="form-group">
 
-                    <label for="prenom">
-                        Prénom
+                    <label for="orderSupplier">
+                        Fournisseur
                     </label>
 
-                    <input
-                        type="text"
-                        id="prenom"
-                        name="prenom"
-                        placeholder="Ex : Jean"
+                    <select
+                        id="orderSupplier"
+                        name="fournisseur_id"
                         required
                     >
+
+                        <option value="">
+                            Sélectionner un fournisseur
+                        </option>
+
+                    </select>
 
                 </div>
 
@@ -636,77 +709,34 @@
 
 
 
-            <!-- EMAIL -->
+            <!-- STATUT -->
 
             <div class="form-group">
 
-                <label for="email">
-                    Adresse email
-                </label>
-
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="Ex : jean.dupont@gmail.com"
-                    required
-                >
-
-            </div>
-
-
-
-            <!-- MOT DE PASSE -->
-
-            <div class="form-group">
-
-                <label for="motDePasse">
-                    Mot de passe
-                </label>
-
-                <input
-                    type="password"
-                    id="motDePasse"
-                    name="motDePasse"
-                    placeholder="Mot de passe"
-                >
-
-                <small id="passwordHelp">
-                    Obligatoire lors de la création.
-                </small>
-
-            </div>
-
-
-
-            <!-- ROLE -->
-
-            <div class="form-group">
-
-                <label for="role_id">
-                    Rôle
+                <label for="orderStatus">
+                    Statut
                 </label>
 
                 <select
-                    id="role_id"
-                    name="role_id"
+                    id="orderStatus"
+                    name="statut"
                     required
                 >
 
-                    <option value="">
-                        Sélectionner un rôle
+                    <option value="EN_ATTENTE">
+                        En attente
                     </option>
 
-                    <option value="1">
-                        Administrateur
+                    <option value="VALIDEE">
+                        Validée
                     </option>
 
-                    <option value="2">
-                        Pharmacien
+                    <option value="RECUE">
+                        Reçue
                     </option>
 
-                    <option value="3">
-                        Employé
+                    <option value="ANNULEE">
+                        Annulée
                     </option>
 
                 </select>
@@ -715,29 +745,85 @@
 
 
 
+            <!-- PRODUITS -->
+
+            <div class="order-products-section">
+
+
+                <div class="order-products-header">
+
+                    <div>
+
+                        <h3>
+                            Produits commandés
+                        </h3>
+
+                        <p>
+                            Ajoutez les médicaments et les quantités.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        id="addProductBtn"
+                        class="add-product-btn"
+                    >
+                        + Ajouter un produit
+                    </button>
+
+                </div>
+
+
+
+                <!-- LIGNES PRODUITS -->
+
+                <div
+                    id="orderProducts"
+                    class="order-products"
+                ></div>
+
+
+            </div>
+
+
+
+            <!-- TOTAL -->
+
+            <div class="order-total">
+
+                <span>
+                    Montant total
+                </span>
+
+                <strong id="orderTotal">
+                    0,00 €
+                </strong>
+
+            </div>
+
+
+
             <!-- BOUTONS -->
 
-            <div class="user-modal-actions">
+            <div class="order-modal-actions">
 
 
                 <button
                     type="button"
-                    id="cancelUserBtn"
-                    class="cancel-user-btn"
+                    id="cancelOrderBtn"
+                    class="cancel-order-btn"
                 >
-
                     Annuler
-
                 </button>
 
 
                 <button
                     type="submit"
-                    class="save-user-btn"
+                    class="save-order-btn"
                 >
-
                     Enregistrer
-
                 </button>
 
 
@@ -755,10 +841,70 @@
 
 
 <!-- =========================================================
+     MODAL DETAILS COMMANDE
+========================================================== -->
+
+<div
+    id="detailsModal"
+    class="order-modal"
+>
+
+
+    <div class="order-modal-content details-modal-content">
+
+
+        <!-- HEADER -->
+
+        <div class="order-modal-header">
+
+
+            <div>
+
+                <h2>
+                    Détails de la commande
+                </h2>
+
+                <p>
+                    Informations et produits de la commande.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="closeDetailsModalBtn"
+                class="close-modal-btn"
+            >
+                ×
+            </button>
+
+
+        </div>
+
+
+
+        <!-- CONTENU -->
+
+        <div id="orderDetailsContent">
+
+            <!-- Les détails seront ajoutés avec commandes.js -->
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================================================
      JAVASCRIPT
 ========================================================== -->
 
-<script src="../js/utilisateurs.js"></script>
+<script src="../js/commandes.js"></script>
 
 
 </body>

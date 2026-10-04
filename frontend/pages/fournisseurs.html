@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Fournisseurs - PharmaStock</title>
+
+    <link
+        rel="stylesheet"
+        href="../css/dashboard.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/fournisseurs.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="app-container">
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo-container">
+
+            <img
+                src="../images/logo1.png"
+                alt="PharmaStock"
+                class="logo"
+            >
+
+            <span>PharmaStock</span>
+
+        </div>
+
+
+        <nav class="sidebar-menu">
+
+            <a
+                href="dashboard-admin.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+
+            <a
+                href="medicaments.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">💊</span>
+                <span>Médicaments</span>
+            </a>
+
+
+            <a
+                href="stock.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">📦</span>
+                <span>Stock</span>
+            </a>
+
+
+            <a
+                href="ventes.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">🛒</span>
+                <span>Ventes</span>
+            </a>
+
+
+            <a
+                href="fournisseurs.html"
+                class="menu-item active"
+            >
+                <span class="menu-icon">🚚</span>
+                <span>Fournisseurs</span>
+            </a>
+
+            <a 
+                href="commandes.html" 
+                class="menu-item"
+            >
+                <span class="menu-icon">📒</span>
+                <span>Commandes</span>
+            </a>
+
+            <a
+                href="utilisateurs.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">👥</span>
+                <span>Utilisateurs</span>
+            </a>
+
+
+            <a
+                href="#"
+                class="menu-item"
+            >
+                <span class="menu-icon">📊</span>
+                <span>Rapports</span>
+            </a>
+
+
+            <a
+                href="#"
+                class="menu-item"
+            >
+                <span class="menu-icon">⚙</span>
+                <span>Paramètres</span>
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <a
+                href="#"
+                class="menu-item"
+                id="logoutBtn"
+            >
+                <span class="menu-icon">↪</span>
+                <span>Déconnexion</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         CONTENU PRINCIPAL
+    ====================================================== -->
+
+    <main class="main-content">
+
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <div class="search-container">
+
+                    <span class="search-icon">⌕</span>
+
+                    <input
+                        type="text"
+                        id="globalSearch"
+                        placeholder="Rechercher..."
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="user-profile">
+
+                <div
+                    class="avatar"
+                    id="adminAvatar"
+                >
+                    A
+                </div>
+
+                <div class="user-info">
+
+                    <strong id="adminName">
+                        Admin
+                    </strong>
+
+                    <small>
+                        Administrateur
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             CONTENU FOURNISSEURS
+        ================================================== -->
+
+        <section class="suppliers-content">
+
+
+            <div class="suppliers-header">
+
+                <div>
+
+                    <h1>
+                        Liste des fournisseurs
+                    </h1>
+
+                    <p>
+                        Fournisseurs enregistrés dans PharmaStock
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="addSupplierBtn"
+                    class="add-supplier-btn"
+                >
+                    <span>＋</span>
+                    Ajouter un fournisseur
+                </button>
+
+            </div>
+
+
+            <!-- MESSAGE -->
+
+            <div
+                id="message"
+                class="users-message"
+            ></div>
+
+
+            <!-- CARTE -->
+
+            <div class="suppliers-card">
+
+
+                <div class="supplier-count">
+                    <span id="supplierCount">
+                        0 fournisseur
+                    </span>
+                </div>
+
+
+                <!-- TABLEAU -->
+
+                <div class="suppliers-table-container">
+
+                    <table class="suppliers-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>#</th>
+
+                                <th>Nom</th>
+
+                                <th>Adresse</th>
+
+                                <th>Téléphone</th>
+
+                                <th>Email</th>
+
+                                <th>Actions</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="suppliersTableBody">
+
+                        </tbody>
+
+                    </table>
+
+
+                    <!-- ETAT VIDE -->
+
+                    <div
+                        id="emptySuppliers"
+                        class="empty-suppliers"
+                        style="display: none;"
+                    >
+
+                        <p>
+                            Aucun fournisseur enregistré.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =========================================================
+     MODAL FOURNISSEUR
+========================================================= -->
+
+<div
+    id="supplierModal"
+    class="supplier-modal"
+>
+
+    <div class="supplier-modal-content">
+
+
+        <!-- HEADER -->
+
+        <div class="supplier-modal-header">
+
+            <div>
+
+                <h2 id="modalTitle">
+                    Ajouter un fournisseur
+                </h2>
+
+                <p>
+                    Renseignez les informations du fournisseur.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="closeModalBtn"
+                class="close-modal-btn"
+                aria-label="Fermer"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <!-- FORMULAIRE -->
+
+        <form
+            id="supplierForm"
+            class="supplier-form"
+            autocomplete="off"
+        >
+
+            <input
+                type="hidden"
+                id="supplierId"
+            >
+
+
+            <div class="form-group">
+
+                <label for="nom">
+                    Nom du fournisseur
+                </label>
+
+                <input
+                    type="text"
+                    id="nom"
+                    name="nom"
+                    placeholder="Ex : Sanofi"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="adresse">
+                    Adresse
+                </label>
+
+                <input
+                    type="text"
+                    id="adresse"
+                    name="adresse"
+                    placeholder="Ex : 54 rue de Paris, 75001 Paris"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="telephone">
+                    Téléphone
+                </label>
+
+                <input
+                    type="tel"
+                    id="telephone"
+                    name="telephone"
+                    placeholder="Ex : 01 45 67 89 10"
+                    maxlength="11"
+                    inputmode="numeric"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="email">
+                    Adresse email
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Ex : contact@sanofi.com"
+                >
+
+            </div>
+
+        </form>
+
+
+        <!-- BOUTONS -->
+
+        <div class="supplier-modal-actions">
+
+            <button
+                type="button"
+                id="cancelSupplierBtn"
+                class="cancel-supplier-btn"
+            >
+                Annuler
+            </button>
+
+
+            <button
+                type="submit"
+                form="supplierForm"
+                class="save-supplier-btn"
+            >
+                Enregistrer
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="../js/fournisseurs.js"></script>
+
+</body>
+
+</html>

@@ -5,23 +5,31 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+html, body {
+    min-height: 100%;
+    overflow-x: hidden;
+}
+
 body {
     background-color: #f4f7f6;
     color: #333;
-    display: flex;
-    justify-content: center;
+    display: block;
     padding: 20px;
+    overflow-y: auto;
+    min-height: 100vh;
 }
 
 .app-container {
     display: flex;
     width: 100%;
     max-width: 1200px;
+    margin: 0 auto;
     background-color: #ffffff;
     border-radius: 16px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
-    min-height: 90vh;
+    overflow: visible;
+    min-height: calc(100vh + 160px);
+    height: auto;
 }
 
 /* Sidebar */

@@ -9,14 +9,17 @@
 html,
 body {
     margin: 0;
-    padding: 0;
     min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 body {
     font-family: Arial, sans-serif;
     background: #eef4f6;
     color: #022730;
+    min-height: 100vh;
+    display: block;
 }
 
 
@@ -26,19 +29,19 @@ body {
 
 .app-container {
     display: flex;
-    width: calc(100% - 60px);
+    width: calc(100% - 30px);
     max-width: 1600px;
-    min-height: calc(100vh - 30px);
+
+    min-height: calc(100vh + 160px);
 
     margin: 15px auto;
 
     background: #f7fafb;
     border-radius: 22px;
-    overflow: hidden;
 
-    box-shadow:
-        0 10px 35px rgba(20, 70, 90, 0.10);
+    overflow: visible;
 
+    box-shadow: 0 10px 35px rgba(20, 70, 90, 0.10);
 }
 
 
@@ -46,22 +49,30 @@ body {
    SIDEBAR
 ========================================================= */
 
+
+
 .sidebar {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    bottom: 15px;
+
     width: 245px;
     min-width: 245px;
 
-    background: #022f39;
-    color: white;
+    height: calc(100vh - 30px);
+
+    overflow-y: auto;
 
     display: flex;
     flex-direction: column;
 
-    position: sticky;
-    top: 0;
+    background: #063b45;
+    color: white;
 
-    height: 100%;
+    z-index: 1000;
 
-    flex-shrink: 0;
+    border-radius: 22px 0 0 22px;
 }
 
 
@@ -152,12 +163,18 @@ body {
 
 .main-content {
     flex: 1;
-    min-width: 0;
 
+    min-width: 0;
     width: auto;
 
     display: flex;
     flex-direction: column;
+
+    min-height: calc(100vh + 160px);
+
+    margin-left: 245px;
+
+    overflow: visible;
 }
 
 
@@ -167,6 +184,7 @@ body {
 
 .topbar {
     min-height: 76px;
+    width: 100%;
 
     background: white;
 
@@ -222,6 +240,7 @@ body {
 
 
 /* Notification */
+
 
 .notification-button {
     position: relative;
@@ -299,7 +318,25 @@ body {
 ========================================================= */
 
 .dashboard-content {
-    padding: 30px;
+    min-height: calc(100vh + 160px);
+    height: auto;
+    overflow: visible;
+    padding-bottom: 50px;
+}
+
+img {
+    max-width: 50%;
+}
+
+.dashboard-grid,
+.bottom-grid,
+.stats-grid {
+    min-width: 0;
+}
+
+.dashboard-card,
+.stat-card {
+    min-width: 0;
 }
 
 

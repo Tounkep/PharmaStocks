@@ -26,6 +26,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 
 require_once __DIR__ .
+    '/../auth/Auth.php';
+
+/*
+ * Ventes : tous les utilisateurs connectés.
+ */
+Auth::requireLogin();
+
+require_once __DIR__ .
     '/../config/Database.php';
 
 require_once __DIR__ .

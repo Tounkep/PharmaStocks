@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>PharmaStock - Stock</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/medicaments.css">
+    <link rel="stylesheet" href="../css/pharmacien.css">
+
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo-container">
+
+            <img
+                src="../images/logo1.png"
+                class="logo-image"
+                alt="PharmaStock"
+            >
+
+            <span class="logo-text">
+                PharmaStock
+            </span>
+
+        </div>
+
+        <!-- Menu construit par role-layout.js -->
+        <nav class="sidebar-menu"></nav>
+
+        <div class="sidebar-bottom">
+
+            <a href="#" id="logoutBtn" class="menu-item">
+                <span class="menu-icon">↪</span>
+                <span>Déconnexion</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div class="search-container">
+
+                <span>⌕</span>
+
+                <input
+                    id="globalSearch"
+                    type="search"
+                    placeholder="Rechercher un médicament ou un lot..."
+                >
+
+            </div>
+
+            <div class="topbar-right">
+
+                <button class="notification-button" type="button">
+                    🔔
+                    <span class="notification-badge">0</span>
+                </button>
+
+                <div class="user-profile">
+
+                    <div class="avatar">P</div>
+
+                    <div class="user-info">
+                        <strong id="userName">Utilisateur</strong>
+                        <small id="userRole"></small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <section class="page-content">
+
+            <!-- TITRE -->
+
+            <div class="page-header">
+
+                <div>
+                    <h1>Gestion du stock</h1>
+                    <p>Lots, mouvements de stock et réception des commandes.</p>
+                </div>
+
+                <div class="header-actions edit-only">
+
+                    <button class="secondary-button" id="openReceptionBtn" type="button">
+                        📥 Réceptionner une commande
+                    </button>
+
+                    <button class="primary-button" id="openLotBtn" type="button">
+                        ＋ Ajouter un lot
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- RÉSUMÉ -->
+
+            <section class="ph-stats">
+
+                <div class="ph-stat">
+                    <div class="ph-stat-icon blue">📦</div>
+                    <div class="ph-stat-info">
+                        <span class="ph-stat-label">Unités disponibles</span>
+                        <strong class="ph-stat-value" id="resumeUnites">--</strong>
+                        <span class="ph-stat-sub" id="resumeLots">--</span>
+                    </div>
+                </div>
+
+                <div class="ph-stat">
+                    <div class="ph-stat-icon green">€</div>
+                    <div class="ph-stat-info">
+                        <span class="ph-stat-label">Valeur du stock</span>
+                        <strong class="ph-stat-value" id="resumeValeur">--</strong>
+                        <span class="ph-stat-sub">au prix d'achat</span>
+                    </div>
+                </div>
+
+                <div class="ph-stat">
+                    <div class="ph-stat-icon orange">⏳</div>
+                    <div class="ph-stat-info">
+                        <span class="ph-stat-label">Expiration sous 30 jours</span>
+                        <strong class="ph-stat-value" id="resumeExpiration">--</strong>
+                        <span class="ph-stat-sub">lots disponibles</span>
+                    </div>
+                </div>
+
+                <div class="ph-stat">
+                    <div class="ph-stat-icon red">☠</div>
+                    <div class="ph-stat-info">
+                        <span class="ph-stat-label">Lots périmés</span>
+                        <strong class="ph-stat-value" id="resumePerimes">--</strong>
+                        <span class="ph-stat-sub">avec des unités à retirer</span>
+                    </div>
+                </div>
+
+            </section>
+
+
+            <!-- ONGLETS -->
+
+            <div class="tabs">
+                <button class="tab-button active" data-tab="lots" type="button">Lots en stock</button>
+                <button class="tab-button" data-tab="mouvements" type="button">Historique des mouvements</button>
+            </div>
+
+
+            <!-- ================= ONGLET LOTS ================= -->
+
+            <div class="tab-panel" id="tab-lots">
+
+                <div class="ph-filters">
+
+                    <div class="filter-search">
+                        <span>⌕</span>
+                        <input id="lotSearch" type="search" placeholder="Médicament, référence ou n° de lot...">
+                    </div>
+
+                    <select id="lotStatusFilter">
+                        <option value="ACTIFS">Lots avec du stock</option>
+                        <option value="">Tous les lots</option>
+                        <option value="DISPONIBLE">Disponibles</option>
+                        <option value="PERIME">Périmés</option>
+                        <option value="EPUISE">Épuisés</option>
+                    </select>
+
+                    <select id="lotExpiryFilter">
+                        <option value="">Toutes les dates</option>
+                        <option value="30">Expire sous 30 jours</option>
+                        <option value="90">Expire sous 90 jours</option>
+                    </select>
+
+                </div>
+
+                <div class="table-card">
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>Médicament</th>
+                                    <th>N° de lot</th>
+                                    <th>Quantité</th>
+                                    <th>Réception</th>
+                                    <th>Expiration</th>
+                                    <th>Statut</th>
+                                    <th class="edit-only">Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="lotsTableBody">
+                                <tr><td colspan="7" class="table-empty">Chargement...</td></tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <div class="table-footer">
+                        <span id="lotsCount">--</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= ONGLET MOUVEMENTS ================= -->
+
+            <div class="tab-panel hidden" id="tab-mouvements">
+
+                <div class="ph-filters">
+
+                    <div class="filter-search">
+                        <span>⌕</span>
+                        <input id="movementSearch" type="search" placeholder="Médicament, lot, motif ou utilisateur...">
+                    </div>
+
+                    <select id="movementTypeFilter">
+                        <option value="">Tous les types</option>
+                        <option value="ENTREE">Entrées</option>
+                        <option value="SORTIE">Sorties</option>
+                        <option value="PERTE">Pertes</option>
+                        <option value="RETOUR">Retours</option>
+                        <option value="AJUSTEMENT">Ajustements</option>
+                    </select>
+
+                    <label>
+                        Du
+                        <input type="date" id="movementFrom">
+                    </label>
+
+                    <label>
+                        au
+                        <input type="date" id="movementTo">
+                    </label>
+
+                </div>
+
+                <div class="table-card">
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Médicament</th>
+                                    <th>Lot</th>
+                                    <th>Type</th>
+                                    <th>Quantité</th>
+                                    <th>Motif</th>
+                                    <th>Utilisateur</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="movementsTableBody">
+                                <tr><td colspan="7" class="table-empty">Chargement...</td></tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <div class="table-footer">
+                        <span id="movementsCount">--</span>
+                        <span class="muted">300 derniers mouvements maximum</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- ================= MODAL : AJOUT DE LOT ================= -->
+
+<div class="modal-overlay hidden" id="lotModal">
+
+    <div class="modal">
+
+        <div class="modal-header">
+            <h2>Ajouter un lot</h2>
+            <button class="modal-close" type="button" data-close>×</button>
+        </div>
+
+        <p class="modal-info">
+            Le lot est ajouté au stock et une entrée est enregistrée
+            dans l'historique des mouvements.
+        </p>
+
+        <form id="lotForm">
+
+            <div class="form-grid">
+
+                <label class="full">
+                    Médicament *
+                    <select id="lotProduct" required></select>
+                </label>
+
+                <label>
+                    N° de lot *
+                    <input id="lotNumber" type="text" maxlength="100" required>
+                </label>
+
+                <label>
+                    Quantité *
+                    <input id="lotQuantity" type="number" min="1" step="1" required>
+                </label>
+
+                <label>
+                    Date de réception *
+                    <input id="lotReception" type="date" required>
+                </label>
+
+                <label>
+                    Date d'expiration *
+                    <input id="lotExpiration" type="date" required>
+                </label>
+
+                <label class="full">
+                    Motif
+                    <input id="lotReason" type="text" maxlength="200" placeholder="Ex. : réception hors commande">
+                </label>
+
+            </div>
+
+            <div class="form-error hidden" id="lotError"></div>
+
+            <div class="modal-actions">
+                <button class="secondary-button" type="button" data-close>Annuler</button>
+                <button class="primary-button" type="submit">Ajouter au stock</button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- ================= MODAL : MOUVEMENT ================= -->
+
+<div class="modal-overlay hidden" id="movementModal">
+
+    <div class="modal">
+
+        <div class="modal-header">
+            <h2>Mouvement de stock</h2>
+            <button class="modal-close" type="button" data-close>×</button>
+        </div>
+
+        <p class="modal-info" id="movementLotInfo"></p>
+
+        <form id="movementForm">
+
+            <input type="hidden" id="movementLotId">
+
+            <div class="form-grid">
+
+                <label class="full">
+                    Type de mouvement *
+                    <select id="movementType" required>
+                        <option value="PERTE">Perte / casse (retire du stock)</option>
+                        <option value="SORTIE">Sortie (retire du stock)</option>
+                        <option value="RETOUR">Retour client ou fournisseur (ajoute au stock)</option>
+                        <option value="ENTREE">Entrée (ajoute au stock)</option>
+                        <option value="AJUSTEMENT">Ajustement d'inventaire (quantité réelle)</option>
+                    </select>
+                </label>
+
+                <label class="full">
+                    <span id="movementQuantityLabel">Quantité *</span>
+                    <input id="movementQuantity" type="number" min="0" step="1" required>
+                    <span class="form-hint" id="movementHint"></span>
+                </label>
+
+                <label class="full">
+                    Motif
+                    <input id="movementReason" type="text" maxlength="200" placeholder="Ex. : boîte abîmée, inventaire mensuel...">
+                </label>
+
+            </div>
+
+            <div class="form-error hidden" id="movementError"></div>
+
+            <div class="modal-actions">
+                <button class="secondary-button" type="button" data-close>Annuler</button>
+                <button class="primary-button" type="submit">Enregistrer</button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- ================= MODAL : RÉCEPTION DE COMMANDE ================= -->
+
+<div class="modal-overlay hidden" id="receptionModal">
+
+    <div class="modal wide">
+
+        <div class="modal-header">
+            <h2>Réceptionner une commande</h2>
+            <button class="modal-close" type="button" data-close>×</button>
+        </div>
+
+        <p class="modal-info">
+            Chaque produit reçu devient un lot. Saisissez le numéro de lot
+            et la date d'expiration indiqués sur les boîtes. La commande
+            passera au statut « Reçue ».
+        </p>
+
+        <form id="receptionForm">
+
+            <div class="form-grid">
+
+                <label class="full">
+                    Commande *
+                    <select id="receptionOrder" required></select>
+                </label>
+
+            </div>
+
+            <div class="table-wrapper">
+
+                <table class="reception-table">
+
+                    <thead>
+                        <tr>
+                            <th>Produit</th>
+                            <th style="width: 90px;">Qté reçue</th>
+                            <th style="width: 170px;">N° de lot</th>
+                            <th style="width: 160px;">Expiration</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="receptionLines"></tbody>
+
+                </table>
+
+            </div>
+
+            <div class="form-error hidden" id="receptionError"></div>
+
+            <div class="modal-actions">
+                <button class="secondary-button" type="button" data-close>Annuler</button>
+                <button class="primary-button" type="submit" id="receptionSubmit">Valider la réception</button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script src="../js/role-layout.js"></script>
+<script src="../js/pharmacien-utils.js"></script>
+<script src="../js/stock.js"></script>
+
+</body>
+
+</html>

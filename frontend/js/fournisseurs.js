@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 const API_FOURNISSEURS = "../../backend/routes/fournisseurs.php";
-const API_DASHBOARD = "../../backend/routes/dashboard.php";
+const API_DASHBOARD = "../../backend/auth/session.php";
 
 
 /* =========================================================

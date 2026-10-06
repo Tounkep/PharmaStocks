@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>PharmaStock - Dashboard Pharmacien</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/medicaments.css">
+    <link rel="stylesheet" href="../css/pharmacien.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo-container">
+
+            <img
+                src="../images/logo1.png"
+                class="logo-image"
+                alt="PharmaStock"
+            >
+
+            <span class="logo-text">
+                PharmaStock
+            </span>
+
+        </div>
+
+        <!-- Menu construit par role-layout.js -->
+        <nav class="sidebar-menu"></nav>
+
+        <div class="sidebar-bottom">
+
+            <a href="#" id="logoutBtn" class="menu-item">
+                <span class="menu-icon">↪</span>
+                <span>Déconnexion</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div class="search-container">
+
+                <span>⌕</span>
+
+                <input
+                    id="globalSearch"
+                    type="search"
+                    placeholder="Rechercher un médicament..."
+                >
+
+            </div>
+
+            <div class="topbar-right">
+
+                <button class="notification-button" type="button">
+                    🔔
+                    <span class="notification-badge">0</span>
+                </button>
+
+                <div class="user-profile">
+
+                    <div class="avatar">P</div>
+
+                    <div class="user-info">
+                        <strong id="userName">Pharmacien</strong>
+                        <small id="userRole">Pharmacien</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <section class="page-content">
+
+            <!-- TITRE -->
+
+            <div class="page-header">
+
+                <div>
+                    <h1>
+                        Bonjour <span id="welcomeName"></span> 👋
+                    </h1>
+
+                    <p id="todayLabel">
+                        Voici l'état de la pharmacie aujourd'hui.
+                    </p>
+                </div>
+
+                <button class="secondary-button" id="refreshButton" type="button">
+                    ↻ Actualiser
+                </button>
+
+            </div>
+
+
+            <!-- INDICATEURS -->
+
+            <section class="ph-stats">
+
+                <a class="ph-stat" href="ventes.html">
+                    <div class="ph-stat-icon green">€</div>
+                    <div class="ph-stat-info">
+                        <span class="ph-stat-label">Ventes du jour</span>
+                        <strong class="ph-stat-value" id="statCaJour">--</strong>
+                        <span class="ph-stat-sub" id="statVentesJour">--</span>
+                    </div>
+                </a>
+
+                <a class="ph-stat" href="stock.html">
+                    <div class="ph-stat-icon blue">📦</div>
+                    <div class="ph-stat-info">
+                        <span class="ph-stat-label">Unités en stock</span>
+                        <strong class="ph-stat-value" id="statStock">--</strong>
+                        <span class="ph-stat-sub" id="statProduits">--</span>
+                    </div>
+                </a>
+
+                <a class="ph-stat" href="alertes.html">
+                    <div class="ph-stat-icon red">⚠</div>
+                    <div class="ph-stat-info">
+                        <span class="ph-stat-label">Alertes à traiter</span>
+                        <strong class="ph-stat-value" id="statAlertes">--</strong>
+                        <span class="ph-stat-sub" id="statAlertesDetail">--</span>
+                    </div>
+                </a>
+
+                <a class="ph-stat" href="commandes.html">
+                    <div class="ph-stat-icon purple">📒</div>
+                    <div class="ph-stat-info">
+                        <span class="ph-stat-label">Commandes en cours</span>
+                        <strong class="ph-stat-value" id="statCommandes">--</strong>
+                        <span class="ph-stat-sub" id="statCaMois">--</span>
+                    </div>
+                </a>
+
+            </section>
+
+
+            <!-- ACTIONS RAPIDES -->
+
+            <section class="quick-actions">
+
+                <a class="quick-action" href="ventes.html">
+                    <span>🛒</span>
+                    <span>Nouvelle vente<small>Enregistrer une vente</small></span>
+                </a>
+
+                <a class="quick-action" href="stock.html?action=reception">
+                    <span>📥</span>
+                    <span>Réceptionner<small>Entrer une commande en stock</small></span>
+                </a>
+
+                <a class="quick-action" href="commandes.html">
+                    <span>📝</span>
+                    <span>Commander<small>Passer une commande fournisseur</small></span>
+                </a>
+
+                <a class="quick-action" href="stock.html?action=lot">
+                    <span>➕</span>
+                    <span>Ajouter un lot<small>Entrée de stock manuelle</small></span>
+                </a>
+
+            </section>
+
+
+            <!-- GRAPHIQUE + ALERTES -->
+
+            <section class="ph-grid">
+
+                <div class="ph-card">
+
+                    <div class="ph-card-header">
+                        <div>
+                            <h2>Ventes des 7 derniers jours</h2>
+                            <p>Chiffre d'affaires quotidien</p>
+                        </div>
+                        <a href="ventes.html">Historique →</a>
+                    </div>
+
+                    <div class="ph-chart">
+                        <canvas id="salesChart"></canvas>
+                    </div>
+
+                </div>
+
+
+                <div class="ph-card">
+
+                    <div class="ph-card-header">
+                        <div>
+                            <h2>Alertes</h2>
+                            <p>Problèmes de stock non traités</p>
+                        </div>
+                        <a href="alertes.html">Tout voir →</a>
+                    </div>
+
+                    <div class="alerts-list" id="alertSummary">
+                        <div class="ph-empty">Chargement...</div>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- RÉAPPRO + EXPIRATIONS -->
+
+            <section class="ph-grid equal">
+
+                <div class="ph-card">
+
+                    <div class="ph-card-header">
+                        <div>
+                            <h2>À réapprovisionner</h2>
+                            <p>Stock vendable sous le seuil minimum</p>
+                        </div>
+                        <a href="commandes.html">Commander →</a>
+                    </div>
+
+                    <div class="ph-list" id="restockList">
+                        <div class="ph-empty">Chargement...</div>
+                    </div>
+
+                </div>
+
+
+                <div class="ph-card">
+
+                    <div class="ph-card-header">
+                        <div>
+                            <h2>Lots à surveiller</h2>
+                            <p>Périmés ou expirant sous 30 jours</p>
+                        </div>
+                        <a href="stock.html?filtre=expiration">Voir le stock →</a>
+                    </div>
+
+                    <div class="ph-list" id="expiryList">
+                        <div class="ph-empty">Chargement...</div>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- MOUVEMENTS + COMMANDES -->
+
+            <section class="ph-grid equal">
+
+                <div class="ph-card">
+
+                    <div class="ph-card-header">
+                        <div>
+                            <h2>Derniers mouvements de stock</h2>
+                            <p>Entrées, sorties, pertes et ajustements</p>
+                        </div>
+                        <a href="stock.html?onglet=mouvements">Historique →</a>
+                    </div>
+
+                    <div class="ph-list" id="movementList">
+                        <div class="ph-empty">Chargement...</div>
+                    </div>
+
+                </div>
+
+
+                <div class="ph-card">
+
+                    <div class="ph-card-header">
+                        <div>
+                            <h2>Commandes en cours</h2>
+                            <p>En attente ou validées, à réceptionner</p>
+                        </div>
+                        <a href="commandes.html">Commandes →</a>
+                    </div>
+
+                    <div class="ph-list" id="orderList">
+                        <div class="ph-empty">Chargement...</div>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script src="../js/role-layout.js"></script>
+<script src="../js/pharmacien-utils.js"></script>
+<script src="../js/dashboard-pharmacien.js"></script>
+
+</body>
+
+</html>

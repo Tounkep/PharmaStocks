@@ -15,9 +15,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
+require_once __DIR__ . '/../auth/Auth.php';
 require_once __DIR__ . '/../config/Database.php';
 require_once __DIR__ . '/../models/Medicament.php';
 require_once __DIR__ . '/../controllers/MedicamentController.php';
+
+/*
+ * Consultation : tous les utilisateurs connectés.
+ * Modification : administrateur et pharmacien.
+ */
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    Auth::requireLogin();
+} else {
+    Auth::requireRole([Auth::ADMIN, Auth::PHARMACIEN]);
+}
 
 try {
 

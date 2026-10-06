@@ -37,7 +37,7 @@ async function loadConnectedUser() {
     try {
 
         const response = await fetch(
-            "../../backend/routes/dashboard.php",
+            "../../backend/auth/session.php",
             {
                 method: "GET",
                 headers: {
@@ -81,7 +81,9 @@ async function loadConnectedUser() {
             }
 
             if (roleElement && utilisateur.role) {
-                roleElement.textContent = utilisateur.role;
+                roleElement.textContent = window.PharmaSession
+                    ? window.PharmaSession.roleLabel(utilisateur.role)
+                    : utilisateur.role;
             }
         }
 

@@ -130,7 +130,7 @@ async function loadConnectedUser() {
     try {
 
         const response = await fetch(
-            "../../backend/routes/dashboard.php",
+            "../../backend/auth/session.php",
             {
                 method: "GET",
                 headers: {

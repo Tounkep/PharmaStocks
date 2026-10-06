@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>PharmaStock - Alertes</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/medicaments.css">
+    <link rel="stylesheet" href="../css/pharmacien.css">
+
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo-container">
+
+            <img
+                src="../images/logo1.png"
+                class="logo-image"
+                alt="PharmaStock"
+            >
+
+            <span class="logo-text">
+                PharmaStock
+            </span>
+
+        </div>
+
+        <!-- Menu construit par role-layout.js -->
+        <nav class="sidebar-menu"></nav>
+
+        <div class="sidebar-bottom">
+
+            <a href="#" id="logoutBtn" class="menu-item">
+                <span class="menu-icon">↪</span>
+                <span>Déconnexion</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div class="search-container">
+
+                <span>⌕</span>
+
+                <input
+                    id="globalSearch"
+                    type="search"
+                    placeholder="Rechercher dans les alertes..."
+                >
+
+            </div>
+
+            <div class="topbar-right">
+
+                <button class="notification-button" type="button">
+                    🔔
+                    <span class="notification-badge">0</span>
+                </button>
+
+                <div class="user-profile">
+
+                    <div class="avatar">P</div>
+
+                    <div class="user-info">
+                        <strong id="userName">Utilisateur</strong>
+                        <small id="userRole"></small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <section class="page-content">
+
+            <div class="page-header">
+
+                <div>
+                    <h1>Alertes de stock</h1>
+                    <p>
+                        Les alertes sont calculées automatiquement à partir du stock
+                        et se ferment d'elles-mêmes quand le problème est résolu.
+                    </p>
+                </div>
+
+                <button class="secondary-button" id="refreshButton" type="button">
+                    ↻ Actualiser
+                </button>
+
+            </div>
+
+
+            <!-- FILTRES -->
+
+            <div class="ph-filters">
+
+                <div class="chip-group" id="typeChips">
+                    <button class="chip active" data-type="" type="button">Toutes<span class="chip-count" data-count="total"></span></button>
+                    <button class="chip" data-type="RUPTURE" type="button">⛔ Ruptures<span class="chip-count" data-count="RUPTURE"></span></button>
+                    <button class="chip" data-type="EXPIRE" type="button">☠ Lots périmés<span class="chip-count" data-count="EXPIRE"></span></button>
+                    <button class="chip" data-type="STOCK_FAIBLE" type="button">⚠ Stocks faibles<span class="chip-count" data-count="STOCK_FAIBLE"></span></button>
+                    <button class="chip" data-type="EXPIRATION_PROCHE" type="button">⏳ Expirations proches<span class="chip-count" data-count="EXPIRATION_PROCHE"></span></button>
+                </div>
+
+                <select id="statusFilter" style="margin-left:auto;">
+                    <option value="NOUVELLE">À traiter</option>
+                    <option value="IGNOREE">Ignorées</option>
+                    <option value="TRAITEE">Résolues</option>
+                    <option value="">Toutes</option>
+                </select>
+
+            </div>
+
+
+            <!-- TABLEAU -->
+
+            <div class="table-card">
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Alerte</th>
+                                <th>Créée le</th>
+                                <th>Statut</th>
+                                <th class="edit-only">Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="alertsTableBody">
+                            <tr><td colspan="5" class="table-empty">Chargement...</td></tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <div class="table-footer">
+                    <span id="alertsCount">--</span>
+                    <span class="muted">« Ignorer » masque l'alerte tant que le problème persiste.</span>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script src="../js/role-layout.js"></script>
+<script src="../js/pharmacien-utils.js"></script>
+<script src="../js/alertes.js"></script>
+
+</body>
+
+</html>

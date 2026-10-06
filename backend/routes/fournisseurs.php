@@ -26,11 +26,18 @@ if (!isset($_SESSION['utilisateur_id'])) {
 |--------------------------------------------------------------------------
 | Vérification du rôle
 |--------------------------------------------------------------------------
+| Le pharmacien peut consulter les fournisseurs (GET).
+| Seul l'administrateur peut les modifier.
 */
+
+$rolesAutorises =
+    $_SERVER['REQUEST_METHOD'] === 'GET'
+        ? ['ADMIN', 'PHARMACIEN']
+        : ['ADMIN'];
 
 if (
     !isset($_SESSION['role'])
-    || $_SESSION['role'] !== 'ADMIN'
+    || !in_array($_SESSION['role'], $rolesAutorises, true)
 ) {
 
     http_response_code(403);

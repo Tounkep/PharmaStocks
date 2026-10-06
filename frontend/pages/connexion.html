@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Connexion - PharmaStock</title>
+
+    <!-- Fichier CSS -->
+    <link rel="stylesheet" href="../css/connexion.css">
+
+</head>
+
+<body>
+
+    <!-- =====================================================
+         MESSAGE D'ERREUR
+    ====================================================== -->
+
+    <div
+        id="error-message"
+        class="error-message"
+    ></div>
+
+
+    <!-- =====================================================
+         CARTE PRINCIPALE : DEUX BLOCS
+    ====================================================== -->
+
+    <main class="login-card">
+
+
+        <!-- =================================================
+             BLOC GAUCHE : IMAGE + LOGO
+        ================================================== -->
+
+        <section class="left-panel">
+
+            <!-- Image de fond -->
+            <img
+                src="../images/R.jpg"
+                alt="Pharmacie"
+                class="background-image"
+            >
+
+            <!-- Voile sombre/vert sur l'image -->
+            <div class="image-overlay"></div>
+
+
+            <!-- Contenu placé sur l'image -->
+            <div class="left-content">
+
+                <!-- Logo -->
+                <img
+                    src="../images/logo1.png"
+                    alt="Logo PharmaStock"
+                    class="logo"
+                >
+
+
+                <!-- Texte sur l'image -->
+                <div class="presentation">
+
+                    <h1>
+                        Une gestion simplifiée
+                        <br>
+                        pour une pharmacie
+                        <br>
+                        plus efficace.
+                    </h1>
+
+                    <p>
+                        Gérez facilement vos stocks,
+                        vos ventes et vos activités
+                        quotidiennes avec PharmaStock.
+                    </p>
+
+                </div>
+
+
+                <!-- Petite phrase en bas -->
+                <p class="left-bottom-text">
+                    Votre pharmacie, notre priorité.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             BLOC DROIT : CONNEXION
+        ================================================== -->
+
+        <section class="right-panel">
+
+            <div class="login-content">
+
+
+                <!-- EN-TÊTE -->
+                <div class="login-header">
+
+                    <h2>
+                        Connexion
+                    </h2>
+
+                    <p>
+                        Accédez à votre espace
+                    </p>
+
+                </div>
+
+
+                <!-- =================================================
+                     FORMULAIRE
+                ================================================== -->
+
+                <form
+                    class="login-form"
+                    action="../../backend/auth/connexion.php"
+                    method="POST"
+                >
+
+
+                    <!-- EMAIL -->
+                    <div class="input-group">
+
+                        <label for="email">
+                            Email
+                        </label>
+
+                        <div class="input-box">
+
+                            <span class="input-icon">
+                                ✉
+                            </span>
+
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="Email"
+                                autocomplete="username"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- MOT DE PASSE -->
+                    <div class="input-group">
+
+                        <label for="password">
+                            Mot de passe
+                        </label>
+
+                        <div class="input-box">
+
+                            <span class="input-icon">
+                                🔒
+                            </span>
+
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Mot de passe"
+                                autocomplete="current-password"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="show-password"
+                                id="showPassword"
+                                aria-label="Afficher le mot de passe"
+                            >
+                                👁
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- OPTIONS -->
+                    <div class="login-options">
+
+                        <label class="remember">
+
+                            <input
+                                type="checkbox"
+                                name="remember"
+                            >
+
+                            <span>
+                                Se souvenir de moi
+                            </span>
+
+                        </label>
+
+
+                        <a
+                            href="#"
+                            class="forgot-password"
+                        >
+                            Mot de passe oublié ?
+                        </a>
+
+                    </div>
+
+
+                    <!-- BOUTON -->
+                    <button
+                        type="submit"
+                        class="login-button"
+                    >
+                        Se connecter
+                    </button>
+
+                </form>
+
+
+                <!-- SÉCURITÉ -->
+                <div class="security">
+
+                    <span>
+                        🔐
+                    </span>
+
+                    <p>
+                        Vos informations sont protégées et sécurisées.
+                    </p>
+
+                </div>
+
+
+                <!-- COPYRIGHT -->
+                <div class="copyright">
+
+                    © 2026 PharmaStock - Tous droits réservés
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+         JAVASCRIPT EXTERNE
+    ====================================================== -->
+
+    <script src="../js/connexion.js"></script>
+
+</body>
+
+</html>

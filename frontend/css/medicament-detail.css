@@ -1,0 +1,398 @@
+.detail-content {
+    padding: 30px;
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+
+.back-button {
+    border: none;
+    background: transparent;
+    color: #087f80;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+
+.detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+
+.detail-title-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+
+.detail-title-row h1 {
+    margin: 0;
+    font-size: 30px;
+    color: #073b46;
+}
+
+
+#medicamentReference {
+    margin: 8px 0 0;
+    color: #8093a2;
+}
+
+
+.edit-button {
+    border: none;
+    background: #087f80;
+    color: white;
+    padding: 11px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+
+.edit-button:hover {
+    background: #066b6c;
+}
+
+
+/* ================= STATISTIQUES ================= */
+
+.detail-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+
+.detail-stat-card {
+    background: white;
+    border-radius: 15px;
+    padding: 22px;
+    box-shadow: 0 3px 15px rgba(20,70,90,.05);
+}
+
+
+.detail-stat-card span {
+    display: block;
+    color: #8093a2;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+
+.detail-stat-card strong {
+    color: #073b46;
+    font-size: 24px;
+}
+
+
+/* ================= CARTES ================= */
+
+.detail-card {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 22px;
+    box-shadow: 0 3px 15px rgba(20,70,90,.05);
+}
+
+
+.detail-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+
+.detail-card-header h2 {
+    margin: 0;
+    color: #073b46;
+    font-size: 20px;
+}
+
+
+.detail-card-header p {
+    margin: 6px 0 0;
+    color: #8093a2;
+}
+
+
+/* ================= INFORMATIONS ================= */
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+
+.info-item {
+    padding: 15px;
+    background: #f7fafb;
+    border-radius: 10px;
+}
+
+
+.info-item span {
+    display: block;
+    color: #8093a2;
+    font-size: 12px;
+    margin-bottom: 7px;
+}
+
+
+.info-item strong {
+    color: #073b46;
+    font-size: 14px;
+}
+
+
+.description-section {
+    margin-top: 25px;
+}
+
+
+.description-section h3 {
+    color: #073b46;
+    font-size: 15px;
+}
+
+
+.description-section p {
+    color: #607985;
+    line-height: 1.7;
+}
+
+
+/* ================= TABLE ================= */
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+
+th,
+td {
+    padding: 14px 12px;
+    border-bottom: 1px solid #edf1f3;
+    text-align: left;
+    font-size: 13px;
+}
+
+
+th {
+    color: #718793;
+    font-size: 12px;
+}
+
+
+td {
+    color: #173f49;
+}
+
+
+/* ================= BADGES ================= */
+
+.lot-status {
+    display: inline-flex;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+
+.lot-disponible {
+    background: #def7eb;
+    color: #13875e;
+}
+
+
+.lot-epuise {
+    background: #eef1f3;
+    color: #687b85;
+}
+
+
+.lot-perime {
+    background: #ffe2e2;
+    color: #d63b3b;
+}
+
+
+/* ================= MOUVEMENTS ================= */
+
+.movement-entry {
+    color: #13875e;
+    font-weight: bold;
+}
+
+
+.movement-sortie,
+.movement-perte {
+    color: #d63b3b;
+    font-weight: bold;
+}
+
+
+.movement-retour {
+    color: #087f80;
+    font-weight: bold;
+}
+
+
+.movement-ajustement {
+    color: #b27600;
+    font-weight: bold;
+}
+
+
+/* ================= GESTION DES LOTS ================= */
+
+.lot-management-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.stock-form {
+    background: #f7fafb;
+    border: 1px solid #edf1f3;
+    border-radius: 12px;
+    padding: 18px;
+}
+
+.stock-form h3 {
+    margin: 0 0 16px;
+    color: #073b46;
+    font-size: 16px;
+}
+
+.form-grid.compact {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.form-grid.compact label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: #607985;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.form-grid.compact input,
+.form-grid.compact select {
+    padding: 10px 12px;
+    border: 1px solid #dfe7ee;
+    border-radius: 8px;
+    background: white;
+    color: #173f49;
+    font-size: 13px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.primary-button,
+.secondary-button,
+.mini-button {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.primary-button {
+    background: #087f80;
+    color: white;
+}
+
+.primary-button:hover {
+    background: #066b6c;
+}
+
+.secondary-button {
+    background: #edf2f5;
+    color: #073b46;
+}
+
+.secondary-button:hover {
+    background: #e4ebef;
+}
+
+.mini-button {
+    background: #edf6f6;
+    color: #087f80;
+    padding: 7px 10px;
+}
+
+.mini-button:hover {
+    background: #def2f3;
+}
+
+@media (max-width: 768px) {
+    .lot-management-grid,
+    .form-grid.compact {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1000px) {
+
+    .detail-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .detail-content {
+        padding: 18px 12px;
+    }
+
+    .detail-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .detail-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+}

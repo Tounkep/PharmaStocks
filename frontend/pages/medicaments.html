@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>PharmaStock - Médicaments</title>
+
+
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+    <!-- CSS commun du Dashboard -->
+    <link
+        rel="stylesheet"
+        href="../css/dashboard.css"
+    >
+
+    <!-- CSS spécifique médicaments -->
+    <link
+        rel="stylesheet"
+        href="../css/medicaments.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="app-container">
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo-container">
+
+            <img
+                src="../images/logo1.png"
+                class="logo-image"
+                alt="PharmaStock"
+            >
+
+            <span class="logo-text">
+                PharmaStock
+            </span>
+
+        </div>
+
+
+        <nav class="sidebar-menu">
+
+            <a
+                href="dashboard-admin.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+
+            <a
+                href="medicaments.html"
+                class="menu-item active"
+            >
+                <span class="menu-icon">💊</span>
+                <span>Médicaments</span>
+            </a>
+
+
+            <a
+                href="stock.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">📦</span>
+                <span>Stock</span>
+            </a>
+
+
+            <a
+                href="ventes.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">🛒</span>
+                <span>Ventes</span>
+            </a>
+
+
+            <a
+                href="fournisseurs.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">🚚</span>
+                <span>Fournisseurs</span>
+            </a>
+
+            <a 
+                href="commandes.html" 
+                class="menu-item"
+            >
+                <span class="menu-icon">📒</span>
+                <span>Commandes</span>
+            </a>
+
+            <a
+                href="utilisateurs.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">👥</span>
+                <span>Utilisateurs</span>
+            </a>
+
+
+            <a href="#" class="menu-item">
+                <span class="menu-icon">📊</span>
+                <span>Rapports</span>
+            </a>
+
+
+            <a href="#" class="menu-item">
+                <span class="menu-icon">⚙</span>
+                <span>Paramètres</span>
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <a
+                href="../../backend/auth/logout.php"
+                class="menu-item"
+            >
+                <span class="menu-icon">↪</span>
+                <span>Déconnexion</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main-content">
+
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div class="search-container">
+
+                <span>⌕</span>
+
+                <input
+                    id="globalSearch"
+                    type="search"
+                    placeholder="Rechercher un médicament..."
+                >
+
+            </div>
+
+
+            <div class="topbar-right">
+
+                <button
+                    class="notification-button"
+                    type="button"
+                >
+                    🔔
+
+                    <span class="notification-badge">
+                        0
+                    </span>
+
+                </button>
+
+
+                <div class="user-profile">
+
+                    <div
+                        class="avatar"
+                        id="userAvatar"
+                    >
+                        A
+                    </div>
+
+
+                    <div class="user-info">
+
+                        <strong id="adminName">
+                            Admin
+                        </strong>
+
+                        <small>
+                            Administrateur
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENU -->
+
+        <section class="page-content">
+
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>
+                        Médicaments
+                    </h1>
+
+                    <p>
+                        Gérez les médicaments
+                        de votre pharmacie.
+                    </p>
+
+                </div>
+
+
+                <button
+                    id="openCreateBtn"
+                    class="primary-button"
+                >
+                    ＋ Ajouter un médicament
+                </button>
+
+            </div>
+
+
+            <!-- FILTRES -->
+
+            <div class="filter-card">
+
+                <div class="filter-search">
+
+                    <span>⌕</span>
+
+                    <input
+                        id="searchInput"
+                        type="search"
+                        placeholder="Rechercher un médicament..."
+                    >
+
+                </div>
+
+
+                <select id="categoryFilter">
+
+                    <option value="">
+                        Catégorie
+                    </option>
+
+                </select>
+
+
+                <select id="statusFilter">
+
+                    <option value="">
+                        État
+                    </option>
+
+                    <option value="NORMAL">
+                        Normal
+                    </option>
+
+                    <option value="FAIBLE">
+                        Faible
+                    </option>
+
+                    <option value="RUPTURE">
+                        Rupture
+                    </option>
+
+                    <option value="EXPIRE">
+                        Expiré
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- TABLE -->
+
+            <div class="table-card">
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                        <tr>
+
+                            <th>
+                                Nom
+                            </th>
+
+                            <th>
+                                Catégorie
+                            </th>
+
+                            <th>
+                                Stock
+                            </th>
+
+                            <th>
+                                Expiration
+                            </th>
+
+                            <th>
+                                État
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                        </thead>
+
+
+                        <tbody id="medicamentsTableBody">
+
+                        <tr>
+
+                            <td
+                                colspan="6"
+                                class="loading"
+                            >
+                                Chargement...
+                            </td>
+
+                        </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <div class="table-footer">
+
+                    <span id="resultsInfo">
+                        0 résultat
+                    </span>
+
+                    <div
+                        id="pagination"
+                        class="pagination"
+                    ></div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- ================= MODAL AJOUT / MODIFICATION ================= -->
+
+<div
+    id="modalOverlay"
+    class="modal-overlay hidden"
+>
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h2 id="modalTitle">
+                    Ajouter un médicament
+                </h2>
+
+                <p>
+                    Renseignez les informations
+                    du médicament.
+                </p>
+
+            </div>
+
+
+            <button
+                id="closeModalBtn"
+                class="modal-close"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="medicamentForm">
+
+            <input
+                type="hidden"
+                id="medicamentId"
+            >
+
+
+            <div class="form-grid">
+
+
+                <label>
+
+                    Nom *
+
+                    <input
+                        id="nom"
+                        required
+                    >
+
+                </label>
+
+
+                <label>
+
+                    Référence *
+
+                    <input
+                        id="reference"
+                        required
+                    >
+
+                </label>
+
+
+                <label>
+
+                    Catégorie *
+
+                    <select
+                        id="categorie_id"
+                        required
+                    ></select>
+
+                </label>
+
+
+                <label>
+
+                    Dosage
+
+                    <input
+                        id="dosage"
+                        placeholder="1000 mg"
+                    >
+
+                </label>
+
+
+                <label>
+
+                    Forme
+
+                    <input
+                        id="forme"
+                        placeholder="Comprimé"
+                    >
+
+                </label>
+
+
+                <label>
+
+                    Prix d'achat *
+
+                    <input
+                        id="prixAchat"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        required
+                    >
+
+                </label>
+
+
+                <label>
+
+                    Prix de vente *
+
+                    <input
+                        id="prixVente"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        required
+                    >
+
+                </label>
+
+
+                <label>
+
+                    Stock minimum *
+
+                    <input
+                        id="seuilMinimum"
+                        type="number"
+                        min="0"
+                        required
+                    >
+
+                </label>
+
+
+                <label class="full">
+
+                    Description
+
+                    <textarea
+                        id="description"
+                        rows="4"
+                    ></textarea>
+
+                </label>
+
+            </div>
+
+
+            <div
+                id="formMessage"
+                class="form-message"
+            ></div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    id="cancelBtn"
+                    class="secondary-button"
+                >
+                    Annuler
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="primary-button"
+                >
+                    Enregistrer
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script src="../js/medicaments.js"></script>
+
+</body>
+
+</html>

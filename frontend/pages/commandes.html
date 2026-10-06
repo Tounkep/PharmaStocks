@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>PharmaStock - Commandes</title>
+
+    <!-- CSS du dashboard -->
+    <link
+        rel="stylesheet"
+        href="../css/dashboard.css"
+    >
+
+    <!-- CSS spécifique aux commandes -->
+    <link
+        rel="stylesheet"
+        href="../css/commandes.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<div class="app-container">
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar">
+
+
+        <!-- LOGO -->
+
+        <div class="logo-container">
+
+            <img
+                src="../images/logo1.png"
+                class="logo-image"
+                alt="Logo PharmaStock"
+            >
+
+            <div class="logo-text">
+                PharmaStock
+            </div>
+
+        </div>
+
+
+        <!-- MENU -->
+
+        <nav class="sidebar-menu">
+
+
+            <!-- DASHBOARD -->
+
+            <a
+                href="dashboard-admin.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    ⌂
+                </span>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <!-- MEDICAMENTS -->
+
+            <a
+                href="medicaments.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    💊
+                </span>
+
+                <span>
+                    Médicaments
+                </span>
+
+            </a>
+
+
+            <!-- STOCK -->
+
+            <a
+                href="stock.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    📦
+                </span>
+
+                <span>
+                    Stock
+                </span>
+
+            </a>
+
+
+            <!-- VENTES -->
+
+            <a
+                href="ventes.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    🛒
+                </span>
+
+                <span>
+                    Ventes
+                </span>
+
+            </a>
+
+
+            <!-- FOURNISSEURS -->
+
+            <a
+                href="fournisseurs.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    🚚
+                </span>
+
+                <span>
+                    Fournisseurs
+                </span>
+
+            </a>
+
+
+            <!-- COMMANDES -->
+
+            <a
+                href="commandes.html"
+                class="menu-item active"
+            >
+
+                <span class="menu-icon">
+                    📒
+                </span>
+
+                <span>
+                    Commandes
+                </span>
+
+            </a>
+
+
+            <!-- UTILISATEURS -->
+
+            <a
+                href="utilisateurs.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    👥
+                </span>
+
+                <span>
+                    Utilisateurs
+                </span>
+
+            </a>
+
+
+            <!-- RAPPORTS -->
+
+            <a
+                href="#"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    📊
+                </span>
+
+                <span>
+                    Rapports
+                </span>
+
+            </a>
+
+
+            <!-- PARAMETRES -->
+
+            <a
+                href="#"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    ⚙
+                </span>
+
+                <span>
+                    Paramètres
+                </span>
+
+            </a>
+
+
+        </nav>
+
+
+        <!-- DECONNEXION -->
+
+        <div class="sidebar-bottom">
+
+            <a
+                href="#"
+                id="logoutBtn"
+                class="menu-item logout"
+            >
+
+                <span class="menu-icon">
+                    ↪
+                </span>
+
+                <span>
+                    Déconnexion
+                </span>
+
+            </a>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         CONTENU PRINCIPAL
+    ====================================================== -->
+
+    <main class="main-content">
+
+
+        <!-- =================================================
+             TOPBAR
+        ================================================== -->
+
+        <header class="topbar">
+
+
+            <!-- RECHERCHE -->
+
+            <div class="search-container">
+
+                <span>
+                    ⌕
+                </span>
+
+                <input
+                    type="text"
+                    id="globalSearch"
+                    placeholder="Rechercher..."
+                >
+
+            </div>
+
+
+            <!-- PARTIE DROITE -->
+
+            <div class="topbar-right">
+
+
+                <!-- NOTIFICATIONS -->
+
+                <button
+                    type="button"
+                    class="notification-button"
+                    id="notificationButton"
+                >
+
+                    🔔
+
+                    <span
+                        class="notification-badge"
+                        id="notificationBadge"
+                    >
+                        0
+                    </span>
+
+                </button>
+
+
+                <!-- ADMIN CONNECTÉ -->
+
+                <div class="user-profile">
+
+
+                    <!-- AVATAR -->
+
+                    <div
+                        class="avatar"
+                        id="adminAvatar"
+                    >
+                        A
+                    </div>
+
+
+                    <!-- NOM -->
+
+                    <div class="user-info">
+
+                        <strong id="adminName">
+                            Admin
+                        </strong>
+
+                        <small>
+                            Administrateur
+                        </small>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </header>
+
+
+
+        <!-- =================================================
+             CONTENU COMMANDES
+        ================================================== -->
+
+        <section class="dashboard-content commandes-content">
+
+
+            <!-- TITRE -->
+
+            <div class="commandes-header">
+
+
+                <div>
+
+                    <h1>
+                        Commandes
+                    </h1>
+
+                    <p>
+                        Gérez les commandes de votre pharmacie.
+                    </p>
+
+                </div>
+
+
+                <!-- BOUTON AJOUTER -->
+
+                <button
+                    type="button"
+                    id="addOrderBtn"
+                    class="add-order-btn"
+                >
+                    + Nouvelle commande
+                </button>
+
+
+            </div>
+
+
+
+            <!-- MESSAGE -->
+
+            <div
+                id="message"
+                class="commandes-message"
+            ></div>
+
+
+
+            <!-- =================================================
+                 CARTE COMMANDES
+            ================================================== -->
+
+            <div class="dashboard-card commandes-card">
+
+
+                <!-- HEADER CARTE -->
+
+                <div class="card-header">
+
+
+                    <div>
+
+                        <h2>
+                            Liste des commandes
+                        </h2>
+
+                        <p>
+                            Commandes enregistrées dans PharmaStock
+                        </p>
+
+                    </div>
+
+
+                    <span
+                        id="orderCount"
+                        class="order-count"
+                    >
+                        0 commande
+                    </span>
+
+
+                </div>
+
+
+
+                <!-- FILTRES -->
+
+                <div class="orders-filters">
+
+
+                    <div class="filter-group">
+
+                        <label for="searchOrder">
+                            Rechercher
+                        </label>
+
+                        <input
+                            type="text"
+                            id="searchOrder"
+                            placeholder="N° commande ou fournisseur..."
+                        >
+
+                    </div>
+
+
+                    <div class="filter-group">
+
+                        <label for="filterStatus">
+                            Statut
+                        </label>
+
+                        <select id="filterStatus">
+
+                            <option value="">
+                                Tous les statuts
+                            </option>
+
+                            <option value="EN_ATTENTE">
+                                En attente
+                            </option>
+
+                            <option value="VALIDEE">
+                                Validée
+                            </option>
+
+                            <option value="RECUE">
+                                Reçue
+                            </option>
+
+                            <option value="ANNULEE">
+                                Annulée
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="filter-group">
+
+                        <label for="filterSupplier">
+                            Fournisseur
+                        </label>
+
+                        <select id="filterSupplier">
+
+                            <option value="">
+                                Tous les fournisseurs
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- TABLEAU -->
+
+                <div class="orders-table-container">
+
+
+                    <table class="orders-table">
+
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    #
+                                </th>
+
+                                <th>
+                                    Date
+                                </th>
+
+                                <th>
+                                    Fournisseur
+                                </th>
+
+                                <th>
+                                    Montant total
+                                </th>
+
+                                <th>
+                                    Statut
+                                </th>
+
+                                <th>
+                                    Actions
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="ordersTableBody">
+
+                            <!--
+                                Les commandes seront ajoutées
+                                ici avec commandes.js
+                            -->
+
+                        </tbody>
+
+
+                    </table>
+
+
+                    <!-- AUCUNE COMMANDE -->
+
+                    <div
+                        id="emptyOrders"
+                        class="empty-orders"
+                    >
+
+                        <div class="empty-orders-icon">
+                            📒
+                        </div>
+
+                        <h3>
+                            Aucune commande
+                        </h3>
+
+                        <p>
+                            Aucune commande n'est encore enregistrée.
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     MODAL AJOUT / MODIFICATION COMMANDE
+========================================================== -->
+
+<div
+    id="orderModal"
+    class="order-modal"
+>
+
+
+    <div class="order-modal-content">
+
+
+        <!-- HEADER -->
+
+        <div class="order-modal-header">
+
+
+            <div>
+
+                <h2 id="modalTitle">
+                    Nouvelle commande
+                </h2>
+
+                <p>
+                    Remplissez les informations de la commande.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="closeModalBtn"
+                class="close-modal-btn"
+            >
+                ×
+            </button>
+
+
+        </div>
+
+
+
+        <!-- FORMULAIRE -->
+
+        <form
+            id="orderForm"
+            autocomplete="off"
+        >
+
+
+            <!-- ID CACHÉ -->
+
+            <input
+                type="hidden"
+                id="orderId"
+                name="id"
+            >
+
+
+            <!-- DATE / FOURNISSEUR -->
+
+            <div class="form-row">
+
+
+                <div class="form-group">
+
+                    <label for="orderDate">
+                        Date de commande
+                    </label>
+
+                    <input
+                        type="date"
+                        id="orderDate"
+                        name="dateCommande"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="orderSupplier">
+                        Fournisseur
+                    </label>
+
+                    <select
+                        id="orderSupplier"
+                        name="fournisseur_id"
+                        required
+                    >
+
+                        <option value="">
+                            Sélectionner un fournisseur
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- STATUT -->
+
+            <div class="form-group">
+
+                <label for="orderStatus">
+                    Statut
+                </label>
+
+                <select
+                    id="orderStatus"
+                    name="statut"
+                    required
+                >
+
+                    <option value="EN_ATTENTE">
+                        En attente
+                    </option>
+
+                    <option value="VALIDEE">
+                        Validée
+                    </option>
+
+                    <option value="RECUE">
+                        Reçue
+                    </option>
+
+                    <option value="ANNULEE">
+                        Annulée
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- PRODUITS -->
+
+            <div class="order-products-section">
+
+
+                <div class="order-products-header">
+
+                    <div>
+
+                        <h3>
+                            Produits commandés
+                        </h3>
+
+                        <p>
+                            Ajoutez les médicaments et les quantités.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        id="addProductBtn"
+                        class="add-product-btn"
+                    >
+                        + Ajouter un produit
+                    </button>
+
+                </div>
+
+
+
+                <!-- LIGNES PRODUITS -->
+
+                <div
+                    id="orderProducts"
+                    class="order-products"
+                ></div>
+
+
+            </div>
+
+
+
+            <!-- TOTAL -->
+
+            <div class="order-total">
+
+                <span>
+                    Montant total
+                </span>
+
+                <strong id="orderTotal">
+                    0,00 €
+                </strong>
+
+            </div>
+
+
+
+            <!-- BOUTONS -->
+
+            <div class="order-modal-actions">
+
+
+                <button
+                    type="button"
+                    id="cancelOrderBtn"
+                    class="cancel-order-btn"
+                >
+                    Annuler
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="save-order-btn"
+                >
+                    Enregistrer
+                </button>
+
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     MODAL DETAILS COMMANDE
+========================================================== -->
+
+<div
+    id="detailsModal"
+    class="order-modal"
+>
+
+
+    <div class="order-modal-content details-modal-content">
+
+
+        <!-- HEADER -->
+
+        <div class="order-modal-header">
+
+
+            <div>
+
+                <h2>
+                    Détails de la commande
+                </h2>
+
+                <p>
+                    Informations et produits de la commande.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="closeDetailsModalBtn"
+                class="close-modal-btn"
+            >
+                ×
+            </button>
+
+
+        </div>
+
+
+
+        <!-- CONTENU -->
+
+        <div id="orderDetailsContent">
+
+            <!-- Les détails seront ajoutés avec commandes.js -->
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================== -->
+
+<script src="../js/commandes.js"></script>
+
+
+</body>
+
+</html>

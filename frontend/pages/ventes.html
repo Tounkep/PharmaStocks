@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>PharmaStock - Ventes</title>
+
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/dashboard.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/ventes.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="app-container">
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo-container">
+
+            <img
+                src="../images/logo1.png"
+                class="logo-image"
+                alt="PharmaStock"
+            >
+
+            <div class="logo-text">
+                PharmaStock
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-menu">
+
+            <a
+                href="dashboard-admin.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+
+            <a
+                href="medicaments.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">💊</span>
+                <span>Médicaments</span>
+            </a>
+
+
+            <a
+                href="stock.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">📦</span>
+                <span>Stock</span>
+            </a>
+
+
+            <a
+                href="ventes.html"
+                class="menu-item active"
+            >
+                <span class="menu-icon">🛒</span>
+                <span>Ventes</span>
+            </a>
+
+
+            <a
+                href="fournisseurs.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">🚚</span>
+                <span>Fournisseurs</span>
+            </a>
+
+
+            <a
+                href="utilisateurs.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">👥</span>
+                <span>Utilisateurs</span>
+            </a>
+
+
+            <a
+                href="#"
+                class="menu-item"
+            >
+                <span class="menu-icon">📊</span>
+                <span>Rapports</span>
+            </a>
+
+
+            <a
+                href="#"
+                class="menu-item"
+            >
+                <span class="menu-icon">⚙</span>
+                <span>Paramètres</span>
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <a
+                href="#"
+                id="logoutBtn"
+                class="menu-item logout"
+            >
+                <span class="menu-icon">↪</span>
+                <span>Déconnexion</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         CONTENU PRINCIPAL
+    ====================================================== -->
+
+    <main class="main-content">
+
+
+        <!-- ================= TOPBAR ================= -->
+
+        <header class="topbar">
+
+            <div class="search-container">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="globalSearch"
+                    placeholder="Rechercher..."
+                >
+
+            </div>
+
+
+            <div class="topbar-right">
+
+                <button
+                    class="notification-button"
+                    id="notificationButton"
+                    type="button"
+                >
+
+                    🔔
+
+                    <span
+                        class="notification-badge"
+                        id="notificationBadge"
+                    >
+                        0
+                    </span>
+
+                </button>
+
+
+                <div class="user-profile">
+
+                    <div
+                        class="avatar"
+                        id="userAvatar"
+                    >
+                        A
+                    </div>
+
+
+                    <div class="user-info">
+
+                        <strong id="adminName">
+                            Admin
+                        </strong>
+
+                        <small id="userRole">
+                            Administrateur
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             CONTENU VENTES
+        ================================================== -->
+
+        <section class="sales-content">
+
+
+            <!-- ================= TITRE ================= -->
+
+            <div class="sales-header">
+
+                <div>
+
+                    <h1>
+                        Gestion des ventes
+                    </h1>
+
+                    <p>
+                        Enregistrez les ventes et gérez les sorties de stock.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="refresh-button"
+                    id="refreshButton"
+                >
+                    ↻ Actualiser
+                </button>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 ZONE PRINCIPALE
+            ================================================== -->
+
+            <section class="sales-grid">
+
+
+                <!-- ================= PRODUITS ================= -->
+
+                <div class="dashboard-card product-selection-card">
+
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <h2>
+                                Nouvelle vente
+                            </h2>
+
+                            <p>
+                                Sélectionnez les médicaments à vendre.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Recherche médicament -->
+
+                    <div class="product-search-box">
+
+                        <label for="productSearch">
+                            Rechercher un médicament
+                        </label>
+
+
+                        <div class="search-product">
+
+                            <span>
+                                ⌕
+                            </span>
+
+                            <input
+                                type="text"
+                                id="productSearch"
+                                autocomplete="off"
+                                placeholder="Nom ou référence..."
+                            >
+
+                        </div>
+
+
+                        <div
+                            id="productResults"
+                            class="product-results"
+                        ></div>
+
+                    </div>
+
+
+
+                    <!-- Produit sélectionné -->
+
+                    <div
+                        id="selectedProduct"
+                        class="selected-product hidden"
+                    >
+
+                        <div class="selected-product-info">
+
+                            <div class="product-icon">
+                                💊
+                            </div>
+
+
+                            <div>
+
+                                <strong id="selectedProductName">
+                                    -
+                                </strong>
+
+                                <small id="selectedProductReference">
+                                    -
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="selected-product-stock">
+
+                            <span>
+                                Stock disponible
+                            </span>
+
+                            <strong id="selectedProductStock">
+                                0
+                            </strong>
+
+                        </div>
+
+
+                        <div class="selected-product-price">
+
+                            <span>
+                                Prix de vente
+                            </span>
+
+                            <strong id="selectedProductPrice">
+                                0,00 €
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- Quantité -->
+
+                    <div
+                        id="quantitySection"
+                        class="quantity-section hidden"
+                    >
+
+                        <label for="quantityInput">
+                            Quantité
+                        </label>
+
+
+                        <div class="quantity-control">
+
+                            <button
+                                type="button"
+                                id="decreaseQuantity"
+                            >
+                                −
+                            </button>
+
+
+                            <input
+                                type="number"
+                                id="quantityInput"
+                                min="1"
+                                value="1"
+                            >
+
+
+                            <button
+                                type="button"
+                                id="increaseQuantity"
+                            >
+                                +
+                            </button>
+
+                        </div>
+
+
+                        <small id="quantityHelp">
+                            Quantité disponible : 0
+                        </small>
+
+
+                        <button
+                            type="button"
+                            class="add-cart-button"
+                            id="addToCartButton"
+                        >
+                            + Ajouter au panier
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- Message -->
+
+                    <div
+                        id="productMessage"
+                        class="form-message"
+                    ></div>
+
+
+                </div>
+
+
+
+                <!-- ================= PANIER ================= -->
+
+                <div class="dashboard-card cart-card">
+
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <h2>
+                                Panier
+                            </h2>
+
+                            <p>
+                                Produits de la vente actuelle.
+                            </p>
+
+                        </div>
+
+
+                        <span
+                            class="cart-count"
+                            id="cartCount"
+                        >
+                            0 article
+                        </span>
+
+                    </div>
+
+
+
+                    <div
+                        id="cartEmpty"
+                        class="cart-empty"
+                    >
+
+                        <div class="empty-icon">
+                            🛒
+                        </div>
+
+                        <strong>
+                            Votre panier est vide
+                        </strong>
+
+                        <span>
+                            Recherchez un médicament pour commencer une vente.
+                        </span>
+
+                    </div>
+
+
+
+                    <div
+                        id="cartContainer"
+                        class="cart-container hidden"
+                    >
+
+                        <div class="cart-table-wrapper">
+
+                            <table class="cart-table">
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>
+                                            Médicament
+                                        </th>
+
+                                        <th>
+                                            Prix
+                                        </th>
+
+                                        <th>
+                                            Quantité
+                                        </th>
+
+                                        <th>
+                                            Total
+                                        </th>
+
+                                        <th>
+                                        </th>
+
+                                    </tr>
+
+                                </thead>
+
+
+                                <tbody id="cartBody"></tbody>
+
+                            </table>
+
+                        </div>
+
+
+
+                        <div class="cart-summary">
+
+                            <div class="summary-line">
+
+                                <span>
+                                    Articles
+                                </span>
+
+                                <strong id="summaryQuantity">
+                                    0
+                                </strong>
+
+                            </div>
+
+
+                            <div class="summary-line total-line">
+
+                                <span>
+                                    Total
+                                </span>
+
+                                <strong id="cartTotal">
+                                    0,00 €
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="cart-actions">
+
+                            <button
+                                type="button"
+                                class="secondary-button"
+                                id="clearCartButton"
+                            >
+                                Vider le panier
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="primary-button"
+                                id="validateSaleButton"
+                            >
+                                ✓ Valider la vente
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 HISTORIQUE DES VENTES
+            ================================================== -->
+
+            <section class="dashboard-card history-card">
+
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h2>
+                            Historique des ventes
+                        </h2>
+
+                        <p>
+                            Consultez les ventes récemment enregistrées.
+                        </p>
+
+                    </div>
+
+
+                    <div class="history-controls">
+
+                        <div class="history-search">
+
+                            <span>
+                                ⌕
+                            </span>
+
+                            <input
+                                type="text"
+                                id="historySearch"
+                                placeholder="Rechercher une vente..."
+                            >
+
+                        </div>
+
+
+                        <select
+                            id="historyPeriod"
+                            class="history-period"
+                        >
+                            <option value="all">
+                                Toutes
+                            </option>
+                            <option value="week">
+                                Cette semaine
+                            </option>
+                            <option value="month">
+                                Ce mois
+                            </option>
+                        </select>
+
+
+                        <button
+                            type="button"
+                            class="export-history-button"
+                            id="exportHistoryButton"
+                        >
+                            Télécharger
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="table-wrapper">
+
+                    <table class="sales-history-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    N°
+                                </th>
+
+                                <th>
+                                    Date
+                                </th>
+
+                                <th>
+                                    Utilisateur
+                                </th>
+
+                                <th>
+                                    Articles
+                                </th>
+
+                                <th>
+                                    Montant
+                                </th>
+
+                                <th>
+                                    Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="salesHistoryBody">
+
+                            <tr>
+
+                                <td
+                                    colspan="6"
+                                    class="table-loading"
+                                >
+                                    Chargement...
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+
+                <div
+                    class="pagination"
+                    id="pagination"
+                ></div>
+
+            </section>
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+
+<!-- =========================================================
+     MODAL DETAIL VENTE
+========================================================== -->
+
+<div
+    class="modal-overlay hidden"
+    id="saleModal"
+>
+
+    <div class="sale-modal">
+
+
+        <div class="modal-header">
+
+            <div>
+
+                <h2>
+                    Détail de la vente
+                </h2>
+
+                <p id="modalSaleNumber">
+                    Vente #-
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="modal-close"
+                id="closeSaleModal"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+
+        <div
+            class="modal-body"
+            id="saleModalBody"
+        >
+
+            Chargement...
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script src="../js/ventes.js"></script>
+
+</body>
+
+</html>

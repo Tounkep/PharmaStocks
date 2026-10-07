@@ -97,9 +97,8 @@ Toutes les routes renvoient du JSON de la forme `{ "success": true, "data": ... 
 
 | Route | Rôle |
 |---|---|
-| `auth/connexion.php` | connexion (formulaire) |
-| `auth/session.php` | utilisateur connecté |
-| `auth/logout.php` | déconnexion |
+| `auth/connexion.php` | connexion (formulaire) et déconnexion (POST `action=logout`) |
+| `auth/session.php` | utilisateur connecté (nom, rôle), pour tous les rôles |
 | `routes/dashboard.php` | dashboard admin |
 | `routes/dashboardPharmacien.php` | dashboard pharmacien |
 | `routes/medicaments.php` | médicaments, lots (fiche détail) |

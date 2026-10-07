@@ -8,7 +8,6 @@
    - construit le menu latéral du pharmacien
    - affiche le nom, l'avatar et le rôle
    - met à jour la cloche des alertes
-   - gère la déconnexion
    - masque les actions interdites au pharmacien
 
    Les autres scripts peuvent attendre l'utilisateur avec :
@@ -18,7 +17,6 @@
 (function () {
 
     const SESSION_URL = "../../backend/auth/session.php";
-    const LOGOUT_URL = "../../backend/auth/logout.php";
     const ALERTES_URL = "../../backend/routes/alertes.php";
 
 
@@ -115,13 +113,6 @@
 
 
     document.addEventListener("DOMContentLoaded", init);
-
-    /*
-     * Phase de capture : notre gestionnaire passe avant
-     * ceux des scripts de page (dont certains pointent
-     * vers des pages inexistantes).
-     */
-    document.addEventListener("click", handleLogoutClick, true);
 
 
     async function init() {
@@ -332,40 +323,5 @@
                 }
             });
     };
-
-
-    /* =====================================================
-       DÉCONNEXION
-    ====================================================== */
-
-    async function handleLogoutClick(event) {
-
-        const link = event.target.closest(
-            "#logoutBtn, .sidebar-bottom a"
-        );
-
-        if (!link) {
-            return;
-        }
-
-        event.preventDefault();
-        event.stopImmediatePropagation();
-
-        try {
-
-            await fetch(LOGOUT_URL, {
-                method: "POST",
-                credentials: "include"
-            });
-
-        } catch (error) {
-
-            console.error("Erreur de déconnexion :", error);
-
-        } finally {
-
-            window.location.href = "connexion.html";
-        }
-    }
 
 })();

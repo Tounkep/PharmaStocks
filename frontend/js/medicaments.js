@@ -117,6 +117,53 @@ function bindEvents() {
             "submit",
             saveMedicament
         );
+
+
+    document
+        .getElementById("logoutBtn")
+        .addEventListener(
+            "click",
+            deconnexion
+        );
+}
+
+
+/* =========================
+   DECONNEXION
+========================= */
+
+async function deconnexion(event) {
+
+    event.preventDefault();
+
+
+    try {
+
+        await fetch(
+            "../../backend/auth/connexion.php",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                        "application/x-www-form-urlencoded"
+                },
+                body: "action=logout",
+                credentials: "include"
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Erreur de déconnexion :",
+            error
+        );
+
+    } finally {
+
+        window.location.href =
+            "connexion.html";
+    }
 }
 
 /**

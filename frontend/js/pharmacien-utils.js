@@ -197,3 +197,52 @@ const PharmaUtils = {
         setTimeout(() => toast.remove(), 4000);
     }
 };
+
+
+/* =========================================================
+   DÉCONNEXION
+========================================================= */
+
+async function deconnexion(event) {
+
+    event.preventDefault();
+
+
+    try {
+
+        await fetch(
+            "../../backend/auth/connexion.php",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                        "application/x-www-form-urlencoded"
+                },
+                body: "action=logout",
+                credentials: "include"
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Erreur de déconnexion :",
+            error
+        );
+
+    } finally {
+
+        window.location.href =
+            "connexion.html";
+    }
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const logoutButton = document.getElementById("logoutBtn");
+
+    if (logoutButton) {
+        logoutButton.addEventListener("click", deconnexion);
+    }
+});

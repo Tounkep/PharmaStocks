@@ -235,7 +235,8 @@
 
         const nameElement =
             document.getElementById("adminName") ||
-            document.getElementById("userName");
+            document.getElementById("userName") ||
+            document.querySelector(".user-info strong");
 
         if (nameElement && fullName) {
             nameElement.textContent = fullName;

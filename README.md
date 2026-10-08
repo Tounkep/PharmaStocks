@@ -38,6 +38,8 @@ Dans **phpMyAdmin** (http://localhost/phpmyadmin), onglet **Importer**, importer
 
 > Pour repartir de zéro : supprimer la base `gestion_pharmacie` dans phpMyAdmin, puis réimporter les deux fichiers.
 
+**Base déjà créée avant une mise à jour du schéma ?** Importer aussi les fichiers du dossier `database/migrations/`, dans l'ordre de leur numéro (par exemple `001_reception_ligne.sql`). Ils ajoutent seulement ce qui manque et ne touchent pas aux données existantes.
+
 La connexion à la base se règle dans `backend/config/Database.php` (par défaut : `localhost:3306`, utilisateur `root`, sans mot de passe, comme XAMPP).
 
 ### 4. Ouvrir l'application
@@ -115,6 +117,7 @@ Toutes les routes renvoient du JSON de la forme `{ "success": true, "data": ... 
 - Le stock d'un médicament est la **somme de ses lots** ; il n'est pas stocké dans la table `Produit`.
 - Un lot dont la date d'expiration est dépassée passe automatiquement au statut `PERIME` et n'est plus vendable.
 - Une vente sort le stock **du lot qui expire le plus tôt** (méthode FEFO).
+- **Réception d'une commande** (Stock → Réceptionner) : chaque produit livré est contrôlé. La quantité **acceptée** devient un lot, la quantité **refusée** est enregistrée avec son motif, le reste est noté **manquant**. Un produit qui expire dans **moins de 6 mois** est refusé par défaut ; le pharmacien peut l'accepter quand même, et c'est tracé. Un produit déjà périmé ne peut jamais être accepté. Le délai se règle avec `Stock::DELAI_MIN_PEREMPTION_MOIS`. L'onglet **Réceptions** garde l'historique (table `ReceptionLigne`).
 - Chaque changement de stock crée une ligne dans `MouvementStock` (entrée, sortie, perte, retour, ajustement) et dans `JournalActivite`.
 - Les **alertes** (rupture, stock faible, expiration proche, lot périmé) sont recalculées à l'ouverture du dashboard pharmacien, de la page Stock et de la page Alertes. Elles passent à « résolue » d'elles-mêmes quand le problème disparaît.
 

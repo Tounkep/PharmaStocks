@@ -171,6 +171,7 @@
             <div class="tabs">
                 <button class="tab-button active" data-tab="lots" type="button">Lots en stock</button>
                 <button class="tab-button" data-tab="mouvements" type="button">Historique des mouvements</button>
+                <button class="tab-button" data-tab="receptions" type="button">Réceptions</button>
             </div>
 
 
@@ -297,6 +298,61 @@
                     <div class="table-footer">
                         <span id="movementsCount">--</span>
                         <span class="muted">300 derniers mouvements maximum</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= ONGLET RÉCEPTIONS ================= -->
+
+            <div class="tab-panel hidden" id="tab-receptions">
+
+                <div class="ph-filters">
+
+                    <div class="filter-search">
+                        <span>⌕</span>
+                        <input id="receptionSearch" type="search" placeholder="N° de commande, fournisseur, produit ou n° de lot...">
+                    </div>
+
+                    <select id="receptionFilter">
+                        <option value="">Toutes les réceptions</option>
+                        <option value="refus">Avec des produits refusés</option>
+                        <option value="manquant">Avec des produits manquants</option>
+                    </select>
+
+                </div>
+
+                <div class="table-card">
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>Réceptionnée le</th>
+                                    <th>Commande</th>
+                                    <th>Fournisseur</th>
+                                    <th>Par</th>
+                                    <th>Acceptées</th>
+                                    <th>Refusées</th>
+                                    <th>Manquantes</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="receptionsTableBody">
+                                <tr><td colspan="8" class="table-empty">Chargement...</td></tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <div class="table-footer">
+                        <span id="receptionsCount">--</span>
                     </div>
 
                 </div>
@@ -437,7 +493,7 @@
 
 <div class="modal-overlay hidden" id="receptionModal">
 
-    <div class="modal wide">
+    <div class="modal xwide">
 
         <div class="modal-header">
             <h2>Réceptionner une commande</h2>
@@ -445,9 +501,12 @@
         </div>
 
         <p class="modal-info">
-            Chaque produit reçu devient un lot. Saisissez le numéro de lot
-            et la date d'expiration indiqués sur les boîtes. La commande
-            passera au statut « Reçue ».
+            Contrôlez chaque produit livré. Saisissez le numéro de lot et la date
+            d'expiration indiqués sur les boîtes, puis la quantité <strong>acceptée</strong>
+            (mise en stock) et la quantité <strong>refusée</strong> (avec son motif).
+            Un produit qui expire dans moins de <strong><span id="receptionDelay">6</span> mois</strong>
+            est refusé par défaut. Ce qui n'est ni accepté ni refusé est noté comme manquant.
+            La commande passera au statut « Reçue ».
         </p>
 
         <form id="receptionForm">
@@ -468,9 +527,11 @@
                     <thead>
                         <tr>
                             <th>Produit</th>
-                            <th style="width: 90px;">Qté reçue</th>
-                            <th style="width: 170px;">N° de lot</th>
-                            <th style="width: 160px;">Expiration</th>
+                            <th style="width: 140px;">N° de lot</th>
+                            <th style="width: 150px;">Expiration</th>
+                            <th style="width: 85px;">Acceptées</th>
+                            <th style="width: 85px;">Refusées</th>
+                            <th style="width: 190px;">Motif du refus</th>
                         </tr>
                     </thead>
 
@@ -488,6 +549,48 @@
             </div>
 
         </form>
+
+    </div>
+
+</div>
+
+
+<!-- ================= MODAL : DÉTAIL D'UNE RÉCEPTION ================= -->
+
+<div class="modal-overlay hidden" id="receptionDetailModal">
+
+    <div class="modal xwide">
+
+        <div class="modal-header">
+            <h2 id="receptionDetailTitle">Réception</h2>
+            <button class="modal-close" type="button" data-close>×</button>
+        </div>
+
+        <p class="modal-info" id="receptionDetailInfo"></p>
+
+        <div class="table-wrapper">
+
+            <table class="reception-table">
+
+                <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Commandé</th>
+                        <th>Accepté (mis en stock)</th>
+                        <th>Refusé</th>
+                        <th>Manquant</th>
+                    </tr>
+                </thead>
+
+                <tbody id="receptionDetailLines"></tbody>
+
+            </table>
+
+        </div>
+
+        <div class="modal-actions">
+            <button class="secondary-button" type="button" data-close>Fermer</button>
+        </div>
 
     </div>
 

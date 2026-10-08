@@ -43,6 +43,8 @@ try {
                 $controller->produits();
             } elseif ($action === 'commandes') {
                 $controller->commandes();
+            } elseif ($action === 'receptions') {
+                $controller->receptions();
             } else {
                 $controller->index();
             }

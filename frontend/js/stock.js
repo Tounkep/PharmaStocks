@@ -11,6 +11,9 @@ const state = {
     mouvements: [],
     produits: null,
     commandes: [],
+    receptions: [],
+    receptionsLoaded: false,
+    delaiMinimumMois: 6,
     canEdit: false
 };
 
@@ -42,8 +45,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     await loadLots();
 
-    if (params.get("onglet") === "mouvements") {
-        showTab("mouvements");
+    if (params.get("onglet") === "mouvements" || params.get("onglet") === "receptions") {
+        showTab(params.get("onglet"));
     }
 
     if (user && state.canEdit) {
@@ -95,6 +98,18 @@ function bindEvents() {
 
     document.getElementById("movementType").addEventListener("change", updateMovementForm);
     document.getElementById("receptionOrder").addEventListener("change", renderReceptionLines);
+
+    document.getElementById("receptionSearch").addEventListener("input", renderReceptions);
+    document.getElementById("receptionFilter").addEventListener("change", renderReceptions);
+
+    document.getElementById("receptionsTableBody").addEventListener("click", event => {
+
+        const button = event.target.closest("button[data-reception]");
+
+        if (button) {
+            openReceptionDetail(button.dataset.reception);
+        }
+    });
 
     /*
      * Boutons d'action du tableau des lots.
@@ -156,6 +171,10 @@ function showTab(name) {
 
     if (name === "mouvements" && state.mouvements.length === 0) {
         loadMovements();
+    }
+
+    if (name === "receptions" && !state.receptionsLoaded) {
+        loadReceptions();
     }
 }
 
@@ -609,8 +628,18 @@ async function submitMovement(event) {
 
 
 /* =========================================================
-   RÉCEPTION D'UNE COMMANDE
+   RÉCEPTION D'UNE COMMANDE (CONTRÔLE DES PRODUITS LIVRÉS)
 ========================================================= */
+
+const MOTIFS_REFUS = [
+    "Péremption trop proche",
+    "Produit périmé",
+    "Produit abîmé",
+    "Non conforme à la commande",
+    "Erreur de livraison",
+    "Autre"
+];
+
 
 async function openReceptionModal(commandeId = null) {
 
@@ -628,6 +657,9 @@ async function openReceptionModal(commandeId = null) {
         const { data } = await U.api(`${STOCK_URL}?action=commandes`);
 
         state.commandes = data.commandes;
+        state.delaiMinimumMois = Number(data.delaiMinimumMois || 6);
+
+        document.getElementById("receptionDelay").textContent = state.delaiMinimumMois;
 
     } catch (error) {
 
@@ -666,24 +698,207 @@ function renderReceptionLines() {
     const tbody = document.getElementById("receptionLines");
     const commande = state.commandes.find(item => String(item.id) === id);
 
+    document.getElementById("receptionError").classList.add("hidden");
+
     if (!commande) {
         tbody.innerHTML = "";
         return;
     }
 
-    const minDate = U.today();
+    const motifs = MOTIFS_REFUS
+        .map(motif => `<option value="${U.escape(motif)}">${U.escape(motif)}</option>`)
+        .join("");
 
     tbody.innerHTML = commande.details.map(detail => `
-        <tr data-detail="${detail.id}">
+        <tr class="line-main" data-detail="${detail.id}" data-ordered="${detail.quantite}">
             <td>
                 <strong>${U.escape(detail.produit)}</strong>
                 <div class="muted">Réf. ${U.escape(detail.reference)} · commandé : ${U.number(detail.quantite)}</div>
             </td>
-            <td><input type="number" name="quantite" min="1" step="1" value="${detail.quantite}" required></td>
-            <td><input type="text" name="numeroLot" maxlength="100" required placeholder="N° de lot"></td>
-            <td><input type="date" name="dateExpiration" min="${minDate}" required></td>
+            <td><input type="text" name="numeroLot" maxlength="100" placeholder="N° de lot"></td>
+            <td><input type="date" name="dateExpiration"></td>
+            <td><input type="number" name="quantiteAcceptee" min="0" step="1" value="${detail.quantite}"></td>
+            <td><input type="number" name="quantiteRefusee" min="0" step="1" value="0"></td>
+            <td>
+                <select name="motifRefus" disabled>
+                    <option value="">—</option>
+                    ${motifs}
+                </select>
+            </td>
+        </tr>
+        <tr class="line-note" data-note-for="${detail.id}">
+            <td colspan="6"><span class="note-text muted">Saisissez la date d'expiration indiquée sur les boîtes.</span></td>
         </tr>
     `).join("");
+
+    tbody.querySelectorAll("tr.line-main").forEach(row => {
+
+        row.querySelector('[name="dateExpiration"]')
+            .addEventListener("change", () => checkExpiry(row));
+
+        row.querySelectorAll('[name="quantiteAcceptee"], [name="quantiteRefusee"]')
+            .forEach(input => input.addEventListener("input", () => updateLine(row)));
+
+        updateLine(row);
+    });
+}
+
+
+/*
+ * Contrôle de la date d'expiration d'une ligne :
+ * - périmé           : acceptation impossible, tout est refusé
+ * - moins de N mois  : tout est refusé par défaut, le pharmacien
+ *                      peut cocher « Accepter quand même »
+ * - sinon            : ligne normale
+ */
+function checkExpiry(row) {
+
+    const expiry = row.querySelector('[name="dateExpiration"]').value;
+    const accepted = row.querySelector('[name="quantiteAcceptee"]');
+    const refused = row.querySelector('[name="quantiteRefusee"]');
+    const motif = row.querySelector('[name="motifRefus"]');
+
+    const status = expiryStatus(expiry);
+    const forced = row.dataset.forced === "1";
+
+    const autoRefuse = reason => {
+
+        if (row.dataset.autoRefused !== "1") {
+            row.dataset.autoRefused = "1";
+            refused.value = Number(refused.value || 0) + Number(accepted.value || 0);
+            accepted.value = 0;
+        }
+
+        motif.value = reason;
+    };
+
+    const restore = () => {
+
+        if (row.dataset.autoRefused === "1") {
+            accepted.value = Number(accepted.value || 0) + Number(refused.value || 0);
+            refused.value = 0;
+            motif.value = "";
+            row.dataset.autoRefused = "";
+        }
+    };
+
+    accepted.disabled = false;
+
+    if (status.state === "expired") {
+
+        row.dataset.forced = "";
+        autoRefuse("Produit périmé");
+        accepted.disabled = true;
+
+    } else if (status.state === "short" && !forced) {
+
+        autoRefuse("Péremption trop proche");
+
+    } else {
+
+        restore();
+    }
+
+    updateLine(row);
+}
+
+
+function expiryStatus(expiry) {
+
+    if (!expiry) {
+        return { state: "empty" };
+    }
+
+    const today = U.today();
+    const limit = new Date(today + "T00:00:00");
+
+    limit.setMonth(limit.getMonth() + (state.delaiMinimumMois || 6));
+
+    const limitIso = new Date(limit - limit.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+
+    const days = Math.round(
+        (new Date(expiry + "T00:00:00") - new Date(today + "T00:00:00")) / 86400000
+    );
+
+    if (expiry <= today) {
+        return { state: "expired", days };
+    }
+
+    if (expiry < limitIso) {
+        return { state: "short", days };
+    }
+
+    return { state: "ok", days };
+}
+
+
+/*
+ * Met à jour la ligne de note sous le produit : avertissement
+ * de péremption, case « Accepter quand même », quantité manquante.
+ */
+function updateLine(row) {
+
+    const note = document.querySelector(`tr[data-note-for="${row.dataset.detail}"]`);
+    const ordered = Number(row.dataset.ordered);
+    const expiry = row.querySelector('[name="dateExpiration"]').value;
+    const accepted = Number(row.querySelector('[name="quantiteAcceptee"]').value || 0);
+    const refused = Number(row.querySelector('[name="quantiteRefusee"]').value || 0);
+    const motif = row.querySelector('[name="motifRefus"]');
+
+    motif.disabled = refused === 0;
+
+    if (refused === 0) {
+        motif.value = "";
+    }
+
+    const status = expiryStatus(expiry);
+    const parts = [];
+
+    if (status.state === "empty") {
+
+        parts.push('<span class="muted">Saisissez la date d\'expiration indiquée sur les boîtes.</span>');
+
+    } else if (status.state === "expired") {
+
+        parts.push('<span class="line-warning-text">⛔ Produit déjà périmé : il ne peut pas être accepté.</span>');
+
+    } else if (status.state === "short") {
+
+        parts.push(
+            `<span class="line-warning-text">⚠ Expire le ${U.date(expiry)}, dans ${status.days} jours `
+            + `(moins de ${state.delaiMinimumMois} mois).</span>`
+            + `<label class="force-label"><input type="checkbox" data-force ${row.dataset.forced === "1" ? "checked" : ""}>`
+            + "Accepter quand même</label>"
+        );
+
+    } else {
+
+        parts.push(`<span class="line-ok-text">✓ Expire le ${U.date(expiry)}, dans ${Math.floor(status.days / 30)} mois.</span>`);
+    }
+
+    const missing = ordered - accepted - refused;
+
+    if (missing > 0) {
+        parts.push(`<span class="muted"> · ${missing} non livrée(s) (manquant)</span>`);
+    } else if (missing < 0) {
+        parts.push(`<span class="line-warning-text"> · ${-missing} de plus que la quantité commandée</span>`);
+    }
+
+    note.firstElementChild.innerHTML = parts.join("");
+
+    const warning = status.state === "expired" || (status.state === "short" && row.dataset.forced !== "1");
+
+    row.classList.toggle("line-warning", warning);
+    note.classList.toggle("line-warning", warning);
+
+    const force = note.querySelector("[data-force]");
+
+    if (force) {
+        force.addEventListener("change", () => {
+            row.dataset.forced = force.checked ? "1" : "";
+            checkExpiry(row);
+        });
+    }
 }
 
 
@@ -692,16 +907,46 @@ async function submitReception(event) {
     event.preventDefault();
 
     const commandeId = Number(document.getElementById("receptionOrder").value);
+    const rows = [...document.querySelectorAll("#receptionLines tr.line-main")];
 
-    const lignes = [...document.querySelectorAll("#receptionLines tr")].map(row => ({
-        detail_id: Number(row.dataset.detail),
-        quantite: Number(row.querySelector('[name="quantite"]').value),
-        numeroLot: row.querySelector('[name="numeroLot"]').value.trim(),
-        dateExpiration: row.querySelector('[name="dateExpiration"]').value
-    }));
-
-    if (!commandeId || lignes.length === 0) {
+    if (!commandeId || rows.length === 0) {
         showFormError("receptionError", "Choisissez une commande à réceptionner.");
+        return;
+    }
+
+    const lignes = [];
+
+    for (const row of rows) {
+
+        const produit = row.querySelector("strong").textContent;
+
+        const ligne = {
+            detail_id: Number(row.dataset.detail),
+            numeroLot: row.querySelector('[name="numeroLot"]').value.trim(),
+            dateExpiration: row.querySelector('[name="dateExpiration"]').value,
+            quantiteAcceptee: Number(row.querySelector('[name="quantiteAcceptee"]').value || 0),
+            quantiteRefusee: Number(row.querySelector('[name="quantiteRefusee"]').value || 0),
+            motifRefus: row.querySelector('[name="motifRefus"]').value,
+            forcer: row.dataset.forced === "1"
+        };
+
+        if (ligne.quantiteAcceptee > 0 && (!ligne.numeroLot || !ligne.dateExpiration)) {
+            showFormError("receptionError", `${produit} : le numéro de lot et la date d'expiration sont obligatoires pour accepter le produit.`);
+            return;
+        }
+
+        if (ligne.quantiteRefusee > 0 && !ligne.motifRefus) {
+            showFormError("receptionError", `${produit} : choisissez le motif du refus.`);
+            return;
+        }
+
+        lignes.push(ligne);
+    }
+
+    const total = lignes.reduce((sum, ligne) => sum + ligne.quantiteAcceptee + ligne.quantiteRefusee, 0);
+
+    if (total === 0) {
+        showFormError("receptionError", "Aucun produit reçu : indiquez au moins une quantité acceptée ou refusée.");
         return;
     }
 
@@ -738,6 +983,139 @@ async function submitReception(event) {
 
 
 /* =========================================================
+   HISTORIQUE DES RÉCEPTIONS
+========================================================= */
+
+async function loadReceptions() {
+
+    try {
+
+        const { data } = await U.api(`${STOCK_URL}?action=receptions`);
+
+        state.receptions = data.receptions;
+        state.receptionsLoaded = true;
+
+        renderReceptions();
+
+    } catch (error) {
+
+        document.getElementById("receptionsTableBody").innerHTML =
+            `<tr><td colspan="8" class="table-empty">${U.escape(error.message)}</td></tr>`;
+    }
+}
+
+
+function renderReceptions() {
+
+    const tbody = document.getElementById("receptionsTableBody");
+    const search = document.getElementById("receptionSearch").value.trim().toLowerCase();
+    const filter = document.getElementById("receptionFilter").value;
+
+    const receptions = state.receptions.filter(reception => {
+
+        if (filter === "refus" && reception.totalRefuse === 0) {
+            return false;
+        }
+
+        if (filter === "manquant" && reception.totalManquant === 0) {
+            return false;
+        }
+
+        if (search) {
+
+            const text = [
+                "#" + reception.id,
+                "commande " + reception.id,
+                reception.fournisseur,
+                reception.receptionnePar,
+                ...reception.produits.flatMap(produit => [
+                    produit.produit,
+                    produit.reference,
+                    ...produit.acceptes.map(item => item.numeroLot),
+                    ...produit.refus.map(item => item.numeroLot)
+                ])
+            ].join(" ").toLowerCase();
+
+            return text.includes(search);
+        }
+
+        return true;
+    });
+
+    document.getElementById("receptionsCount").textContent =
+        `${receptions.length} réception${receptions.length > 1 ? "s" : ""}`;
+
+    if (receptions.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" class="table-empty">Aucune réception enregistrée.</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = receptions.map(reception => `
+        <tr class="${reception.totalRefuse > 0 ? "row-warning" : ""}">
+            <td>${U.dateTime(reception.dateReception)}</td>
+            <td class="product-name">#${U.escape(reception.id)}</td>
+            <td>${U.escape(reception.fournisseur)}</td>
+            <td>${U.escape(reception.receptionnePar)}</td>
+            <td><span class="qty-positive">${U.number(reception.totalAccepte)}</span></td>
+            <td>${reception.totalRefuse > 0 ? `<span class="qty-negative">${U.number(reception.totalRefuse)}</span>` : "0"}</td>
+            <td>${reception.totalManquant > 0 ? `<span class="badge badge-orange">${U.number(reception.totalManquant)}</span>` : "0"}</td>
+            <td><button class="mini-button" type="button" data-reception="${reception.id}">Détails</button></td>
+        </tr>
+    `).join("");
+}
+
+
+function openReceptionDetail(id) {
+
+    const reception = state.receptions.find(item => String(item.id) === String(id));
+
+    if (!reception) {
+        return;
+    }
+
+    document.getElementById("receptionDetailTitle").textContent = `Réception de la commande #${reception.id}`;
+
+    document.getElementById("receptionDetailInfo").innerHTML = `
+        <strong>${U.escape(reception.fournisseur)}</strong> · commandée le ${U.date(reception.dateCommande)}
+        · réceptionnée le ${U.dateTime(reception.dateReception)} par ${U.escape(reception.receptionnePar)}<br>
+        ${U.number(reception.totalAccepte)} acceptée(s), ${U.number(reception.totalRefuse)} refusée(s),
+        ${U.number(reception.totalManquant)} manquante(s)
+    `;
+
+    const list = items => items.length === 0
+        ? '<span class="muted">—</span>'
+        : `<ul class="reception-detail-list">${items.join("")}</ul>`;
+
+    document.getElementById("receptionDetailLines").innerHTML = reception.produits.map(produit => `
+        <tr>
+            <td>
+                <strong>${U.escape(produit.produit)}</strong>
+                <div class="muted">Réf. ${U.escape(produit.reference)}</div>
+            </td>
+            <td>${U.number(produit.quantiteCommandee)}</td>
+            <td>${list(produit.acceptes.map(item => `
+                <li>
+                    <span class="qty-positive">${U.number(item.quantite)}</span>
+                    · lot ${U.escape(item.numeroLot)} · exp. ${U.date(item.dateExpiration)}
+                    ${item.motif ? `<br><span class="line-warning-text">${U.escape(item.motif)}</span>` : ""}
+                </li>
+            `))}</td>
+            <td>${list(produit.refus.map(item => `
+                <li>
+                    <span class="qty-negative">${U.number(item.quantite)}</span>
+                    · ${U.escape(item.motif)}
+                    ${item.dateExpiration ? `<br><span class="muted">exp. ${U.date(item.dateExpiration)}${item.numeroLot ? " · lot " + U.escape(item.numeroLot) : ""}</span>` : ""}
+                </li>
+            `))}</td>
+            <td>${produit.quantiteManquante > 0 ? `<span class="badge badge-orange">${U.number(produit.quantiteManquante)}</span>` : "0"}</td>
+        </tr>
+    `).join("");
+
+    openModal("receptionDetailModal");
+}
+
+
+/* =========================================================
    RECHARGEMENT
 ========================================================= */
 
@@ -747,5 +1125,9 @@ async function reloadAll() {
 
     if (!document.getElementById("tab-mouvements").classList.contains("hidden") || state.mouvements.length > 0) {
         await loadMovements();
+    }
+
+    if (state.receptionsLoaded) {
+        await loadReceptions();
     }
 }

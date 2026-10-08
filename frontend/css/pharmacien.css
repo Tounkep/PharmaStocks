@@ -537,6 +537,71 @@ a.ph-stat:hover {
     vertical-align: middle;
 }
 
+.modal.xwide {
+    width: min(1000px, 100%);
+}
+
+.reception-table select {
+    width: 100%;
+    border: 1px solid #dce7ec;
+    border-radius: 7px;
+    padding: 8px;
+    font-size: 13px;
+    background: white;
+    outline: none;
+}
+
+.reception-table select:disabled,
+.reception-table input:disabled {
+    background: #f4f7f8;
+    color: #9aaab3;
+}
+
+.reception-table tr.line-warning > td {
+    background: #fff5f5;
+}
+
+.reception-table tr.line-note > td {
+    padding-top: 0;
+    border-bottom: 1px solid #edf1f3;
+    font-size: 12px;
+}
+
+.reception-table tr.line-main > td {
+    border-bottom: none;
+}
+
+.line-warning-text {
+    color: #c53030;
+    font-weight: 600;
+}
+
+.line-ok-text {
+    color: #13875e;
+}
+
+.force-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 10px;
+    color: #456170;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.force-label input {
+    width: auto;
+}
+
+.reception-detail-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
 
 /* =========================================================
    NOTIFICATIONS (TOAST)

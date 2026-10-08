@@ -61,7 +61,19 @@ class StockController
         $this->json([
             'success' => true,
             'data' => [
-                'commandes' => $this->stock->getCommandesAReceptionner()
+                'commandes' => $this->stock->getCommandesAReceptionner(),
+                'delaiMinimumMois' => Stock::DELAI_MIN_PEREMPTION_MOIS
+            ]
+        ]);
+    }
+
+
+    public function receptions(): void
+    {
+        $this->json([
+            'success' => true,
+            'data' => [
+                'receptions' => $this->stock->getReceptions()
             ]
         ]);
     }
@@ -135,9 +147,15 @@ class StockController
                     $utilisateurId
                 );
 
+                $message = "Commande réceptionnée : {$resultat['unitesAcceptees']} unité(s) mises en stock";
+
+                if ($resultat['unitesRefusees'] > 0) {
+                    $message .= ", {$resultat['unitesRefusees']} refusée(s)";
+                }
+
                 $this->json([
                     'success' => true,
-                    'message' => 'Commande réceptionnée, les lots ont été ajoutés au stock.',
+                    'message' => $message . '.',
                     'data' => $resultat
                 ]);
 

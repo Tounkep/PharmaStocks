@@ -4,6 +4,12 @@ class Stock
 {
     private PDO $db;
 
+    /*
+     * Durée de vie restante minimale d'un produit livré.
+     * En dessous, le produit est refusé par défaut à la réception.
+     */
+    public const DELAI_MIN_PEREMPTION_MOIS = 6;
+
     public const TYPES_MOUVEMENT = [
         'ENTREE',
         'SORTIE',
@@ -483,11 +489,22 @@ class Stock
 
 
     /*
+     * Contrôle des produits livrés.
+     *
      * $lignes : [
-     *   { detail_id, numeroLot, dateExpiration, quantite }
+     *   {
+     *     detail_id,
+     *     quantiteAcceptee,   mise en stock dans un nouveau lot
+     *     quantiteRefusee,    renvoyée au fournisseur
+     *     motifRefus,         obligatoire si quantiteRefusee > 0
+     *     numeroLot,          obligatoire si quantiteAcceptee > 0
+     *     dateExpiration,     obligatoire si quantiteAcceptee > 0
+     *     forcer              accepter malgré une péremption proche
+     *   }
      * ]
      *
-     * Chaque ligne de la commande devient un lot.
+     * Ce qui n'est ni accepté ni refusé est considéré comme
+     * non livré (manquant).
      */
     public function receptionnerCommande(
         int $commandeId,
@@ -554,45 +571,131 @@ class Stock
                 $saisies[(int)($ligne['detail_id'] ?? 0)] = $ligne;
             }
 
-            $lotsCrees = [];
             $dateReception = date('Y-m-d');
+            $dateLimite = date('Y-m-d', strtotime('+' . self::DELAI_MIN_PEREMPTION_MOIS . ' months'));
+
+            $lotsCrees = [];
+            $unitesAcceptees = 0;
+            $unitesRefusees = 0;
+            $acceptationsForcees = 0;
 
             foreach ($details as $detailId => $detail) {
 
-                if (!isset($saisies[$detailId])) {
-                    throw new InvalidArgumentException(
-                        "Informations du lot manquantes pour : {$detail['produit']}."
-                    );
+                $produit = $detail['produit'];
+                $ligne = $saisies[$detailId] ?? [];
+
+                $acceptee = $this->entierPositif($ligne['quantiteAcceptee'] ?? 0, $produit, 'acceptée');
+                $refusee = $this->entierPositif($ligne['quantiteRefusee'] ?? 0, $produit, 'refusée');
+
+                if ($acceptee + $refusee === 0) {
+                    continue;
                 }
 
-                $ligne = $saisies[$detailId];
-
                 $numeroLot = trim((string)($ligne['numeroLot'] ?? ''));
-                $dateExpiration = (string)($ligne['dateExpiration'] ?? '');
-                $quantite = filter_var(
-                    $ligne['quantite'] ?? $detail['quantite'],
-                    FILTER_VALIDATE_INT
+                $dateExpiration = trim((string)($ligne['dateExpiration'] ?? ''));
+                $motifRefus = trim((string)($ligne['motifRefus'] ?? ''));
+
+                if ($dateExpiration !== '' && !$this->isDate($dateExpiration)) {
+                    throw new InvalidArgumentException("La date d'expiration est invalide ({$produit}).");
+                }
+
+                /*
+                 * Quantité acceptée : contrôle de la péremption,
+                 * création du lot et entrée en stock.
+                 */
+                if ($acceptee > 0) {
+
+                    if ($dateExpiration !== '' && $dateExpiration <= $dateReception) {
+                        throw new InvalidArgumentException(
+                            "{$produit} est déjà périmé (" . date('d/m/Y', strtotime($dateExpiration))
+                            . ') : il ne peut pas être accepté.'
+                        );
+                    }
+
+                    $this->validerLot($numeroLot, $acceptee, $dateReception, $dateExpiration, $produit);
+
+                    $forcee = false;
+
+                    if ($dateExpiration < $dateLimite) {
+
+                        if (empty($ligne['forcer'])) {
+                            throw new InvalidArgumentException(
+                                "{$produit} expire le " . date('d/m/Y', strtotime($dateExpiration))
+                                . ', dans moins de ' . self::DELAI_MIN_PEREMPTION_MOIS . ' mois. '
+                                . 'Refusez ce produit ou confirmez son acceptation.'
+                            );
+                        }
+
+                        $forcee = true;
+                        $acceptationsForcees++;
+                    }
+
+                    $lotId = $this->insererLot(
+                        (int)$detail['produit_id'],
+                        $numeroLot,
+                        $acceptee,
+                        $dateReception,
+                        $dateExpiration
+                    );
+
+                    $this->enregistrerMouvement(
+                        $lotId,
+                        'ENTREE',
+                        $acceptee,
+                        "Réception commande #{$commandeId}",
+                        $utilisateurId
+                    );
+
+                    $this->enregistrerLigneReception(
+                        $commandeId,
+                        $detailId,
+                        (int)$detail['produit_id'],
+                        'ACCEPTEE',
+                        $acceptee,
+                        $numeroLot,
+                        $dateExpiration,
+                        $forcee
+                            ? 'Accepté malgré une péremption à moins de ' . self::DELAI_MIN_PEREMPTION_MOIS . ' mois'
+                            : null,
+                        $lotId,
+                        $utilisateurId
+                    );
+
+                    $lotsCrees[] = $lotId;
+                    $unitesAcceptees += $acceptee;
+                }
+
+                /*
+                 * Quantité refusée : aucune entrée en stock,
+                 * seulement la trace du refus.
+                 */
+                if ($refusee > 0) {
+
+                    if ($motifRefus === '') {
+                        throw new InvalidArgumentException("Indiquez le motif du refus ({$produit}).");
+                    }
+
+                    $this->enregistrerLigneReception(
+                        $commandeId,
+                        $detailId,
+                        (int)$detail['produit_id'],
+                        'REFUSEE',
+                        $refusee,
+                        $numeroLot !== '' ? $numeroLot : null,
+                        $dateExpiration !== '' ? $dateExpiration : null,
+                        $motifRefus,
+                        null,
+                        $utilisateurId
+                    );
+
+                    $unitesRefusees += $refusee;
+                }
+            }
+
+            if ($unitesAcceptees + $unitesRefusees === 0) {
+                throw new InvalidArgumentException(
+                    'Aucun produit reçu : indiquez au moins une quantité acceptée ou refusée.'
                 );
-
-                $this->validerLot($numeroLot, $quantite, $dateReception, $dateExpiration, $detail['produit']);
-
-                $lotId = $this->insererLot(
-                    (int)$detail['produit_id'],
-                    $numeroLot,
-                    (int)$quantite,
-                    $dateReception,
-                    $dateExpiration
-                );
-
-                $this->enregistrerMouvement(
-                    $lotId,
-                    'ENTREE',
-                    (int)$quantite,
-                    "Réception commande #{$commandeId}",
-                    $utilisateurId
-                );
-
-                $lotsCrees[] = $lotId;
             }
 
             $this->db->prepare("
@@ -603,17 +706,23 @@ class Stock
                 'id' => $commandeId
             ]);
 
-            $this->journaliser(
-                'COMMANDE_RECUE',
-                "Commande #{$commandeId} réceptionnée : " . count($lotsCrees) . ' lot(s) ajouté(s).',
-                $utilisateurId
-            );
+            $description = "Commande #{$commandeId} réceptionnée : "
+                . "{$unitesAcceptees} unité(s) acceptée(s) dans " . count($lotsCrees) . ' lot(s), '
+                . "{$unitesRefusees} refusée(s).";
+
+            if ($acceptationsForcees > 0) {
+                $description .= " {$acceptationsForcees} acceptation(s) malgré une péremption proche.";
+            }
+
+            $this->journaliser('COMMANDE_RECUE', $description, $utilisateurId);
 
             $this->db->commit();
 
             return [
                 'commande_id' => $commandeId,
-                'lots' => $lotsCrees
+                'lots' => $lotsCrees,
+                'unitesAcceptees' => $unitesAcceptees,
+                'unitesRefusees' => $unitesRefusees
             ];
 
         } catch (Throwable $e) {
@@ -622,6 +731,156 @@ class Stock
 
             throw $e;
         }
+    }
+
+
+    /* =====================================================
+       HISTORIQUE DES RÉCEPTIONS
+    ====================================================== */
+
+    public function getReceptions(): array
+    {
+        $commandes = $this->db->query("
+            SELECT
+                c.id,
+                c.dateCommande,
+                c.montantTotal,
+                f.nom AS fournisseur,
+                MAX(r.dateReception) AS dateReception,
+                MAX(CONCAT(u.prenom, ' ', u.nom)) AS receptionnePar
+
+            FROM ReceptionLigne r
+
+            INNER JOIN Commande c
+                ON c.id = r.commande_id
+
+            INNER JOIN Fournisseur f
+                ON f.id = c.fournisseur_id
+
+            INNER JOIN Utilisateur u
+                ON u.id = r.utilisateur_id
+
+            GROUP BY
+                c.id,
+                c.dateCommande,
+                c.montantTotal,
+                f.nom
+
+            ORDER BY dateReception DESC
+
+            LIMIT 100
+        ")->fetchAll();
+
+        $stmtDetails = $this->db->prepare("
+            SELECT
+                d.id,
+                d.quantite AS quantiteCommandee,
+                p.nom AS produit,
+                p.reference
+            FROM DetailCommande d
+            INNER JOIN Produit p
+                ON p.id = d.produit_id
+            WHERE d.commande_id = :commande_id
+            ORDER BY d.id ASC
+        ");
+
+        $stmtLignes = $this->db->prepare("
+            SELECT
+                r.detail_commande_id,
+                r.decision,
+                r.quantite,
+                r.numeroLot,
+                r.dateExpiration,
+                r.motif,
+                r.lot_id,
+                p.nom AS produit,
+                p.reference
+            FROM ReceptionLigne r
+            INNER JOIN Produit p
+                ON p.id = r.produit_id
+            WHERE r.commande_id = :commande_id
+            ORDER BY r.id ASC
+        ");
+
+        foreach ($commandes as &$commande) {
+
+            $stmtDetails->execute(['commande_id' => $commande['id']]);
+            $stmtLignes->execute(['commande_id' => $commande['id']]);
+
+            $produits = [];
+
+            foreach ($stmtDetails->fetchAll() as $detail) {
+                $produits[(int)$detail['id']] = [
+                    'produit' => $detail['produit'],
+                    'reference' => $detail['reference'],
+                    'quantiteCommandee' => (int)$detail['quantiteCommandee'],
+                    'acceptes' => [],
+                    'refus' => []
+                ];
+            }
+
+            foreach ($stmtLignes->fetchAll() as $ligne) {
+
+                /*
+                 * Ligne de commande supprimée depuis :
+                 * on regroupe sous une clé propre au produit.
+                 */
+                $cle = $ligne['detail_commande_id'] !== null
+                    ? (int)$ligne['detail_commande_id']
+                    : 'x' . $ligne['reference'];
+
+                if (!isset($produits[$cle])) {
+                    $produits[$cle] = [
+                        'produit' => $ligne['produit'],
+                        'reference' => $ligne['reference'],
+                        'quantiteCommandee' => 0,
+                        'acceptes' => [],
+                        'refus' => []
+                    ];
+                }
+
+                $entree = [
+                    'quantite' => (int)$ligne['quantite'],
+                    'numeroLot' => $ligne['numeroLot'],
+                    'dateExpiration' => $ligne['dateExpiration'],
+                    'motif' => $ligne['motif'],
+                    'lot_id' => $ligne['lot_id'] !== null ? (int)$ligne['lot_id'] : null
+                ];
+
+                if ($ligne['decision'] === 'ACCEPTEE') {
+                    $produits[$cle]['acceptes'][] = $entree;
+                } else {
+                    $produits[$cle]['refus'][] = $entree;
+                }
+            }
+
+            $totalAccepte = 0;
+            $totalRefuse = 0;
+            $totalManquant = 0;
+
+            foreach ($produits as &$produit) {
+
+                $produit['quantiteAcceptee'] = array_sum(array_column($produit['acceptes'], 'quantite'));
+                $produit['quantiteRefusee'] = array_sum(array_column($produit['refus'], 'quantite'));
+                $produit['quantiteManquante'] = max(
+                    0,
+                    $produit['quantiteCommandee'] - $produit['quantiteAcceptee'] - $produit['quantiteRefusee']
+                );
+
+                $totalAccepte += $produit['quantiteAcceptee'];
+                $totalRefuse += $produit['quantiteRefusee'];
+                $totalManquant += $produit['quantiteManquante'];
+            }
+
+            unset($produit);
+
+            $commande['produits'] = array_values($produits);
+            $commande['totalAccepte'] = $totalAccepte;
+            $commande['totalRefuse'] = $totalRefuse;
+            $commande['totalManquant'] = $totalManquant;
+        }
+
+        return $commandes;
     }
 
 
@@ -847,6 +1106,79 @@ class Stock
         }
 
         return 'DISPONIBLE';
+    }
+
+
+    private function enregistrerLigneReception(
+        int $commandeId,
+        int $detailId,
+        int $produitId,
+        string $decision,
+        int $quantite,
+        ?string $numeroLot,
+        ?string $dateExpiration,
+        ?string $motif,
+        ?int $lotId,
+        int $utilisateurId
+    ): void {
+
+        $this->db->prepare("
+            INSERT INTO ReceptionLigne
+            (
+                dateReception,
+                decision,
+                quantite,
+                numeroLot,
+                dateExpiration,
+                motif,
+                commande_id,
+                detail_commande_id,
+                produit_id,
+                lot_id,
+                utilisateur_id
+            )
+            VALUES
+            (
+                NOW(),
+                :decision,
+                :quantite,
+                :numeroLot,
+                :dateExpiration,
+                :motif,
+                :commande_id,
+                :detail_commande_id,
+                :produit_id,
+                :lot_id,
+                :utilisateur_id
+            )
+        ")->execute([
+            'decision' => $decision,
+            'quantite' => $quantite,
+            'numeroLot' => $numeroLot !== null ? mb_substr($numeroLot, 0, 100) : null,
+            'dateExpiration' => $dateExpiration,
+            'motif' => $motif !== null ? mb_substr($motif, 0, 255) : null,
+            'commande_id' => $commandeId,
+            'detail_commande_id' => $detailId,
+            'produit_id' => $produitId,
+            'lot_id' => $lotId,
+            'utilisateur_id' => $utilisateurId
+        ]);
+    }
+
+
+    private function entierPositif($valeur, string $produit, string $libelle): int
+    {
+        if ($valeur === null || $valeur === '') {
+            return 0;
+        }
+
+        $nombre = filter_var($valeur, FILTER_VALIDATE_INT);
+
+        if ($nombre === false || $nombre < 0) {
+            throw new InvalidArgumentException("Quantité {$libelle} invalide ({$produit}).");
+        }
+
+        return $nombre;
     }
 
 

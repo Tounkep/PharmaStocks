@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PharmaStock - Dashboard Employé</title>
+
+    <!-- CSS commun du projet -->
+    <link rel="stylesheet" href="../css/style.css">
+
+    <!-- Même style que le dashboard Admin -->
+    <link rel="stylesheet" href="../css/dashboard.css">
+
+    <!-- Styles spécifiques à l'employé -->
+    <link rel="stylesheet" href="../css/employee.css">
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- =====================================================
+         SIDEBAR EMPLOYÉ
+    ====================================================== -->
+
+        <aside class="sidebar">
+
+            <div class="logo-container">
+                <img src="../images/logo1.png" class="logo-image" alt="PharmaStock">
+
+                <div class="logo-text">
+                    PharmaStock
+                </div>
+            </div>
+
+
+            <nav class="sidebar-menu">
+
+                <a href="employee.html" class="menu-item active">
+                    <span class="menu-icon">⌂</span>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="medicaments.html" class="menu-item">
+                    <span class="menu-icon">💊</span>
+                    <span>Médicaments</span>
+                </a>
+
+                <a href="stock.html" class="menu-item">
+                    <span class="menu-icon">📦</span>
+                    <span>Stock</span>
+                </a>
+
+                <a href="ventes.html" class="menu-item">
+                    <span class="menu-icon">🛒</span>
+                    <span>Ventes</span>
+                </a>
+
+                <a href="#" class="menu-item">
+                    <span class="menu-icon">📊</span>
+                    <span>Rapports</span>
+                </a>
+
+                <a href="#" class="menu-item">
+                    <span class="menu-icon">⚙</span>
+                    <span>Paramètres</span>
+                </a>
+
+            </nav>
+
+
+            <div class="sidebar-bottom">
+
+                <a href="#" id="logoutBtn" class="menu-item logout">
+                    <span class="menu-icon">↪</span>
+                    <span>Déconnexion</span>
+                </a>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =====================================================
+         CONTENU PRINCIPAL
+    ====================================================== -->
+
+        <main class="main-content">
+
+            <!-- TOPBAR -->
+
+            <header class="topbar">
+
+                <div class="search-container">
+                    <span>⌕</span>
+
+                    <input type="text" id="globalSearch" placeholder="Rechercher...">
+                </div>
+
+
+                <div class="topbar-right">
+
+                    <button class="notification-button" id="notificationButton" title="Notifications">
+                        🔔
+
+                        <span class="notification-badge" id="notificationBadge">
+                            3
+                        </span>
+                    </button>
+
+
+                    <div class="user-profile">
+
+                        <div class="avatar">
+                            <span id="avatarInitial">E</span>
+                        </div>
+
+                        <div class="user-info">
+
+                            <strong id="employeeName">
+                                Employé
+                            </strong>
+
+                            <small>
+                                Employé
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <!-- =====================================================
+             DASHBOARD
+        ====================================================== -->
+
+            <section class="dashboard-content">
+
+
+                <!-- BIENVENUE -->
+
+                <div class="welcome-section employee-welcome">
+
+                    <div>
+
+                        <h1>
+                            Bonjour
+                            <span id="welcomeName">Employé</span>
+                            👋
+                        </h1>
+
+                        <p>
+                            Que souhaitez-vous faire ?
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                 ACTIONS RAPIDES
+            ================================================== -->
+
+                <section class="action-cards-grid employee-actions">
+
+
+                    <a href="ventes.html" class="action-card green">
+
+                        <div class="action-card-icon">
+                            🛒
+                        </div>
+
+                        <div>
+                            <h3>Nouvelle vente</h3>
+                            <p>Enregistrer une vente</p>
+                        </div>
+
+                    </a>
+
+
+                    <a href="medicaments.html" class="action-card blue">
+
+                        <div class="action-card-icon">
+                            🔎
+                        </div>
+
+                        <div>
+                            <h3>Rechercher un médicament</h3>
+                            <p>Consulter les informations</p>
+                        </div>
+
+                    </a>
+
+
+                    <a href="stock.html" class="action-card purple">
+
+                        <div class="action-card-icon">
+                            📦
+                        </div>
+
+                        <div>
+                            <h3>Consulter le stock</h3>
+                            <p>Voir les quantités disponibles</p>
+                        </div>
+
+                    </a>
+
+
+                    <a href="stock.html" class="action-card orange">
+
+                        <div class="action-card-icon">
+                            ⚠️
+                        </div>
+
+                        <div>
+                            <h3>Alertes stock</h3>
+                            <p>Voir les produits en rupture</p>
+                        </div>
+
+                    </a>
+
+                </section>
+
+
+                <!-- =================================================
+                 ACTIVITÉ + INFORMATIONS RAPIDES
+            ================================================== -->
+
+                <section class="employee-bottom-grid">
+
+
+                    <!-- ACTIVITÉ DU JOUR -->
+
+                    <div class="dashboard-card activity-card">
+
+                        <div class="card-header">
+
+                            <div>
+                                <h2>Activité du jour</h2>
+
+                                <p>
+                                    Vos dernières opérations
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="activity-list">
+
+
+                            <div class="activity-item">
+
+                                <div class="activity-icon">
+                                    🛒
+                                </div>
+
+                                <div class="activity-content">
+
+                                    <strong>
+                                        Vente #4582
+                                    </strong>
+
+                                    <small>
+                                        24,50 €
+                                    </small>
+
+                                </div>
+
+                                <span class="activity-date">
+                                    14:21
+                                </span>
+
+                            </div>
+
+
+                            <div class="activity-item">
+
+                                <div class="activity-icon">
+                                    🛒
+                                </div>
+
+                                <div class="activity-content">
+
+                                    <strong>
+                                        Vente #4581
+                                    </strong>
+
+                                    <small>
+                                        42,80 €
+                                    </small>
+
+                                </div>
+
+                                <span class="activity-date">
+                                    14:10
+                                </span>
+
+                            </div>
+
+
+                            <div class="activity-item">
+
+                                <div class="activity-icon">
+                                    🛒
+                                </div>
+
+                                <div class="activity-content">
+
+                                    <strong>
+                                        Vente #4580
+                                    </strong>
+
+                                    <small>
+                                        12,10 €
+                                    </small>
+
+                                </div>
+
+                                <span class="activity-date">
+                                    13:52
+                                </span>
+
+                            </div>
+
+
+                            <div class="activity-item">
+
+                                <div class="activity-icon">
+                                    🛒
+                                </div>
+
+                                <div class="activity-content">
+
+                                    <strong>
+                                        Vente #4579
+                                    </strong>
+
+                                    <small>
+                                        8,90 €
+                                    </small>
+
+                                </div>
+
+                                <span class="activity-date">
+                                    12:37
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <a href="ventes.html" class="card-footer-link">
+                            Voir toutes les ventes →
+                        </a>
+
+                    </div>
+
+
+                    <!-- INFORMATIONS RAPIDES -->
+
+                    <div class="dashboard-card quick-info-card">
+
+                        <div class="card-header">
+
+                            <div>
+                                <h2>Informations rapides</h2>
+
+                                <p>
+                                    État actuel du stock
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="quick-info-list">
+
+
+                            <div class="quick-info-item">
+
+                                <span class="quick-icon warning">
+                                    ⚠
+                                </span>
+
+                                <span class="quick-info-label">
+                                    Stock faible
+                                </span>
+
+                                <strong id="lowStockCount">
+                                    8
+                                </strong>
+
+                            </div>
+
+
+                            <div class="quick-info-item">
+
+                                <span class="quick-icon danger">
+                                    !
+                                </span>
+
+                                <span class="quick-info-label">
+                                    Ruptures de stock
+                                </span>
+
+                                <strong id="outOfStockCount">
+                                    5
+                                </strong>
+
+                            </div>
+
+
+                            <div class="quick-info-item">
+
+                                <span class="quick-icon orange">
+                                    ⚠
+                                </span>
+
+                                <span class="quick-info-label">
+                                    Expirations proches
+                                </span>
+
+                                <strong id="expirationCount">
+                                    3
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- =========================================================
+     JAVASCRIPT TEMPORAIRE
+     Les données pourront ensuite venir du backend.
+========================================================= -->
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            /*
+             * Pour l'instant, on affiche un nom de démonstration.
+             * Plus tard, cette valeur pourra venir de la session/backend.
+             */
+            const employeeName = "Thomas";
+
+            const nameElement = document.getElementById("employeeName");
+            const welcomeElement = document.getElementById("welcomeName");
+            const avatarElement = document.getElementById("avatarInitial");
+
+            if (nameElement) {
+                nameElement.textContent = employeeName;
+            }
+
+            if (welcomeElement) {
+                welcomeElement.textContent = employeeName;
+            }
+
+            if (avatarElement) {
+                avatarElement.textContent = employeeName.charAt(0).toUpperCase();
+            }
+
+
+            /*
+             * Bouton de déconnexion.
+             * À connecter ensuite à ton backend.
+             */
+            const logoutBtn = document.getElementById("logoutBtn");
+
+            if (logoutBtn) {
+
+                logoutBtn.addEventListener("click", function (event) {
+
+                    event.preventDefault();
+
+                    // À remplacer par la vraie route de déconnexion
+                    window.location.href = "connexion.html";
+                });
+            }
+
+
+            /*
+             * Recherche globale.
+             * Pour l'instant elle redirige vers la page médicaments
+             * lorsque l'utilisateur saisit une recherche.
+             */
+            const searchInput = document.getElementById("globalSearch");
+
+            if (searchInput) {
+
+                searchInput.addEventListener("keydown", function (event) {
+
+                    if (event.key === "Enter") {
+
+                        const search = searchInput.value.trim();
+
+                        if (search !== "") {
+
+                            window.location.href =
+                                "medicaments.html?search=" +
+                                encodeURIComponent(search);
+                        }
+                    }
+                });
+            }
+
+
+            /*
+             * Notification.
+             */
+            const notificationButton =
+                document.getElementById("notificationButton");
+
+            if (notificationButton) {
+
+                notificationButton.addEventListener("click", function () {
+
+                    alert(
+                        "Vous avez 3 notifications concernant le stock."
+                    );
+
+                });
+            }
+
+        });
+    </script>
+
+</body>
+
+</html>

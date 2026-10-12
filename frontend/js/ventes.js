@@ -13,6 +13,29 @@ let currentPage = 1;
 
 const ITEMS_PER_PAGE = 10;
 
+function formatRole(role) {
+    if (!role) {
+        return "Administrateur";
+    }
+
+    const normalizedRole = String(role).trim();
+    const roleMap = {
+        ADMIN: "Administrateur",
+        PHARMACIEN: "Pharmacien",
+        EMPLOYE: "Employé",
+        EMPLOYEE: "Employé",
+        VENDEUR: "Vendeur"
+    };
+
+    const key = normalizedRole.toUpperCase();
+
+    if (roleMap[key]) {
+        return roleMap[key];
+    }
+
+    return normalizedRole.charAt(0).toUpperCase() + normalizedRole.slice(1).toLowerCase();
+}
+
 
 /* =========================================================
    INITIALISATION
@@ -80,8 +103,8 @@ async function loadConnectedUser() {
                 avatarElement.textContent = (fullName || "A").charAt(0).toUpperCase();
             }
 
-            if (roleElement && utilisateur.role) {
-                roleElement.textContent = utilisateur.role;
+            if (roleElement) {
+                roleElement.textContent = formatRole(utilisateur.role);
             }
         }
 

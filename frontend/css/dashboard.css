@@ -339,7 +339,6 @@ img {
     min-width: 0;
 }
 
-
 /* =========================================================
    BIENVENUE
 ========================================================= */
@@ -1322,4 +1321,37 @@ body {
 .user-role {
     font-size: 0.8rem;
     color: #64748b;
+}
+
+/* Le document défile avec son contenu ; la sidebar reste fixe. */
+html,
+body {
+    height: auto;
+    min-height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.app-container {
+    width: calc(100% - 30px);
+    height: auto;
+    min-height: 100vh;
+}
+
+.sidebar {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    bottom: 15px;
+    width: 245px;
+    min-width: 245px;
+    height: calc(100vh - 30px);
+    overflow-y: auto;
+}
+
+.main-content {
+    height: auto;
+    min-height: calc(100vh + 160px);
+    overflow: visible;
 }

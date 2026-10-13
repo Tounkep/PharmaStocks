@@ -517,17 +517,29 @@ function setupEvents() {
             try {
 
                 await fetch(
-                    "../../backend/auth/logout.php",
+                    "../../backend/auth/connexion.php",
                     {
                         method: "POST",
+                        headers: {
+                            "Content-Type":
+                                "application/x-www-form-urlencoded"
+                        },
+                        body: "action=logout",
                         credentials: "include"
                     }
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Erreur de déconnexion :",
+                    error
                 );
 
             } finally {
 
                 window.location.href =
-                    "login.html";
+                    "connexion.html";
             }
 
         }

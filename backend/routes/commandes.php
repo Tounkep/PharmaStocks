@@ -32,7 +32,7 @@ if (!isset($_SESSION['utilisateur_id'])) {
 
 if (
     !isset($_SESSION['role'])
-    || $_SESSION['role'] !== 'ADMIN'
+    || !in_array($_SESSION['role'], ['ADMIN', 'PHARMACIEN'], true)
 ) {
 
     http_response_code(403);
@@ -40,7 +40,7 @@ if (
     echo json_encode([
         'success' => false,
         'message' =>
-            'Accès réservé à l’administrateur.'
+            'Accès réservé à l’administrateur et au pharmacien.'
     ], JSON_UNESCAPED_UNICODE);
 
     exit;

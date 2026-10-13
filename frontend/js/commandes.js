@@ -1550,7 +1550,7 @@ async function loadAdminInfo() {
 
         const response =
             await fetch(
-                "../../backend/routes/dashboard.php",
+                "../../backend/auth/session.php",
                 {
                     method: "GET",
                     credentials: "include"

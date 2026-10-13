@@ -41,6 +41,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Déconnexion
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', deconnexion);
+    }
+
     // Fermeture de la modale en cliquant en dehors du contenu
     window.addEventListener('click', function (e) {
         if (e.target === saleModal) {
@@ -48,3 +54,40 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
+// =========================================================
+// DÉCONNEXION
+// =========================================================
+
+async function deconnexion(event) {
+
+    event.preventDefault();
+
+    try {
+
+        await fetch(
+            "../backend/auth/connexion.php",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                        "application/x-www-form-urlencoded"
+                },
+                body: "action=logout",
+                credentials: "include"
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Erreur de déconnexion :",
+            error
+        );
+
+    } finally {
+
+        window.location.href =
+            "pages/connexion.html";
+    }
+}

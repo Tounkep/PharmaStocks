@@ -37,7 +37,7 @@ async function loadConnectedUser() {
     try {
 
         const response = await fetch(
-            "../../backend/routes/dashboard.php",
+            "../../backend/auth/session.php",
             {
                 method: "GET",
                 headers: {
@@ -81,7 +81,9 @@ async function loadConnectedUser() {
             }
 
             if (roleElement && utilisateur.role) {
-                roleElement.textContent = utilisateur.role;
+                roleElement.textContent = window.PharmaSession
+                    ? window.PharmaSession.roleLabel(utilisateur.role)
+                    : utilisateur.role;
             }
         }
 
@@ -1762,17 +1764,29 @@ function setupEvents() {
             try {
 
                 await fetch(
-                    "../../backend/auth/logout.php",
+                    "../../backend/auth/connexion.php",
                     {
                         method: "POST",
+                        headers: {
+                            "Content-Type":
+                                "application/x-www-form-urlencoded"
+                        },
+                        body: "action=logout",
                         credentials: "include"
                     }
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Erreur de déconnexion :",
+                    error
                 );
 
             } finally {
 
                 window.location.href =
-                    "login.html";
+                    "connexion.html";
 
             }
 

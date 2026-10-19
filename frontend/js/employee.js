@@ -91,3 +91,4 @@ async function deconnexion(event) {
             "pages/connexion.html";
     }
 }
+

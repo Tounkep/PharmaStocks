@@ -172,7 +172,7 @@ if ($utilisateur["role"] === "PHARMACIEN") {
 if ($utilisateur["role"] === "EMPLOYE") {
 
     header(
-        "Location: ../../frontend/pages/dashboard-employe.html"
+        "Location: ../../frontend/pages/employee.html"
     );
 
     exit;
@@ -188,3 +188,7 @@ header(
 );
 
 exit;
+
+$_SESSION['utilisateur_id'] = $utilisateur['id'];
+$_SESSION['prenom'] = $utilisateur['prenom'];
+$_SESSION['nom'] = $utilisateur['nom'];

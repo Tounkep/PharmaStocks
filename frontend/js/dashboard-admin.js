@@ -14,6 +14,39 @@ let salesChart = null;
  */
 
 const API_URL = "../../backend/routes/dashboard.php";
+const ALERTES_URL = "../../backend/routes/alertes.php";
+
+
+async function loadAlertCounters() {
+    try {
+        const response = await fetch(
+            `${ALERTES_URL}?statut=NOUVELLE`,
+            {
+                method: "GET",
+                headers: {
+                    "Accept": "application/json"
+                },
+                credentials: "include"
+            }
+        );
+
+        if (!response.ok) {
+            return {};
+        }
+
+        const result = await response.json();
+
+        if (!result.success || !result.data || !result.data.compteurs) {
+            return {};
+        }
+
+        return result.data.compteurs;
+
+    } catch (error) {
+        console.error("Compteurs d'alertes indisponibles :", error);
+        return {};
+    }
+}
 
 
 /**
@@ -79,6 +112,7 @@ async function loadDashboard() {
 
 
         const data = result.data;
+        const alertCounters = await loadAlertCounters();
 
 
         /*
@@ -111,8 +145,15 @@ async function loadDashboard() {
 
         updateAlerts(
             data.statistiques,
-            data.alertes
+            data.alertes,
+            alertCounters
         );
+
+        const alertCount = Number(alertCounters.total || 0);
+
+        if (window.PharmaSession && window.PharmaSession.updateAlertCount) {
+            window.PharmaSession.updateAlertCount(alertCount);
+        }
 
 
         /*
@@ -468,75 +509,38 @@ function updateStats(stats) {
  * =====================================================
  */
 
-function updateAlerts(stats, alertes) {
+function updateAlerts(stats, alertes, counters = {}) {
 
-    let ruptures = 0;
+    const compteurParType = {
+        RUPTURE: Number(counters.RUPTURE || 0),
+        STOCK_FAIBLE: Number(counters.STOCK_FAIBLE || 0),
+        EXPIRATION_PROCHE: Number(counters.EXPIRATION_PROCHE || 0),
+        EXPIRE: Number(counters.EXPIRE || 0),
+        TOTAL: Number(counters.total || 0)
+    };
 
-
-    if (Array.isArray(alertes)) {
-
-        ruptures =
-            alertes.filter(
-                alerte =>
-                    alerte.type === "RUPTURE"
-            ).length;
+    if (Array.isArray(alertes) && alertes.length > 0) {
+        alertes.forEach(alerte => {
+            const type = String(alerte.type || "").toUpperCase();
+            if (type in compteurParType) {
+                compteurParType[type] += 1;
+            }
+        });
     }
 
-
-    /*
-     * Stock faible
-     */
-
-    const stocksFaiblesCount =
-        document.getElementById(
-            "stocksFaiblesCount"
-        );
-
-
+    const stocksFaiblesCount = document.getElementById("stocksFaiblesCount");
     if (stocksFaiblesCount) {
-
-        stocksFaiblesCount.textContent =
-            formatNumber(
-                stats?.stockFaible || 0
-            );
+        stocksFaiblesCount.textContent = formatNumber(compteurParType.STOCK_FAIBLE || stats?.stockFaible || 0);
     }
 
-
-    /*
-     * Expirations proches
-     */
-
-    const expirationsCount =
-        document.getElementById(
-            "expirationsCount"
-        );
-
-
+    const expirationsCount = document.getElementById("expirationsCount");
     if (expirationsCount) {
-
-        expirationsCount.textContent =
-            formatNumber(
-                stats?.expirationsProches || 0
-            );
+        expirationsCount.textContent = formatNumber((compteurParType.EXPIRATION_PROCHE || 0) + (compteurParType.EXPIRE || 0) + (stats?.expirationsProches || 0));
     }
 
-
-    /*
-     * Ruptures
-     */
-
-    const rupturesCount =
-        document.getElementById(
-            "rupturesCount"
-        );
-
-
+    const rupturesCount = document.getElementById("rupturesCount");
     if (rupturesCount) {
-
-        rupturesCount.textContent =
-            formatNumber(
-                ruptures
-            );
+        rupturesCount.textContent = formatNumber(compteurParType.RUPTURE || 0);
     }
 }
 
@@ -873,40 +877,22 @@ function updateNotificationBadge(data) {
         return;
     }
 
-
-    const stats =
-        data.statistiques || {};
-
-
     const alertes =
         Array.isArray(data.alertes)
             ? data.alertes
             : [];
 
-
-    let totalAlertes =
-        alertes.length;
-
-
-    if (totalAlertes === 0) {
-
-        totalAlertes =
-            Number(
-                stats.stockFaible || 0
-            ) +
-            Number(
-                stats.expirationsProches || 0
-            ) +
-            Number(
-                stats.lotsExpires || 0
-            );
-    }
-
+    const totalAlertes =
+        Array.isArray(data.alertes) && data.alertes.length > 0
+            ? data.alertes.length
+            : Number(data.alertes?.total || 0);
 
     badge.textContent =
         formatNumber(
             totalAlertes
         );
+
+    badge.style.display = totalAlertes > 0 ? "inline-flex" : "none";
 }
 
 

@@ -396,3 +396,89 @@ td {
         grid-template-columns: 1fr;
     }
 }
+/* Cloche et badge d'alertes : meme rendu sur toutes les pages */
+.topbar .topbar-right button.notification-button {
+    position: relative !important;
+    display: inline-grid !important;
+    place-items: center !important;
+    width: 44px !important;
+    min-width: 44px !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    padding: 7px !important;
+    overflow: visible !important;
+    border: 0 !important;
+    border-radius: 12px !important;
+    background: #f1f7f6 !important;
+    color: #123f4c !important;
+    font-size: 25px !important;
+    line-height: 1 !important;
+    cursor: pointer;
+}
+
+.topbar .topbar-right button.notification-button .notification-badge {
+    position: absolute !important;
+    top: -7px !important;
+    right: -10px !important;
+    z-index: 20 !important;
+    display: flex;
+    align-items: center !important;
+    justify-content: center !important;
+    width: auto !important;
+    min-width: 28px !important;
+    height: 28px !important;
+    padding: 0 5px !important;
+    overflow: visible !important;
+    border: 2px solid #fff !important;
+    border-radius: 999px !important;
+    background: #e9363f !important;
+    color: #fff !important;
+    font-family: Arial, sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    box-shadow: 0 2px 8px rgba(120, 20, 20, .3) !important;
+}
+
+.menu-item span.menu-counter:last-child {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    margin-left: auto;
+    border-radius: 999px;
+    background: #e9363f;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.menu-item span.menu-counter.hidden:last-child {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .menu-item span.menu-counter:last-child {
+        display: inline-flex;
+    }
+
+    .menu-item span.menu-counter.hidden:last-child {
+        display: none;
+    }
+}
+
+
+.notification-button .notification-icon {
+    position: relative !important;
+    z-index: 30 !important;
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    font-size: 25px !important;
+    line-height: 1 !important;
+}

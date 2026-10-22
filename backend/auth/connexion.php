@@ -32,7 +32,16 @@ if (
 require_once __DIR__ . "/../config/Database.php";
 
 $database = new Database();
-$pdo = $database->getConnection();
+
+try {
+    $pdo = $database->getConnection();
+} catch (PDOException $e) {
+    error_log('Connexion à la base de données impossible : ' . $e->getMessage());
+    header(
+        "Location: ../../frontend/pages/connexion.html?error=base_indisponible"
+    );
+    exit;
+}
 
 
 /* =========================================================

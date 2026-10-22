@@ -52,13 +52,19 @@
                     <span class="menu-icon">📦</span>
                     <span>Stock</span>
                 </a>
+            <a href="alertes.html" class="menu-item">
+                <span class="menu-icon">🔔</span>
+                <span>Alertes</span>
+            
+                <span class="menu-counter hidden" data-alert-counter>0</span>
+            </a>
 
                 <a href="ventes.html" class="menu-item">
                     <span class="menu-icon">🛒</span>
                     <span>Ventes</span>
                 </a>
 
-                <a href="#" class="menu-item">
+                <a href="rapports.html" class="menu-item">
                     <span class="menu-icon">📊</span>
                     <span>Rapports</span>
                 </a>
@@ -102,10 +108,10 @@
 
                 <div class="topbar-right">
 
-                    <button class="notification-button" id="notificationButton" title="Notifications">
-                        🔔
+                    <button class="notification-button" id="notificationButton" title="Notifications" style="position: relative; display: inline-grid; place-items: center; width: 44px; min-width: 44px; height: 44px; min-height: 44px; padding: 7px; overflow: visible; border: 0; border-radius: 12px; background: #f1f7f6; color: #123f4c; font-size: 25px; line-height: 1;">
+                        <span class="notification-icon" aria-hidden="true" style="display: inline-block; position: relative; z-index: 3; visibility: visible; opacity: 1; font-size: 25px; line-height: 1;">&#128276;</span>
 
-                        <span class="notification-badge" id="notificationBadge">
+                        <span class="notification-badge" id="notificationBadge" style="position: absolute; top: -7px; right: -10px; z-index: 2; min-width: 28px; width: auto; height: 28px; padding: 0 5px; border: 2px solid #fff; border-radius: 999px; background: #e9363f; color: #fff; font: 900 14px/1 Arial, sans-serif; text-align: center; white-space: nowrap; box-shadow: 0 2px 8px rgba(120,20,20,.3);">
                             3
                         </span>
                     </button>
@@ -243,10 +249,10 @@
                         <div class="card-header">
 
                             <div>
-                                <h2>Activité du jour</h2>
+                                <h2>Ventes récentes</h2>
 
                                 <p>
-                                    Vos dernières opérations
+                                    Vos dernières ventes enregistrées
                                 </p>
                             </div>
 
@@ -256,58 +262,10 @@
                         <div class="activity-list">
 
 
-                            <div class="activity-item">
-
-                                <div class="activity-icon">
-                                    🛒
-                                </div>
-
-                                <div class="activity-content">
-
-                                    <strong>
-                                        Vente #4582
-                                    </strong>
-
-                                    <small>
-                                        24,50 €
-                                    </small>
-
-                                </div>
-
-                                <span class="activity-date">
-                                    14:21
-                                </span>
-
-                            </div>
-
-
-                            <div class="activity-item">
-
-                                <div class="activity-icon">
-                                    🛒
-                                </div>
-
-                                <div class="activity-content">
-
-                                    <strong>
-                                        Vente #4581
-                                    </strong>
-
-                                    <small>
-                                        42,80 €
-                                    </small>
-
-                                </div>
-
-                                <span class="activity-date">
-                                    14:10
-                                </span>
-
-                            </div>
-
-
-
-
+                            <p id="salesEmptyMessage" class="activity-empty">
+                                Chargement des ventes...
+                            </p>
+                            <div id="recentSalesList"></div>
 
                             <a href="ventes.html" class="card-footer-link">
                                 Voir toutes les ventes →
@@ -347,7 +305,7 @@
                                     </span>
 
                                     <strong id="lowStockCount">
-                                        8
+                                        —
                                     </strong>
 
                                 </div>
@@ -364,7 +322,7 @@
                                     </span>
 
                                     <strong id="outOfStockCount">
-                                        5
+                                        —
                                     </strong>
 
                                 </div>
@@ -381,7 +339,7 @@
                                     </span>
 
                                     <strong id="expirationCount">
-                                        3
+                                        —
                                     </strong>
 
                                 </div>
@@ -400,100 +358,8 @@
     </div>
 
 
-    <!-- =========================================================
-     JAVASCRIPT TEMPORAIRE
-     Les données pourront ensuite venir du backend.
-========================================================= -->
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-
-            /*
-             * Pour l'instant, on affiche un nom de démonstration.
-             * Plus tard, cette valeur pourra venir de la session/backend.
-             */
-            const employeeName = "Thomas";
-
-            const nameElement = document.getElementById("employeeName");
-            const welcomeElement = document.getElementById("welcomeName");
-            const avatarElement = document.getElementById("avatarInitial");
-
-            if (nameElement) {
-                nameElement.textContent = employeeName;
-            }
-
-            if (welcomeElement) {
-                welcomeElement.textContent = employeeName;
-            }
-
-            if (avatarElement) {
-                avatarElement.textContent = employeeName.charAt(0).toUpperCase();
-            }
-
-
-            /*
-             * Bouton de déconnexion.
-             * À connecter ensuite à ton backend.
-             */
-            const logoutBtn = document.getElementById("logoutBtn");
-
-            if (logoutBtn) {
-
-                logoutBtn.addEventListener("click", function (event) {
-
-                    event.preventDefault();
-
-                    // À remplacer par la vraie route de déconnexion
-                    window.location.href = "connexion.html";
-                });
-            }
-
-
-            /*
-             * Recherche globale.
-             * Pour l'instant elle redirige vers la page médicaments
-             * lorsque l'utilisateur saisit une recherche.
-             */
-            const searchInput = document.getElementById("globalSearch");
-
-            if (searchInput) {
-
-                searchInput.addEventListener("keydown", function (event) {
-
-                    if (event.key === "Enter") {
-
-                        const search = searchInput.value.trim();
-
-                        if (search !== "") {
-
-                            window.location.href =
-                                "medicaments.html?search=" +
-                                encodeURIComponent(search);
-                        }
-                    }
-                });
-            }
-
-
-            /*
-             * Notification.
-             */
-            const notificationButton =
-                document.getElementById("notificationButton");
-
-            if (notificationButton) {
-
-                notificationButton.addEventListener("click", function () {
-
-                    alert(
-                        "Vous avez 3 notifications concernant le stock."
-                    );
-
-                });
-            }
-
-        });
-    </script>
+    <script src="../js/role-layout.js"></script>
+    <script src="../js/employee.js"></script>
 
 </body>
 

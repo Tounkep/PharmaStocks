@@ -82,6 +82,14 @@ if (error === "champs_vides") {
     errorMessage.classList.add("show");
 }
 
+if (error === "base_indisponible") {
+
+    errorMessage.textContent =
+        "La base de données est indisponible. Démarrez MySQL dans XAMPP et vérifiez son port.";
+
+    errorMessage.classList.add("show");
+}
+
 
 // ------------------------------------------
 // 5. FAIRE DISPARAÎTRE LE MESSAGE

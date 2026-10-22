@@ -5,7 +5,7 @@
    (avant le script propre à la page).
 
    - récupère l'utilisateur connecté (session.php)
-   - construit le menu latéral du pharmacien
+   - construit le menu latéral selon le rôle
    - affiche le nom, l'avatar et le rôle
    - met à jour la cloche des alertes
    - masque les actions interdites au pharmacien
@@ -51,12 +51,22 @@
         ],
 
         EMPLOYE: [
+            { href: "employee.html", icon: "⌂", label: "Dashboard" },
             { href: "medicaments.html", icon: "💊", label: "Médicaments", also: ["medicament-detail.html"] },
             { href: "stock.html", icon: "📦", label: "Stock" },
             { href: "alertes.html", icon: "🔔", label: "Alertes", counter: true },
             { href: "ventes.html", icon: "🛒", label: "Ventes" }
         ]
     };
+
+    const EMPLOYE_PAGES = new Set([
+        "employee.html",
+        "medicaments.html",
+        "medicament-detail.html",
+        "stock.html",
+        "alertes.html",
+        "ventes.html"
+    ]);
 
 
     const BASE_CSS = `
@@ -157,6 +167,14 @@
 
         const role = user.role || "";
 
+        const currentPage =
+            window.location.pathname.split("/").pop() || "";
+
+        if (role === "EMPLOYE" && !EMPLOYE_PAGES.has(currentPage)) {
+            window.location.href = "employee.html";
+            return;
+        }
+
         document.body.classList.add(
             "role-" + role.toLowerCase()
         );
@@ -171,9 +189,7 @@
         buildMenu(role);
         fillProfile(user);
 
-        if (role === "ADMIN" || role === "PHARMACIEN") {
-            loadAlertCount();
-        }
+        loadAlertCount();
     }
 
 
@@ -240,6 +256,12 @@
 
         if (nameElement && fullName) {
             nameElement.textContent = fullName;
+        }
+
+        const welcomeName = document.getElementById("welcomeName");
+
+        if (welcomeName && fullName) {
+            welcomeName.textContent = user.prenom || fullName;
         }
 
         document

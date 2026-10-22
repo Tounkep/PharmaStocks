@@ -189,17 +189,6 @@ async function loadDashboard() {
         );
 
 
-        /*
-         * =====================================================
-         * BADGE DES NOTIFICATIONS
-         * =====================================================
-         */
-
-        updateNotificationBadge(
-            data
-        );
-
-
     } catch (error) {
 
         console.error(

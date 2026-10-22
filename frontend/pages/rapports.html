@@ -1,0 +1,295 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PharmaStock - Rapports</title>
+
+    <link rel="stylesheet" href="../css/rapports.css">
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo-container">
+            <img src="../images/logo1.png" class="logo-image" alt="Logo PharmaStock">
+            <div class="logo-text">PharmaStock</div>
+        </div>
+
+        <nav class="sidebar-menu">
+            <a href="dashboard-admin.html" class="menu-item">
+                <span class="menu-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="medicaments.html" class="menu-item">
+                <span class="menu-icon">💊</span>
+                <span>Médicaments</span>
+            </a>
+
+            <a href="stock.html" class="menu-item">
+                <span class="menu-icon">📦</span>
+                <span>Stock</span>
+            </a>
+            <a href="alertes.html" class="menu-item">
+                <span class="menu-icon">🔔</span>
+                <span>Alertes</span>
+            
+                <span class="menu-counter hidden" data-alert-counter>0</span>
+            </a>
+
+            <a href="ventes.html" class="menu-item">
+                <span class="menu-icon">🛒</span>
+                <span>Ventes</span>
+            </a>
+
+            <a href="fournisseurs.html" class="menu-item">
+                <span class="menu-icon">🚚</span>
+                <span>Fournisseurs</span>
+            </a>
+
+            <a href="commandes.html" class="menu-item">
+                <span class="menu-icon">📒</span>
+                <span>Commandes</span>
+            </a>
+
+            <a href="utilisateurs.html" class="menu-item">
+                <span class="menu-icon">👥</span>
+                <span>Utilisateurs</span>
+            </a>
+
+            <a href="rapports.html" class="menu-item active">
+                <span class="menu-icon">📊</span>
+                <span>Rapports</span>
+            </a>
+
+            <a href="parametres.html" class="menu-item">
+                <span class="menu-icon">⚙</span>
+                <span>Paramètres</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="#" id="logoutBtn" class="menu-item logout">
+                <span class="menu-icon">↪</span>
+                <span>Déconnexion</span>
+            </a>
+        </div>
+
+    </aside>
+
+    <!-- CONTENU PRINCIPAL -->
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+
+            <div class="search-container">
+                <span>⌕</span>
+                <input type="text" id="globalSearch"
+                       placeholder="Rechercher...">
+            </div>
+
+            <div class="topbar-right">
+
+                <button class="notification-button"
+                        id="notificationButton"
+                        type="button">
+                    <svg class="notification-icon" viewBox="0 0 24 24" width="25" height="25" fill="none" aria-hidden="true">
+    <path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9Z" fill="#FFC247" stroke="#C98518" stroke-width="1.5" stroke-linejoin="round"/>
+    <path d="M10 21h4" stroke="#C98518" stroke-width="1.5" stroke-linecap="round"/>
+</svg>
+                    <span class="notification-badge"
+                          id="notificationBadge">0</span>
+                </button>
+
+                <div class="user-profile">
+                    <div class="avatar">A</div>
+
+                    <div class="user-info">
+                        <strong id="adminName">Admin</strong>
+                        <small>Administrateur</small>
+                    </div>
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- CONTENU DES RAPPORTS -->
+        <section class="dashboard-content">
+
+            <p id="reportError" class="report-error" role="alert" hidden></p>
+
+            <div class="welcome-section">
+                <div>
+                    <h1>Rapports 📊</h1>
+                    <p>
+                        Consultez les statistiques et les performances
+                        de votre pharmacie.
+                    </p>
+                </div>
+            </div>
+
+            <!-- INDICATEURS -->
+            <section class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-icon purple">€</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Chiffre d'affaires</span>
+                        <strong class="stat-value" id="chiffreAffaires">
+                            -- €
+                        </strong>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon blue">🛒</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Nombre de ventes</span>
+                        <strong class="stat-value" id="nombreVentes">
+                            --
+                        </strong>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon green">📦</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Quantité en stock</span>
+                        <strong class="stat-value" id="quantiteStock">
+                            --
+                        </strong>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon orange">📒</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Commandes en attente</span>
+                        <strong class="stat-value" id="commandesEnAttente">
+                            --
+                        </strong>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- GRAPHIQUE DES VENTES -->
+            <section class="dashboard-grid">
+
+                <div class="dashboard-card sales-chart-card">
+                    <div class="card-header">
+                        <div>
+                            <h2>Mouvements du stock</h2>
+                    <p>Quantités entrées et sorties, depuis le début de l'activité</p>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="dashboard-card sales-chart-card">
+                    <div class="card-header">
+                        <div>
+                            <h2>Chiffre d'affaires</h2>
+                            <p>Ventes par mois, depuis le début de l'activité</p>
+                        </div>
+                    </div>
+                    <div class="chart-container"><canvas id="revenueChart"></canvas></div>
+                </div>
+
+                <!-- ETAT DU STOCK -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <div>
+                            <h2>État du stock</h2>
+                            <p>Indicateurs de vigilance</p>
+                        </div>
+                    </div>
+
+                    <div class="report-summary">
+                        <div class="report-row">
+                            <span>Produits à stock faible</span>
+                            <strong id="stockFaible">--</strong>
+                        </div>
+
+                        <div class="report-row">
+                            <span>Lots proches de l'expiration</span>
+                            <strong id="expirationsProches">--</strong>
+                        </div>
+
+                        <div class="report-row">
+                            <span>Lots expirés</span>
+                            <strong id="lotsExpires">--</strong>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <section class="dashboard-card report-table-card">
+                <div class="card-header"><div><h2>Historique des mouvements</h2><p>Entrées et sorties enregistrées</p></div></div>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>Date</th><th>Type</th><th>Produit</th><th>Lot</th><th>Quantité</th><th>Motif</th><th>Utilisateur</th></tr></thead>
+                        <tbody id="mouvementsTableBody"><tr><td colspan="7">Chargement des données...</td></tr></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- TABLEAU DES COMMANDES -->
+            <section class="dashboard-card report-table-card">
+
+                <div class="card-header">
+                    <div>
+                        <h2>Résumé des commandes</h2>
+                        <p>Répartition des commandes par statut</p>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Statut</th>
+                                <th>Nombre de commandes</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="commandesTableBody">
+                            <tr>
+                                <td colspan="2">
+                                    Chargement des données...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
+
+</div>
+
+<!-- Chart.js pour le graphique -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="../js/role-layout.js"></script>
+<script src="../js/rapports.js"></script>
+
+</body>
+</html>

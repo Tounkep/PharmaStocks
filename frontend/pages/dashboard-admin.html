@@ -80,6 +80,16 @@
 
 
             <a
+                href="alertes.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">🔔</span>
+                <span>Alertes</span>
+                <span class="menu-counter hidden" data-alert-counter>0</span>
+            </a>
+
+
+            <a
                 href="ventes.html"
                 class="menu-item"
             >
@@ -423,9 +433,11 @@
                     <div class="alerts-list">
 
 
-                        <div
+                        <a
                             class="alert-item danger"
                             id="rupturesAlert"
+                            href="alertes.html?type=RUPTURE"
+                            style="text-decoration:none; color:inherit;"
                         >
 
                             <div class="alert-icon">
@@ -451,13 +463,15 @@
                                 →
                             </span>
 
-                        </div>
+                        </a>
 
 
 
-                        <div
+                        <a
                             class="alert-item warning"
                             id="stockFaibleAlert"
+                            href="alertes.html?type=STOCK_FAIBLE"
+                            style="text-decoration:none; color:inherit;"
                         >
 
                             <div class="alert-icon">
@@ -486,13 +500,15 @@
                                 →
                             </span>
 
-                        </div>
+                        </a>
 
 
 
-                        <div
+                        <a
                             class="alert-item orange"
                             id="expirationAlert"
+                            href="alertes.html?type=EXPIRATION_PROCHE"
+                            style="text-decoration:none; color:inherit;"
                         >
 
                             <div class="alert-icon">
@@ -521,7 +537,7 @@
                                 →
                             </span>
 
-                        </div>
+                        </a>
 
                     </div>
 
@@ -612,6 +628,7 @@
 </div>
 
 
+<script src="../js/role-layout.js"></script>
 <script src="../js/dashboard-admin.js"></script>
 
 </body>

@@ -148,17 +148,6 @@ async function loadDashboard() {
         );
 
 
-        /*
-         * =====================================================
-         * BADGE DES NOTIFICATIONS
-         * =====================================================
-         */
-
-        updateNotificationBadge(
-            data
-        );
-
-
     } catch (error) {
 
         console.error(
@@ -852,61 +841,6 @@ function updateRecentSales(sales) {
                 `;
             }
         ).join("");
-}
-
-
-/**
- * =====================================================
- * BADGE DES NOTIFICATIONS
- * =====================================================
- */
-
-function updateNotificationBadge(data) {
-
-    const badge =
-        document.getElementById(
-            "notificationBadge"
-        );
-
-
-    if (!badge) {
-        return;
-    }
-
-
-    const stats =
-        data.statistiques || {};
-
-
-    const alertes =
-        Array.isArray(data.alertes)
-            ? data.alertes
-            : [];
-
-
-    let totalAlertes =
-        alertes.length;
-
-
-    if (totalAlertes === 0) {
-
-        totalAlertes =
-            Number(
-                stats.stockFaible || 0
-            ) +
-            Number(
-                stats.expirationsProches || 0
-            ) +
-            Number(
-                stats.lotsExpires || 0
-            );
-    }
-
-
-    badge.textContent =
-        formatNumber(
-            totalAlertes
-        );
 }
 
 

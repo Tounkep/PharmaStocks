@@ -171,9 +171,7 @@
         buildMenu(role);
         fillProfile(user);
 
-        if (role === "ADMIN" || role === "PHARMACIEN") {
-            loadAlertCount();
-        }
+        loadAlertCount();
     }
 
 

@@ -624,7 +624,7 @@ img {
 
 
 /* =========================================================
-   ACTIVITÉ / VENTES
+   ACTIVITÃ‰ / VENTES
 ========================================================= */
 
 .activity-list,
@@ -694,7 +694,7 @@ img {
 
 
 /* =========================================================
-   ÉTATS
+   Ã‰TATS
 ========================================================= */
 
 .loading,
@@ -945,7 +945,7 @@ img {
 
 
 /* =========================================================
-   TRÈS PETITS ÉCRANS
+   TRÃˆS PETITS Ã‰CRANS
 ========================================================= */
 
 @media (max-width: 450px) {
@@ -995,7 +995,7 @@ img {
 }
 
 /* =========================================================
-   COMPLÉMENTS POUR LE DASHBOARD PHARMAMANAGER
+   COMPLÃ‰MENTS POUR LE DASHBOARD PHARMAMANAGER
 ========================================================= */
 
 /* Cartes d'action principales (4 grands blocs de couleur) */
@@ -1148,7 +1148,7 @@ img {
     }
 }
 
-/* 1. Bloquer le défilement de toute la page */
+/* 1. Bloquer le dÃ©filement de toute la page */
 html,
 body {
     margin: 0;
@@ -1156,18 +1156,18 @@ body {
     height: 100vh;
     width: 100vw;
     overflow: hidden;
-    /* Empêche le scroll global */
+    /* EmpÃªche le scroll global */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* 2. Conteneur principal plein écran */
+/* 2. Conteneur principal plein Ã©cran */
 .app-container {
     display: flex;
     width: 100vw;
     height: 100vh;
 }
 
-/* 3. Barre latérale fixe */
+/* 3. Barre latÃ©rale fixe */
 .sidebar {
     width: 250px;
     height: 100vh;
@@ -1178,7 +1178,7 @@ body {
     padding: 20px 15px;
     box-sizing: border-box;
     flex-shrink: 0;
-    /* Empêche la sidebar de se déformer */
+    /* EmpÃªche la sidebar de se dÃ©former */
 }
 
 .sidebar-menu {
@@ -1191,7 +1191,7 @@ body {
 
 .sidebar-bottom {
     margin-top: auto;
-    /* Pousse Déconnexion tout en bas */
+    /* Pousse DÃ©connexion tout en bas */
     padding-top: 15px;
 }
 
@@ -1202,7 +1202,7 @@ body {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    /* Si le contenu dépasse sur petit écran, seul le contenu défile, pas la sidebar */
+    /* Si le contenu dÃ©passe sur petit Ã©cran, seul le contenu dÃ©file, pas la sidebar */
     padding: 20px 30px;
     box-sizing: border-box;
     background-color: #f8fafc;
@@ -1231,7 +1231,7 @@ body {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
-/* Zone supérieure droite */
+/* Zone supÃ©rieure droite */
 .topbar-right {
     display: flex;
     align-items: center;
@@ -1289,7 +1289,7 @@ body {
     object-fit: cover;
 }
 
-/* Fallback Icône */
+/* Fallback IcÃ´ne */
 .avatar-icon {
     color: #0284c7;
     font-size: 1.1rem;
@@ -1323,7 +1323,7 @@ body {
     color: #64748b;
 }
 
-/* Le document défile avec son contenu ; la sidebar reste fixe. */
+/* Le document dÃ©file avec son contenu ; la sidebar reste fixe. */
 html,
 body {
     height: auto;
@@ -1354,4 +1354,165 @@ body {
     height: auto;
     min-height: calc(100vh + 160px);
     overflow: visible;
+}
+
+/* Notification badge: visible et lisible sur les pages du tableau de bord */
+.topbar-right .notification-button {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    min-width: 42px;
+    min-height: 42px;
+    padding: 7px;
+    border: 0;
+    border-radius: 12px;
+    background: #f1f7f6;
+    color: #123f4c;
+    font-size: 25px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.topbar-right .notification-button:hover {
+    background: #e3f1ef;
+}
+
+.topbar-right .notification-button:focus-visible {
+    outline: 3px solid rgba(8, 127, 128, .35);
+    outline-offset: 2px;
+}
+
+.topbar-right .notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 23px;
+    height: 23px;
+    padding: 0 5px;
+    border: 2px solid #fff;
+    border-radius: 999px;
+    background: #ef4444;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1;
+    box-shadow: 0 2px 7px rgba(120, 20, 20, .25);
+}
+.menu-counter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 21px;
+    height: 21px;
+    padding: 0 6px;
+    margin-left: auto;
+    border-radius: 999px;
+    background: #e9363f;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1;
+    box-shadow: 0 2px 6px rgba(120, 20, 20, .25);
+}
+
+.menu-counter.hidden {
+    display: none;
+}
+
+.menu-item span.menu-counter:last-child {
+    display: inline-flex;
+}
+
+.menu-item span.menu-counter.hidden:last-child {
+    display: none;
+}
+
+/* Cloche et badge d'alertes : meme rendu sur toutes les pages */
+.topbar .topbar-right button.notification-button {
+    position: relative !important;
+    display: inline-grid !important;
+    place-items: center !important;
+    width: 44px !important;
+    min-width: 44px !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    padding: 7px !important;
+    overflow: visible !important;
+    border: 0 !important;
+    border-radius: 12px !important;
+    background: #f1f7f6 !important;
+    color: #123f4c !important;
+    font-size: 25px !important;
+    line-height: 1 !important;
+    cursor: pointer;
+}
+
+.topbar .topbar-right button.notification-button .notification-badge {
+    position: absolute !important;
+    top: -7px !important;
+    right: -10px !important;
+    z-index: 20 !important;
+    display: flex;
+    align-items: center !important;
+    justify-content: center !important;
+    width: auto !important;
+    min-width: 28px !important;
+    height: 28px !important;
+    padding: 0 5px !important;
+    overflow: visible !important;
+    border: 2px solid #fff !important;
+    border-radius: 999px !important;
+    background: #e9363f !important;
+    color: #fff !important;
+    font-family: Arial, sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    box-shadow: 0 2px 8px rgba(120, 20, 20, .3) !important;
+}
+
+.menu-item span.menu-counter:last-child {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    margin-left: auto;
+    border-radius: 999px;
+    background: #e9363f;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.menu-item span.menu-counter.hidden:last-child {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .menu-item span.menu-counter:last-child {
+        display: inline-flex;
+    }
+
+    .menu-item span.menu-counter.hidden:last-child {
+        display: none;
+    }
+}
+
+
+.notification-button .notification-icon {
+    position: relative !important;
+    z-index: 30 !important;
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    font-size: 25px !important;
+    line-height: 1 !important;
 }

@@ -8,7 +8,7 @@
 
 
 /* =========================================================
-   EN-TÊTE
+   EN-TÃŠTE
 ========================================================= */
 
 .users-header {
@@ -175,7 +175,7 @@
 }
 
 
-/* Prénom */
+/* PrÃ©nom */
 
 .users-table th:nth-child(3),
 .users-table td:nth-child(3) {
@@ -191,7 +191,7 @@
 }
 
 
-/* Rôle */
+/* RÃ´le */
 
 .users-table th:nth-child(5),
 .users-table td:nth-child(5) {
@@ -230,7 +230,7 @@
 
 
 /* =========================================================
-   PRÉNOM
+   PRÃ‰NOM
 ========================================================= */
 
 .user-firstname {
@@ -252,7 +252,7 @@
 
 
 /* =========================================================
-   BADGES DES RÔLES
+   BADGES DES RÃ”LES
 ========================================================= */
 
 .role-badge {
@@ -274,23 +274,23 @@
 
 /* Administrateur */
 
-.role-admin {
-    background: #eee8ff;
-    color: #6842c2;
+.role-badge.role-admin {
+    background: #e7f0f4;
+    color: #073b4c;
 }
 
 
 /* Pharmacien */
 
-.role-pharmacien {
+.role-badge.role-pharmacien {
     background: #e4f7f4;
     color: #087f78;
 }
 
 
-/* Employé */
+/* EmployÃ© */
 
-.role-employe {
+.role-badge.role-employe {
     background: #fff1df;
     color: #c96b16;
 }
@@ -451,7 +451,7 @@
 
 
 /* =========================================================
-   EN-TÊTE DU MODAL
+   EN-TÃŠTE DU MODAL
 ========================================================= */
 
 .user-modal-header {
@@ -536,7 +536,7 @@
 }
 
 
-/* Deux champs sur la même ligne */
+/* Deux champs sur la mÃªme ligne */
 
 .form-row {
     display: grid;
@@ -777,4 +777,98 @@
 
         align-items: flex-start;
     }
+}
+/* Cloche et badge d'alertes : meme rendu sur toutes les pages */
+.topbar .topbar-right button.notification-button {
+    position: relative !important;
+    display: inline-grid !important;
+    place-items: center !important;
+    width: 44px !important;
+    min-width: 44px !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    padding: 7px !important;
+    overflow: visible !important;
+    border: 0 !important;
+    border-radius: 12px !important;
+    background: #f1f7f6 !important;
+    color: #123f4c !important;
+    font-size: 25px !important;
+    line-height: 1 !important;
+    cursor: pointer;
+}
+
+.topbar .topbar-right button.notification-button .notification-badge {
+    position: absolute !important;
+    top: -7px !important;
+    right: -10px !important;
+    z-index: 20 !important;
+    display: flex;
+    align-items: center !important;
+    justify-content: center !important;
+    width: auto !important;
+    min-width: 28px !important;
+    height: 28px !important;
+    padding: 0 5px !important;
+    overflow: visible !important;
+    border: 2px solid #fff !important;
+    border-radius: 999px !important;
+    background: #e9363f !important;
+    color: #fff !important;
+    font-family: Arial, sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    box-shadow: 0 2px 8px rgba(120, 20, 20, .3) !important;
+}
+
+.menu-item span.menu-counter:last-child {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    margin-left: auto;
+    border-radius: 999px;
+    background: #e9363f;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.menu-item span.menu-counter.hidden:last-child {
+    display: none;
+}
+
+/* La classe du rôle est portée par body : garder le thème général neutre. */
+body.role-admin,
+body.role-pharmacien,
+body.role-employe {
+    background-color: #f4f7f6 !important;
+    color: #333 !important;
+}
+
+@media (max-width: 900px) {
+    .menu-item span.menu-counter:last-child {
+        display: inline-flex;
+    }
+
+    .menu-item span.menu-counter.hidden:last-child {
+        display: none;
+    }
+}
+
+
+.notification-button .notification-icon {
+    position: relative !important;
+    z-index: 30 !important;
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    font-size: 25px !important;
+    line-height: 1 !important;
 }
